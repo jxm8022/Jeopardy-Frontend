@@ -1,7 +1,20 @@
 <app-nav-bar></app-nav-bar>
-<ng-container *ngFor="let team of teams; let i = index;">
-    <p>-{{team.Name}}</p>
-    <ng-container *ngFor="let player of players[i];">
-        <p>-{{player.Name}}</p>
-    </ng-container>
-</ng-container>
+<div class="d-flex justify-content-center" [ngStyle]="{'opacity': opacity}">
+    <div class="game">
+        <div class="wrapper">
+            <ng-container *ngFor="let question of questions; let q = index">
+                <ng-container *ngFor="let category of categories; let c = index">
+                    <div class="box" (click)="flipCard(c,q)">
+                        <h1 *ngIf="q == 0" class="d-flex justify-content-center"><i>{{categories[c]}}</i></h1>
+                        <h1 *ngIf="q > 0" class="d-flex justify-content-center"><i>{{questionCost[q-1]}}</i></h1>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+    <div>
+        <ng-container *ngFor="let team of teams; let i = index;">
+            team stuff
+        </ng-container>
+    </div>
+</div>

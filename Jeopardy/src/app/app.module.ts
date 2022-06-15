@@ -12,6 +12,7 @@ import { GameboardComponent } from './gameboard/gameboard.component';
 import { FormsModule } from '@angular/forms';
 import { CategoryComponent } from './category/category.component';
 import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    MdbModalModule
+    MdbModalModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
