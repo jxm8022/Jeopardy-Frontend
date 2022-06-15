@@ -1,14 +1,21 @@
-.wrapper {
-    display: grid;
-    grid-template-columns: auto auto auto auto auto;
-    grid-gap: 10px;
-    background-color: #3080A4;
-    background-size: 700px;
-    width: 900px;
-    height: 700px;
-    padding: 15px;
+.box {
+    background-color: #2bbfe0;
+    width: 15%;
+    float: left;
+    margin: 10px;
+    height: 100px;
 }
 
-.box {
-    background-color: rgb(255, 255, 255);
+h1 {
+    color: white;
+}
+
+@media (min-width: 1200px) {
+    .box {
+        background-color: #2bbfe0;
+        width: 18%;
+        float: left;
+        margin: 10px;
+        height: 110px;
+    }
 }

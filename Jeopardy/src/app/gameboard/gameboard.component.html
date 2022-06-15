@@ -1,12 +1,16 @@
 <app-nav-bar></app-nav-bar>
 <div class="d-flex justify-content-center" [ngStyle]="{'opacity': opacity}">
-    <div class="game">
-        <div class="wrapper">
+    <div class="container">
+        <div class="row">
             <ng-container *ngFor="let question of questions; let q = index">
                 <ng-container *ngFor="let category of categories; let c = index">
-                    <div class="box" (click)="flipCard(c,q)">
-                        <h1 *ngIf="q == 0" class="d-flex justify-content-center"><i>{{categories[c]}}</i></h1>
-                        <h1 *ngIf="q > 0" class="d-flex justify-content-center"><i>{{questionCost[q-1]}}</i></h1>
+                    <div class="box overflow-auto d-flex align-items-center" (click)="flipCard(c,q)">
+                        <h1 *ngIf="q == 0" class="mx-auto text-break text-dark">
+                            {{categories[c]}}
+                        </h1>
+                        <h1 *ngIf="q > 0" class="mx-auto text-break">
+                            <i>{{questionCost[q-1]}}</i>
+                        </h1>
                     </div>
                 </ng-container>
             </ng-container>
