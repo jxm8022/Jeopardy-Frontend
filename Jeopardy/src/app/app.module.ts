@@ -10,6 +10,8 @@ import { HomeComponent } from './home/home.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { GameboardComponent } from './gameboard/gameboard.component';
 import { FormsModule } from '@angular/forms';
+import { CategoryComponent } from './category/category.component';
+import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
 
 @NgModule({
   declarations: [
@@ -19,12 +21,14 @@ import { FormsModule } from '@angular/forms';
     NavBarComponent,
     HomeComponent,
     LeaderboardComponent,
-    GameboardComponent
+    GameboardComponent,
+    CategoryComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    MdbModalModule
   ],
   providers: [],
   bootstrap: [AppComponent]
