@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
+import { Type } from '../models/Type';
 import { HttpService } from '../service/http.service';
 
 @Component({
@@ -9,18 +10,33 @@ import { HttpService } from '../service/http.service';
 })
 export class CategoryComponent implements OnInit {
 
-  categories: string[] = ["", "", "", "", ""];
+  categories: string[] = [];
+  selection!: Type[];
+  errorMessage = '';
 
   constructor(private api: HttpService, public modalRef: MdbModalRef<CategoryComponent>) { }
 
   ngOnInit(): void {
     this.api.getTypes().subscribe(res => {
-      console.log(res);
+      this.selection = res;
     });
   }
 
-  submit() {
-    this.modalRef.close(this.categories);
+  changed(index: number) {
+    if (this.categories.includes(this.selection[index].Category)) {
+      this.categories[this.categories.indexOf(this.selection[index].Category)] = "";
+      this.categories = this.categories.filter(element => { return element !== '' });
+    } else {
+      this.categories.push(this.selection[index].Category);
+    }
+    console.log(this.categories)
   }
 
+  submit() {
+    if (this.categories.length === 5) {
+      this.modalRef.close(this.categories);
+    } else {
+      this.errorMessage = "Select 5 categories!"
+    }
+  }
 }
