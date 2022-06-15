@@ -1,0 +1,8 @@
+img {
+    width: 50%;
+    margin-top: 50px;
+}
+
+button:hover {
+    transform: rotate(5deg) scale(10);
+}
