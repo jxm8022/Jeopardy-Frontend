@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Player } from '../models/Player';
+import { Team } from '../models/Team';
 
 @Component({
   selector: 'app-gameboard',
@@ -6,6 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./gameboard.component.css']
 })
 export class GameboardComponent implements OnInit {
+
+  @Input()
+  teams: Team[] = [];
+
+  @Input()
+  players: Player[][] = [];
 
   constructor() { }
 

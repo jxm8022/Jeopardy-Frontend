@@ -1,1 +1,7 @@
-<p>gameboard works!</p>
+<app-nav-bar></app-nav-bar>
+<ng-container *ngFor="let team of teams; let i = index;">
+    <p>-{{team.Name}}</p>
+    <ng-container *ngFor="let player of players[i];">
+        <p>-{{player.Name}}</p>
+    </ng-container>
+</ng-container>
