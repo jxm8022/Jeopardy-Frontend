@@ -17,7 +17,7 @@ export class GameboardComponent implements OnInit {
   @Input()
   players: Player[][] = [];
 
-  categories: string[] = ["a", "b", "c", "d", "e"];
+  categories: string[] = ["Catagory 1", "Catagory 2", "Catagory 3", "Catagory 4", "Catagory 5"];
   questions: number[] = [1, 2, 3, 4, 5, 6];
   questionCost: number[] = [100, 200, 300, 400, 500];
 
@@ -36,8 +36,12 @@ export class GameboardComponent implements OnInit {
       modalClass: 'modal-dialog-centered'
     })
     this.modalRef.onClose.subscribe((message: any) => {
-      this.categories = message;
-      this.opacity = "100%";
+      if (message) {
+        this.categories = message;
+        this.opacity = "100%";
+      }
+      else
+        this.displayCategorySelector();
     })
   }
 
