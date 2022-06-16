@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { IQA } from '../models/IQA';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,8 @@ export class HttpService {
   // QA {Question: Question, Answer: Answer}
   // Input: category id
   // Notes: returns 5 QAs for a category
-  getQuestions(category: number): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseURL}/Question/GetQuestions/${category}`);
+  getQuestions(category: number): Observable<IQA[]> {
+    return this.http.get<IQA[]>(`${environment.apiBaseURL}/Question/GetQuestions/${category}`);
   }
 
   // Returns List<Team>
