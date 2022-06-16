@@ -1,5 +1,5 @@
 export interface ITeam {
-    ID: number,
+    Id: number,
     Name: string,
     Score: number
 }

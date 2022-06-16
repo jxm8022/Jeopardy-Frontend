@@ -2,8 +2,8 @@ import { IPlayer } from "./IPlayer";
 
 export class Player implements IPlayer {
     constructor(
-        public ID: number,
+        public Id: number,
         public Name: string,
-        public Team_ID: number
+        public Team_id: number
     ) { }
 }

@@ -1,4 +1,4 @@
 export interface IType {
-    ID: number,
+    Id: number,
     Category: string
 }
