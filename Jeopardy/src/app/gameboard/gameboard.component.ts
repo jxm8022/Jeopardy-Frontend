@@ -47,15 +47,10 @@ export class GameboardComponent implements OnInit {
       if (message) {
         this.categories = message;
         this.opacity = "100%";
-        this.getCategoryQuestions(message);
       }
       else
         this.displayCategorySelector();
     })
-  }
-
-  getCategoryQuestions(category: string[]): void {
-    this.api.getQuestions
   }
 
   flipCard(question: number, category: number): void {
