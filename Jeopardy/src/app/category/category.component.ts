@@ -10,7 +10,7 @@ import { HttpService } from '../service/http.service';
 })
 export class CategoryComponent implements OnInit {
 
-  categories: string[] = [];
+  categories: Type[] = [];
   selection!: Type[];
   errorMessage = '';
 
@@ -23,11 +23,11 @@ export class CategoryComponent implements OnInit {
   }
 
   changed(index: number) {
-    if (this.categories.includes(this.selection[index].Category)) {
-      this.categories[this.categories.indexOf(this.selection[index].Category)] = "";
-      this.categories = this.categories.filter(element => { return element !== '' });
+    if (this.categories.includes(this.selection[index])) {
+      this.categories[this.categories.indexOf(this.selection[index])] = new Type(-1, "");
+      this.categories = this.categories.filter(element => { return element.Category !== "" });
     } else {
-      this.categories.push(this.selection[index].Category);
+      this.categories.push(this.selection[index]);
     }
     console.log(this.categories)
   }
