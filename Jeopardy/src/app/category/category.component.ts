@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
-import { Answer } from '../models/Answer';
 import { QA } from '../models/QA';
-import { Question } from '../models/Question';
 import { Type } from '../models/Type';
 import { HttpService } from '../service/http.service';
 
@@ -35,11 +33,8 @@ export class CategoryComponent implements OnInit {
 
         // questions
         for (let i = 0; i < this.questions.length; i++) {
-          console.log(this.questions[i][0]);
-          console.log(this.questions[i][0].Question);
-          console.log(this.questions[i][0].Question.Type_ID);
-          if (this.questions[i][0].Question.Type_ID === index + 1) {
-            console.log("removing at index" + i)
+          if (this.questions[i][0].Question.Type_id === index + 1) {
+            this.questions[i] = [];
           }
         }
         this.questions = this.questions.filter(element => { return element.length !== 0 });
@@ -47,7 +42,7 @@ export class CategoryComponent implements OnInit {
         this.categories.push(this.selection[index]);
         this.questions.push(res);
       }
-      console.log(this.questions.length);
+      console.log(this.questions);
     });
   }
 
