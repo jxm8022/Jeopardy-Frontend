@@ -3,6 +3,8 @@ import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { CategoryComponent } from '../category/category.component';
 import { Player } from '../models/Player';
 import { Team } from '../models/Team';
+import { Type } from '../models/Type';
+import { HttpService } from '../service/http.service';
 
 @Component({
   selector: 'app-gameboard',
@@ -17,14 +19,20 @@ export class GameboardComponent implements OnInit {
   @Input()
   players: Player[][] = [];
 
-  categories: string[] = ["Catagory 1", "Catagory 2", "Catagory 3", "Catagory 4", "Catagory 5"];
+  categories: Type[] = [
+    new Type(-1, "Category 1"),
+    new Type(-1, "Category 2"),
+    new Type(-1, "Category 3"),
+    new Type(-1, "Category 4"),
+    new Type(-1, "Category 5"),
+  ];
   questions: number[] = [1, 2, 3, 4, 5, 6];
   questionCost: number[] = [100, 200, 300, 400, 500];
 
   opacity: string = '100%';
   modalRef: MdbModalRef<CategoryComponent> | null = null;
 
-  constructor(private modalService: MdbModalService) { }
+  constructor(private api: HttpService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
     this.displayCategorySelector();
@@ -39,10 +47,15 @@ export class GameboardComponent implements OnInit {
       if (message) {
         this.categories = message;
         this.opacity = "100%";
+        this.getCategoryQuestions(message);
       }
       else
         this.displayCategorySelector();
     })
+  }
+
+  getCategoryQuestions(category: string[]): void {
+    this.api.getQuestions
   }
 
   flipCard(question: number, category: number): void {
