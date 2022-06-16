@@ -1,4 +1,5 @@
 export interface IQuestion {
     ID: number,
-    Entry: string
+    Entry: string,
+    Type_ID: number
 }
