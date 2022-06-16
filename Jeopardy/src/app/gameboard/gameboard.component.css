@@ -3,11 +3,25 @@
     width: 15%;
     float: left;
     margin: 10px;
-    height: 100px;
+    height: 90px;
+}
+
+.question-box {
+    background-color: #2bbfe0;
+    width: 100%;
+    float: left;
+    margin: 10px;
+    height: 700px;
+    padding: 40px;
 }
 
 h1 {
     color: white;
+}
+
+hr {
+    border-top: 4px solid;
+    width: 75%;
 }
 
 @media (min-width: 1200px) {
@@ -16,6 +30,16 @@ h1 {
         width: 18%;
         float: left;
         margin: 10px;
-        height: 110px;
+        height: 100px;
+    }
+}
+
+@media (min-height: 1000px) {
+    .box {
+        background-color: #2bbfe0;
+        width: 18%;
+        float: left;
+        margin: 10px;
+        height: 140px;
     }
 }
