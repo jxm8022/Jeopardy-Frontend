@@ -42,7 +42,6 @@ export class CategoryComponent implements OnInit {
         this.categories.push(this.selection[index]);
         this.questions.push(res);
       }
-      console.log(this.questions);
     });
   }
 
