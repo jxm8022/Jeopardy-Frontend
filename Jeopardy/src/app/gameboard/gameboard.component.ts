@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { CategoryComponent } from '../category/category.component';
 import { Player } from '../models/Player';
+import { QA } from '../models/QA';
 import { Team } from '../models/Team';
 import { Type } from '../models/Type';
 import { HttpService } from '../service/http.service';
@@ -26,8 +27,14 @@ export class GameboardComponent implements OnInit {
     new Type(-1, "Category 4"),
     new Type(-1, "Category 5"),
   ];
-  questions: number[] = [1, 2, 3, 4, 5, 6];
-  questionCost: number[] = [100, 200, 300, 400, 500];
+  questionAndAnswer: QA[][] = [];
+  isQuestionAnswered: boolean[][] = [];
+  questionCost: number[] = [0, 100, 200, 300, 400, 500];
+
+  currentQuestion: string = "Question";
+  currentAnswer: string = "Answer";
+
+  questionSelected: boolean = false; // set to false
 
   opacity: string = '100%';
   modalRef: MdbModalRef<CategoryComponent> | null = null;
@@ -35,6 +42,10 @@ export class GameboardComponent implements OnInit {
   constructor(private api: HttpService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
+    this.isQuestionAnswered = new Array(2).fill([]);
+    for (let i = 0; i < this.isQuestionAnswered.length; i++) {
+      this.isQuestionAnswered[i] = new Array(5).fill(false);
+    }
     this.displayCategorySelector();
   }
 
@@ -44,17 +55,47 @@ export class GameboardComponent implements OnInit {
       modalClass: 'modal-dialog-centered'
     })
     this.modalRef.onClose.subscribe((message: any) => {
-      if (message) {
-        this.categories = message;
-        this.opacity = "100%";
-      }
-      else
-        this.displayCategorySelector();
+      this.api.getTypes().subscribe(res => {
+        if (message) {
+          for (let i = 0; i < message.length; i++) {
+            for (let j = 0; j < res.length; j++) {
+              if (message[i][0].Question.Type_id === res[j].Id) {
+                this.categories[i] = res[j];
+              }
+            }
+            this.questionAndAnswer.push(message[i]);
+          }
+          this.opacity = "100%";
+        }
+        else
+          this.displayCategorySelector();
+      });
     })
   }
 
-  flipCard(question: number, category: number): void {
-    console.log(category, question);
+  getColor(question: number, category: number): string {
+    if (question !== 0) {
+      if (this.isQuestionAnswered[category][question - 1]) {
+        return '#2bbfe066';
+      } else {
+        return '#2bbfe0';
+      }
+    }
+    return '#2bbfe0';
   }
 
+  flipCard(question: number, category: number): void {
+    if (question !== 0 || this.questionSelected) {
+      if (question !== 0) {
+        this.currentQuestion = this.questionAndAnswer[category][question - 1].Question.Entry; // -1 from question because the category row
+        this.currentAnswer = this.questionAndAnswer[category][question - 1].Answer.Entry;
+        this.isQuestionAnswered[category][question - 1] = true;
+      }
+      this.questionSelected = !this.questionSelected;
+    }
+  }
+
+  trackBy(index: any, item: any) {
+    return index;
+  }
 }
