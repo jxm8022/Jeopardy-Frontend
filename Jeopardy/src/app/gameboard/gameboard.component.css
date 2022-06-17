@@ -6,6 +6,10 @@
     height: 90px;
 }
 
+#question:hover {
+    transform: scale(.95);
+}
+
 .question-box {
     background-color: #2bbfe0;
     width: 100%;

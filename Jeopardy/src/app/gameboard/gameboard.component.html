@@ -6,7 +6,8 @@
                 <ng-container *ngFor="let category of categories; let c = index">
                     <ng-container *ngIf="!questionSelected">
                         <div class="box overflow-auto d-flex align-items-center"
-                            [ngStyle]="{'background-color':getColor(q,c)}" (click)="flipCard(q,c)" aria-disabled="true">
+                            [ngStyle]="{'background-color':getColor(q,c)}" (click)="flipCard(q,c)" aria-disabled="true"
+                            id="question">
                             <h1 *ngIf="q == 0" class="mx-auto text-break text-dark">
                                 {{categories[c].Category}}
                             </h1>
