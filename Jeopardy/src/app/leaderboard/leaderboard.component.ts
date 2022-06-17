@@ -13,12 +13,18 @@ export class LeaderboardComponent implements OnInit {
   teams: Team[] = [];
   players: Player[][] = [];
 
+  opacity: string = "20%";
+  width: string = "";
+
   constructor(private api: HttpService) { }
 
   ngOnInit(): void {
+    this.width = this.width + 100 / 3 + "%";
     this.api.getSortedTeams().subscribe(res => {
-      this.teams = res;
-      console.log(res);
+      if (!res) {
+        this.teams = res;
+        this.opacity = "100%";
+      }
     })
   }
 

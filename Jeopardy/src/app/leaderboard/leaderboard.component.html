@@ -1,5 +1,15 @@
-<app-nav-bar style="opacity: 20%;"></app-nav-bar>
-<img class="mx-auto d-block" src="../../assets/leaderboard.png" style="opacity: 20%;" />
-<div class="text-center" style="margin-top: 30px;">
+<app-nav-bar [ngStyle]="{'opacity': opacity}"></app-nav-bar>
+<img class="mx-auto d-block" src="../../assets/leaderboard.png" [ngStyle]="{'opacity': opacity}" />
+<div class="text-center" style="margin-top: 30px;" *ngIf="teams.length === 0">
     <input type="image" src="../../assets/coming_soon.png" [routerLink]="['..']" style="width: 75%;" />
+</div>
+<div class="text-center mx-auto" style="margin-top: 50px; width: 60%;" *ngIf="teams.length > 0">
+    <ng-container *ngFor="let team of teams; let i = index;">
+        <div class="row">
+            <h1 class="mx-auto" [ngStyle]="{'width':width}">{{i+1}}.</h1>
+            <h1 class="mx-auto" [ngStyle]="{'width':width}"><i>{{team.Name}}</i></h1>
+            <h1 class="mx-auto" [ngStyle]="{'width':width}"><i>{{team.Score}}</i></h1>
+        </div>
+        <hr class="mx-auto">
+    </ng-container>
 </div>
