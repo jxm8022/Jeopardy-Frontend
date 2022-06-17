@@ -31,17 +31,24 @@ export class GameboardComponent implements OnInit {
   isQuestionAnswered: boolean[][] = [];
   questionCost: number[] = [0, 100, 200, 300, 400, 500];
 
+  score: number[] = [];
+
   currentQuestion: string = "Question";
   currentAnswer: string = "Answer";
 
   questionSelected: boolean = false; // set to false
 
   opacity: string = '100%';
+  width: string = "";
   modalRef: MdbModalRef<CategoryComponent> | null = null;
 
   constructor(private api: HttpService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
+    if (this.teams.length < 2)
+      this.teams = new Array(5).fill(new Team(-1, "Team name", 0));
+    this.width = this.width + (100 / this.teams.length) + '%';
+    this.score = new Array(this.teams.length).fill(0);
     this.isQuestionAnswered = new Array(5).fill([]);
     for (let i = 0; i < this.isQuestionAnswered.length; i++) {
       this.isQuestionAnswered[i] = new Array(5).fill(false);
