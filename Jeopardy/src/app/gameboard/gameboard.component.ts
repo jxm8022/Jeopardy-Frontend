@@ -37,11 +37,12 @@ export class GameboardComponent implements OnInit {
   currentQuestion: string = "Question";
   currentAnswer: string = "Answer";
 
+  buttonName: string = "Submit Teams";
+
   questionSelected: boolean = false;
   showAnswer: boolean = false;
 
-  winner: boolean = false;
-  displayWinner: boolean = false;
+  winner: boolean = true;
 
   opacity: string = '100%';
   width: string = "";
@@ -50,6 +51,8 @@ export class GameboardComponent implements OnInit {
   constructor(private route: Router, private api: HttpService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
+    if (this.teams[0].Name === "" && this.teams[1].Name === "")
+      this.buttonName = "Go Home";
     this.width = this.width + (100 / this.teams.length) + '%';
     this.score = new Array(this.teams.length).fill(0);
     this.isQuestionAnswered = new Array(5).fill([]);
@@ -121,7 +124,11 @@ export class GameboardComponent implements OnInit {
   }
 
   winnerWinnerChickenDinner(): void {
-    this.route.navigate(['home']);
+    if (this.buttonName === "Go Home")
+      this.route.navigate(['home']);
+    else {
+      console.log("sending teams to db");
+    }
   }
 
   trackBy(index: any, item: any) {
