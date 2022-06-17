@@ -27,7 +27,7 @@
                 </ng-container>
             </ng-container>
         </div>
-        <div class="text-center" *ngIf="teams[0].Name && teams[0].Name">
+        <div class="text-center" *ngIf="teams[0].Name && teams[1].Name">
             <form #form="ngForm" class="row mx-auto" style="width:85%; margin:50px;">
                 <ng-container *ngFor="let team of teams; let i = index; trackBy: trackBy">
                     <div [ngStyle]="{'width':width}">

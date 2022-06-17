@@ -18,6 +18,8 @@ export class GameboardComponent implements OnInit {
   @Input()
   teams: Team[] = [];
 
+  sortedTeams: Team[] = [];
+
   @Input()
   players: Player[][] = [];
 
@@ -51,7 +53,8 @@ export class GameboardComponent implements OnInit {
   constructor(private route: Router, private api: HttpService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
-    if (this.teams[0].Name === "" && this.teams[1].Name === "")
+    console.log(this.teams);
+    if (this.teams[0].Name && this.teams[1].Name)
       this.buttonName = "Go Home";
     this.width = this.width + (100 / this.teams.length) + '%';
     this.score = new Array(this.teams.length).fill(0);
@@ -127,7 +130,28 @@ export class GameboardComponent implements OnInit {
     if (this.buttonName === "Go Home")
       this.route.navigate(['home']);
     else {
-      console.log("sending teams to db");
+      for (let i = 0; i < this.score.length; i++) {
+        this.teams[i].Score = this.score[i];
+      }
+      this.api.createTeams(this.teams).subscribe(res => {
+        this.api.getSortedTeams().subscribe(res => {
+          this.sortedTeams = res;
+          console.log(this.sortedTeams);
+          for (let i = 0; i < this.teams.length; i++) {         // iterate through teams
+            for (let j = 0; j < this.players[i].length; j++) {  // iterate through players
+              for (let k = 0; k < this.sortedTeams.length; k++) {    // iterate through sorted teams to find team id for player
+                if ((this.sortedTeams[k].Name === this.teams[i].Name) && (this.sortedTeams[k].Score === this.teams[i].Score)) {
+                  this.players[i][j].Team_id = this.sortedTeams[k].Id;
+                }
+              }
+            }
+          }
+          console.log(this.players);
+          this.api.createPlayers(this.players).subscribe(res => {
+            this.route.navigate(['home']);
+          });
+        })
+      })
     }
   }
 
