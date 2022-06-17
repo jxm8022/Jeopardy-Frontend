@@ -50,8 +50,6 @@ export class TeamComponent implements OnInit {
   }
 
   submitTeams(): void {
-    console.log("submitting teams");
-
     for (let i = 0; i < this.teamNames.length; i++) {
       this.teams.push(new Team(-1, this.teamNames[i], 0));
       this.players.push([]);
