@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiBaseURL: "https://localhost:7004"
+  apiBaseURL: "https://localhost:7004",
+  apiAzureURL: "https://junipardyapi.azurewebsites.net"
 };
 
 /*
