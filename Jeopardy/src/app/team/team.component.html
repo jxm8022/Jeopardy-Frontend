@@ -14,7 +14,7 @@
     <div class="text-center">
         <form #form="ngForm" class="row mx-auto" style="width:85%; margin:50px;">
             <ng-container *ngFor="let team of teamNames; let i = index; trackBy: trackBy">
-                <div class="col-{{12/teamNumber}}">
+                <div [ngStyle]="{'width':width}">
                     <input name="team" [(ngModel)]="teamNames[i]" class="form-control form-control-lg" type="text"
                         placeholder="TEAM NAME {{i+1}}" aria-label=".form-control-lg team-name" style="margin: 10px;">
                     <ng-container *ngFor="let teamPlayers of playerNames[i]; let y = index; trackBy: trackBy">

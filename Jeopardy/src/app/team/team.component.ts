@@ -20,12 +20,15 @@ export class TeamComponent implements OnInit {
 
   game: boolean = false;
 
+  width: string = "";
+
   constructor() {
     this.teamNames = Array(this.teamNumber).fill("");
     this.fillPlayers(2);
   }
 
   ngOnInit(): void {
+    this.width = this.width = this.width + (100 / this.teamNumber) + '%';
   }
 
   fillPlayers(x: number): void {
@@ -39,6 +42,8 @@ export class TeamComponent implements OnInit {
   }
 
   onRadioChange(i: number): void {
+    this.width = "";
+    this.width = this.width = this.width + (100 / i) + '%';
     this.teamNumber = i;
     this.teamNames = Array(i).fill("");
     this.fillPlayers(i);
