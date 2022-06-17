@@ -39,7 +39,7 @@ export class GameboardComponent implements OnInit {
   currentQuestion: string = "Question";
   currentAnswer: string = "Answer";
 
-  buttonName: string = "Submit Teams";
+  buttonName: string = "Go Home";
 
   questionSelected: boolean = false;
   showAnswer: boolean = false;
@@ -53,9 +53,18 @@ export class GameboardComponent implements OnInit {
   constructor(private route: Router, private api: HttpService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
-    console.log(this.teams);
-    if (this.teams[0].Name && this.teams[1].Name)
-      this.buttonName = "Go Home";
+    if (this.teams[0].Name && this.teams[1].Name) {
+      this.buttonName = "Submit Team";
+      this.teams = this.teams.filter(element => { return element.Name !== "" });
+
+      let temp = [];
+      let temp2d = [];
+      for (let i = 0; i < this.players.length; i++) {
+        temp = this.players[i].filter(element => { return element.Name !== "" });
+        temp2d.push(temp);
+      }
+      this.players = temp2d;
+    }
     this.width = this.width + (100 / this.teams.length) + '%';
     this.score = new Array(this.teams.length).fill(0);
     this.isQuestionAnswered = new Array(5).fill([]);
@@ -136,7 +145,6 @@ export class GameboardComponent implements OnInit {
       this.api.createTeams(this.teams).subscribe(res => {
         this.api.getSortedTeams().subscribe(res => {
           this.sortedTeams = res;
-          console.log(this.sortedTeams);
           for (let i = 0; i < this.teams.length; i++) {         // iterate through teams
             for (let j = 0; j < this.players[i].length; j++) {  // iterate through players
               for (let k = 0; k < this.sortedTeams.length; k++) {    // iterate through sorted teams to find team id for player
@@ -146,7 +154,6 @@ export class GameboardComponent implements OnInit {
               }
             }
           }
-          console.log(this.players);
           this.api.createPlayers(this.players).subscribe(res => {
             this.route.navigate(['home']);
           });
