@@ -44,7 +44,7 @@ export class GameboardComponent implements OnInit {
   questionSelected: boolean = false;
   showAnswer: boolean = false;
 
-  winner: boolean = true;
+  winner: boolean = false;
 
   opacity: string = '100%';
   width: string = "";
@@ -148,7 +148,7 @@ export class GameboardComponent implements OnInit {
           for (let i = 0; i < this.teams.length; i++) {         // iterate through teams
             for (let j = 0; j < this.players[i].length; j++) {  // iterate through players
               for (let k = 0; k < this.sortedTeams.length; k++) {    // iterate through sorted teams to find team id for player
-                if ((this.sortedTeams[k].Name === this.teams[i].Name) && (this.sortedTeams[k].Score === this.teams[i].Score)) {
+                if ((this.sortedTeams[k].Name === this.teams[i].Name) && (this.sortedTeams[k].Score == this.teams[i].Score)) { // not sure why team.Score is string but it has '==' because the values match but not the types
                   this.players[i][j].Team_id = this.sortedTeams[k].Id;
                 }
               }
