@@ -42,7 +42,7 @@ export class GameboardComponent implements OnInit {
   constructor(private api: HttpService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
-    this.isQuestionAnswered = new Array(2).fill([]);
+    this.isQuestionAnswered = new Array(5).fill([]);
     for (let i = 0; i < this.isQuestionAnswered.length; i++) {
       this.isQuestionAnswered[i] = new Array(5).fill(false);
     }
