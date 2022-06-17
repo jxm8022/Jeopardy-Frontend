@@ -95,7 +95,7 @@ export class GameboardComponent implements OnInit {
   }
 
   flipCard(question: number, category: number): void {
-    if (question === 0) {
+    if (question === 0 && this.questionSelected) {
       this.showAnswer = !this.showAnswer;
       if (!this.showAnswer) {
         this.questionSelected = !this.questionSelected;
