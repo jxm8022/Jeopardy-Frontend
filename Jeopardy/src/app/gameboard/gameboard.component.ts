@@ -36,7 +36,8 @@ export class GameboardComponent implements OnInit {
   currentQuestion: string = "Question";
   currentAnswer: string = "Answer";
 
-  questionSelected: boolean = false; // set to false
+  questionSelected: boolean = false;
+  showAnswer: boolean = false;
 
   opacity: string = '100%';
   width: string = "";
@@ -45,8 +46,6 @@ export class GameboardComponent implements OnInit {
   constructor(private api: HttpService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
-    if (this.teams.length < 2)
-      this.teams = new Array(5).fill(new Team(-1, "Team name", 0));
     this.width = this.width + (100 / this.teams.length) + '%';
     this.score = new Array(this.teams.length).fill(0);
     this.isQuestionAnswered = new Array(5).fill([]);
@@ -92,8 +91,13 @@ export class GameboardComponent implements OnInit {
   }
 
   flipCard(question: number, category: number): void {
-    if (question !== 0 || this.questionSelected) {
-      if (question !== 0) {
+    if (question === 0) {
+      this.showAnswer = !this.showAnswer;
+      if (!this.showAnswer) {
+        this.questionSelected = !this.questionSelected;
+      }
+    } else if ((question !== 0 || this.questionSelected)) {
+      if (question !== 0) { // this is here because when showing the question, exiting out has question and category set to 0
         this.currentQuestion = this.questionAndAnswer[category][question - 1].Question.Entry; // -1 from question because the category row
         this.currentAnswer = this.questionAndAnswer[category][question - 1].Answer.Entry;
         this.isQuestionAnswered[category][question - 1] = true;

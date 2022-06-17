@@ -21,7 +21,7 @@ const routes: Routes = [
   },
   {
     path: 'home/game',
-    component: GameboardComponent
+    component: TeamComponent
   }
 ];
 

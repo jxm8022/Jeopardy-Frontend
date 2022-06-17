@@ -19,7 +19,7 @@
                         <div class="question-box" *ngIf="q === 0 && c === 0" (click)="flipCard(q,c)">
                             <h1 class="text-center text-dark">{{currentQuestion}}</h1>
                             <hr class="mx-auto">
-                            <h1>
+                            <h1 *ngIf="showAnswer">
                                 <div class="text-break" [innerHTML]="currentAnswer"></div>
                             </h1>
                         </div>
@@ -27,7 +27,7 @@
                 </ng-container>
             </ng-container>
         </div>
-        <div class="text-center">
+        <div class="text-center" *ngIf="teams[0].Name && teams[0].Name">
             <form #form="ngForm" class="row mx-auto" style="width:85%; margin:50px;">
                 <ng-container *ngFor="let team of teams; let i = index; trackBy: trackBy">
                     <div [ngStyle]="{'width':width}">
@@ -41,5 +41,3 @@
         </div>
     </div>
 </div>
-
-<!-- show question then answer-->
