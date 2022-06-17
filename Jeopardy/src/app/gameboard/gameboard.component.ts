@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { CategoryComponent } from '../category/category.component';
 import { Player } from '../models/Player';
@@ -39,11 +40,14 @@ export class GameboardComponent implements OnInit {
   questionSelected: boolean = false;
   showAnswer: boolean = false;
 
+  winner: boolean = false;
+  displayWinner: boolean = false;
+
   opacity: string = '100%';
   width: string = "";
   modalRef: MdbModalRef<CategoryComponent> | null = null;
 
-  constructor(private api: HttpService, private modalService: MdbModalService) { }
+  constructor(private route: Router, private api: HttpService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
     this.width = this.width + (100 / this.teams.length) + '%';
@@ -95,6 +99,16 @@ export class GameboardComponent implements OnInit {
       this.showAnswer = !this.showAnswer;
       if (!this.showAnswer) {
         this.questionSelected = !this.questionSelected;
+        let counter = 0;
+        for (let i = 0; i < this.isQuestionAnswered.length; i++) {
+          for (let j = 0; j < this.isQuestionAnswered[i].length; j++) {
+            if (this.isQuestionAnswered[i][j])
+              counter++;
+          }
+        }
+        if (counter === (this.isQuestionAnswered.length * this.isQuestionAnswered[0].length)) {
+          this.winner = true;
+        }
       }
     } else if ((question !== 0 || this.questionSelected)) {
       if (question !== 0) { // this is here because when showing the question, exiting out has question and category set to 0
@@ -104,6 +118,10 @@ export class GameboardComponent implements OnInit {
       }
       this.questionSelected = !this.questionSelected;
     }
+  }
+
+  winnerWinnerChickenDinner(): void {
+    this.route.navigate(['home']);
   }
 
   trackBy(index: any, item: any) {
