@@ -21,7 +21,7 @@ export class LeaderboardComponent implements OnInit {
   ngOnInit(): void {
     this.width = this.width + 100 / 3 + "%";
     this.api.getSortedTeams().subscribe(res => {
-      if (!res) {
+      if (res) {
         this.teams = res;
         this.opacity = "100%";
       }
