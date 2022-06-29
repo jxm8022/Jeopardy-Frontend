@@ -22,7 +22,7 @@ jobs:
       with:
         context: ./Jeopardy
         file: ./Jeopardy/Dockerfile
-        tags: index.docker.io/${{secrets.DOCKERHUB_USERNAME}}/junipardy:${{github.sha}}
+        tags: index.docker.io/${{secrets.DOCKERHUB_USERNAME}}/junipardyui:${{github.sha}}
         push: true
   deploy:
     runs-on: ubuntu-latest
@@ -33,4 +33,4 @@ jobs:
       with:
         app-name: 'garagemeetui'
         publish-profile: ${{secrets.AZURE_PUBLISH_PROFILE_JUNIPARDY}}
-        images: index.docker.io/${{secrets.DOCKERHUB_USERNAME}}/junipardy:${{github.sha}}
+        images: index.docker.io/${{secrets.DOCKERHUB_USERNAME}}/junipardyui:${{github.sha}}
