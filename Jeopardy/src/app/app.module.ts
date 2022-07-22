@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { CategoryComponent } from './category/category.component';
 import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
 import { HttpClientModule } from '@angular/common/http';
+import { AdminComponent } from './admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { HttpClientModule } from '@angular/common/http';
     HomeComponent,
     LeaderboardComponent,
     GameboardComponent,
-    CategoryComponent
+    CategoryComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
