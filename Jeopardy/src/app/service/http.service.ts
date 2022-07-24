@@ -46,7 +46,7 @@ export class HttpService {
   // Admin {ID: integer, Name: string, Password: string, Access: integer}
   // Input: username, password
   getAdmin(username: string, password: string): Observable<any> {
-    return this.http.get(`${environment.apiAzureURL}/Admin/${username}/${password}`)
+    return this.http.get(`${environment.apiAzureURL}/Player/Admin/${username}/${password}`)
   }
 
   // Returns List<Player>
