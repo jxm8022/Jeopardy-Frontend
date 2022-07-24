@@ -2,9 +2,9 @@
 <img class="mx-auto d-block" src="../../assets/admin.png" />
 <form #form="ngForm" class="row mx-auto" style="width:30%; margin:50px;">
     <input name="username" [(ngModel)]="username" class="form-control form-control-lg" type="text"
-        placeholder="username" aria-label=".form-control-lg username" style="margin: 10px;">
-    <input name="password" [(ngModel)]="password" class="form-control form-control-lg" type="text"
-        placeholder="password" aria-label=".form-control-lg password" style="margin: 10px;">
+        placeholder="username" aria-label=".form-control-lg username" style="margin: 10px;"> {{username}}
+    <input name="password" [(ngModel)]="password" class="form-control form-control-lg" type="password"
+        placeholder="password" aria-label=".form-control-lg password" style="margin: 10px;"> {{password}}
 </form>
 <div class="text-center" style="margin-bottom: 25px;">
     <button type="button" class="btn btn-primary btn-lg" (click)="login()">Login</button>

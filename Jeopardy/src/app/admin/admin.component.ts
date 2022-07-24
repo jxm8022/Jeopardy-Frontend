@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { sha256 } from 'js-sha256';
+import { Admin } from '../models/Admin';
+import { HttpService } from '../service/http.service';
 
 @Component({
   selector: 'app-admin',
@@ -8,17 +11,35 @@ import { sha256 } from 'js-sha256';
 })
 export class AdminComponent implements OnInit {
 
-  constructor() { }
+  constructor(private api: HttpService, private router: Router) { }
 
   ngOnInit(): void {
   }
 
+  admin: Admin = { admin_id: -1, admin_name: "", admin_password: "", admin_access: -1 };
+
   username: string = "";
   password: string = "";
+  errorMessage: string = "";
 
   login(): void {
-    var hash = sha256(this.password);
-    localStorage.setItem("adminActive", "true");
+    this.api.getAdmin(this.username, sha256(this.password)).subscribe({
+      'next': (res) => {
+        console.log(res);
+        if (res.status === 200) {
+          this.admin = res.body;
+          localStorage.setItem("adminActive", "true");
+          this.router.navigate(['home']);
+        }
+        if (res.status === 204) {
+          this.errorMessage = "No Content";
+        }
+      },
+      'error': (err) => {
+        console.log(err);
+        this.errorMessage = err.error;
+      }
+    });
   }
 
 }

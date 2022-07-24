@@ -9,7 +9,7 @@
 .admin {
     width: 7%;
     margin: 15px;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: 0;
 }
@@ -27,6 +27,11 @@ hr {
 #leaderboard {
     width: 100%;
     padding: 50px 0;
+}
+
+#createCard {
+    width: 100%;
+    margin: 50px 0;
 }
 
 #create:hover {

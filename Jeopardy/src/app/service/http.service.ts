@@ -42,6 +42,13 @@ export class HttpService {
     // return this.http.post(`${environment.apiBaseURL}/Team/CreateTeams`, p);
   }
 
+  // Returns Admin
+  // Admin {ID: integer, Name: string, Password: string, Access: integer}
+  // Input: username, password
+  getAdmin(username: string, password: string): Observable<any> {
+    return this.http.get(`${environment.apiAzureURL}/Admin/${username}/${password}`)
+  }
+
   // Returns List<Player>
   // Player {ID: integer, Name: string, Team_ID: integer}
   // Input: team id

@@ -3,5 +3,13 @@
     <input id="create" type="image" src="../../assets/play_game.png" [routerLink]="['game']" />
     <hr class="mx-auto">
     <input id="leaderboard" type="image" src="../../assets/leaderboard.png" [routerLink]="['leaderboard']" />
+    <ng-container *ngIf="adminActive">
+        <hr class="mx-auto">
+        <input id="createCard" type="image" src="../../assets/add_category.png" />
+        <hr class="mx-auto">
+        <input id="createCard" type="image" src="../../assets/add_subcategory.png" />
+        <hr class="mx-auto">
+        <input id="createCard" type="image" src="../../assets/add_question.png" />
+    </ng-container>
 </div>
 <input class="admin" type="image" src="../../assets/admin.png" [routerLink]="['admin']" />
