@@ -25,19 +25,14 @@ export class AdminComponent implements OnInit {
   login(): void {
     this.api.getAdmin(this.username, sha256(this.password)).subscribe({
       'next': (res) => {
-        console.log(res);
         if (res.status === 200) {
           this.admin = res.body;
-          localStorage.setItem("adminActive", "true");
+          sessionStorage.setItem("adminActive", "true");
           this.router.navigate(['home']);
         }
         if (res.status === 204) {
-          this.errorMessage = "No Content";
+          this.errorMessage = "Not an admin!";
         }
-      },
-      'error': (err) => {
-        console.log(err);
-        this.errorMessage = err.error;
       }
     });
   }

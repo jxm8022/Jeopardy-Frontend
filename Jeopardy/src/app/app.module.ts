@@ -14,6 +14,7 @@ import { CategoryComponent } from './category/category.component';
 import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
 import { HttpClientModule } from '@angular/common/http';
 import { AdminComponent } from './admin/admin.component';
+import { CreateComponent } from './create/create.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { AdminComponent } from './admin/admin.component';
     LeaderboardComponent,
     GameboardComponent,
     CategoryComponent,
-    AdminComponent
+    AdminComponent,
+    CreateComponent
   ],
   imports: [
     BrowserModule,

@@ -9,7 +9,7 @@
                             [ngStyle]="{'background-color':getColor(q,c)}" (click)="flipCard(q,c)" aria-disabled="true"
                             id="question">
                             <h1 *ngIf="q == 0" class="mx-auto text-break text-dark">
-                                {{categories[c].Category}}
+                                {{categories[c].category.category_name}}
                             </h1>
                             <h1 *ngIf="q > 0" class="mx-auto text-break">
                                 <i>{{questionCost[q]}}</i>

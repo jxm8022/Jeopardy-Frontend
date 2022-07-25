@@ -1,15 +1,23 @@
 <app-nav-bar></app-nav-bar>
-<div class="center">
-    <input id="create" type="image" src="../../assets/play_game.png" [routerLink]="['game']" />
-    <hr class="mx-auto">
-    <input id="leaderboard" type="image" src="../../assets/leaderboard.png" [routerLink]="['leaderboard']" />
-    <ng-container *ngIf="adminActive">
-        <hr class="mx-auto">
-        <input id="createCard" type="image" src="../../assets/add_category.png" />
-        <hr class="mx-auto">
-        <input id="createCard" type="image" src="../../assets/add_subcategory.png" />
-        <hr class="mx-auto">
-        <input id="createCard" type="image" src="../../assets/add_question.png" />
-    </ng-container>
-</div>
+<ng-container *ngIf="!adminActive">
+    <div class="center">
+        <input id="mainOptions" type="image" src="../../assets/play_game.png" [routerLink]="['game']" />
+        <hr class="mx-auto mainHr">
+        <input id="mainOptions" type="image" src="../../assets/leaderboard.png" [routerLink]="['leaderboard']" />
+    </div>
+</ng-container>
+<ng-container *ngIf="adminActive">
+    <div class="center text-center">
+        <input id="adminOptions" type="image" src="../../assets/play_game.png" [routerLink]="['game']" />
+        <hr class="mx-auto adminHr">
+        <input id="adminOptions" type="image" src="../../assets/leaderboard.png" [routerLink]="['leaderboard']" />
+        <hr class="mx-auto adminHr">
+        <input id="adminOptions" type="image" src="../../assets/add_category.png" [routerLink]="['create/category']" />
+        <hr class="mx-auto adminHr">
+        <input id="adminOptions" type="image" src="../../assets/add_subcategory.png"
+            [routerLink]="['create/subcategory']" />
+        <hr class="mx-auto adminHr">
+        <input id="adminOptions" type="image" src="../../assets/add_question.png" [routerLink]="['create/question']" />
+    </div>
+</ng-container>
 <input class="admin" type="image" src="../../assets/admin.png" [routerLink]="['admin']" />

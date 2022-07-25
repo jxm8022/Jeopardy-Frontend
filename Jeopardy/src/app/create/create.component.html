@@ -1,0 +1,39 @@
+<app-nav-bar></app-nav-bar>
+<div [ngStyle]="{'opacity': opacity}">
+    <img class="mx-auto d-block" src="../../assets/add_{{createType}}.png" />
+
+    <ng-container *ngIf="createType === 'category' ">
+        <form #form="ngForm" class="row mx-auto" style="width:30%; margin:50px;">
+            <input name="category" [(ngModel)]="category" class="form-control form-control-lg" type="text"
+                placeholder="Category" aria-label=".form-control-lg category" style="margin: 10px;">
+        </form>
+        <div class="text-center" style="margin-bottom: 25px;">
+            <p *ngIf="errorMessage" style="color: red;">{{errorMessage}}</p>
+            <button type="button" class="btn btn-primary btn-lg" (click)="createCategory()">Create</button>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="createType === 'subcategory' ">
+        <form #form="ngForm" class="row mx-auto" style="width:30%; margin:50px;">
+            <input name="subcategory" [(ngModel)]="subcategory" class="form-control form-control-lg" type="text"
+                placeholder="Subcategory" aria-label=".form-control-lg subcategory" style="margin: 10px;">
+        </form>
+        <div class="text-center" style="margin-bottom: 25px;">
+            <p *ngIf="errorMessage" style="color: red;">{{errorMessage}}</p>
+            <button type="button" class="btn btn-primary btn-lg" (click)="createSubcategory()">Create</button>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="createType === 'question' ">
+        <form #form="ngForm" class="row mx-auto" style="width:30%; margin:50px;">
+            <input name="question" [(ngModel)]="question" class="form-control form-control-lg" type="text"
+                placeholder="Question" aria-label=".form-control-lg question" style="margin: 10px;">
+            <input name="answer" [(ngModel)]="answer" class="form-control form-control-lg" type="text"
+                placeholder="Answer" aria-label=".form-control-lg answer" style="margin: 10px;">
+        </form>
+        <div class="text-center" style="margin-bottom: 25px;">
+            <p *ngIf="errorMessage" style="color: red;">{{errorMessage}}</p>
+            <button type="button" class="btn btn-primary btn-lg" (click)="createQuestion()">Create</button>
+        </div>
+    </ng-container>
+</div>

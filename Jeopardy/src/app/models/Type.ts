@@ -1,8 +1,10 @@
+import { Category } from "./Category";
 import { IType } from "./IType";
+import { SubCategory } from "./SubCategory";
 
 export class Type implements IType {
     constructor(
-        public Id: number,
-        public Category: string
+        public category: Category,
+        public subcategories: SubCategory[]
     ) { }
 }

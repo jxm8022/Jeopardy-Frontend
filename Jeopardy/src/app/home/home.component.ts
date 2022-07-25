@@ -10,8 +10,10 @@ export class HomeComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    if (!localStorage.getItem("adminActive"))
+    sessionStorage.setItem("adminActive", "true");
+    if (sessionStorage.getItem("adminActive") === "true") {
       this.adminActive = true;
+    }
   }
 
   adminActive: boolean = false;

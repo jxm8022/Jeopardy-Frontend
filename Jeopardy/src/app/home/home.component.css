@@ -14,24 +14,24 @@
     right: 0;
 }
 
-hr {
+.mainHr {
     border-top: 4px solid;
     width: 75%;
 }
 
-#create {
+.adminHr {
+    border-top: 4px solid;
+    width: 30%;
+}
+
+#mainOptions {
     width: 100%;
     margin: 50px 0;
 }
 
-#leaderboard {
-    width: 100%;
-    padding: 50px 0;
-}
-
-#createCard {
-    width: 100%;
-    margin: 50px 0;
+#adminOptions {
+    width: 45%;
+    margin: 10px 0;
 }
 
 #create:hover {

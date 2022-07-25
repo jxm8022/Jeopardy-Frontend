@@ -2,8 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { CategoryComponent } from '../category/category.component';
+import { Category } from '../models/Category';
 import { Player } from '../models/Player';
 import { QA } from '../models/QA';
+import { SubCategory } from '../models/SubCategory';
 import { Team } from '../models/Team';
 import { Type } from '../models/Type';
 import { HttpService } from '../service/http.service';
@@ -24,11 +26,11 @@ export class GameboardComponent implements OnInit {
   players: Player[][] = [];
 
   categories: Type[] = [
-    new Type(-1, "Category 1"),
-    new Type(-1, "Category 2"),
-    new Type(-1, "Category 3"),
-    new Type(-1, "Category 4"),
-    new Type(-1, "Category 5"),
+    new Type(new Category(0, ""), [new SubCategory(0, "", 0)]),
+    new Type(new Category(0, ""), [new SubCategory(0, "", 0)]),
+    new Type(new Category(0, ""), [new SubCategory(0, "", 0)]),
+    new Type(new Category(0, ""), [new SubCategory(0, "", 0)]),
+    new Type(new Category(0, ""), [new SubCategory(0, "", 0)]),
   ];
   questionAndAnswer: QA[][] = [];
   isQuestionAnswered: boolean[][] = [];

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
+import { Category } from '../models/Category';
 import { QA } from '../models/QA';
+import { SubCategory } from '../models/SubCategory';
 import { Type } from '../models/Type';
 import { HttpService } from '../service/http.service';
 
@@ -10,6 +12,8 @@ import { HttpService } from '../service/http.service';
   styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit {
+
+  type!: string;
 
   questions: QA[][] = [];
   categories: Type[] = [];
@@ -28,8 +32,8 @@ export class CategoryComponent implements OnInit {
     this.api.getQuestions(index + 1).subscribe(res => {
       if (this.categories.includes(this.selection[index])) {
         // categories
-        this.categories[this.categories.indexOf(this.selection[index])] = new Type(-1, "");
-        this.categories = this.categories.filter(element => { return element.Category !== "" });
+        this.categories[this.categories.indexOf(this.selection[index])] = new Type(new Category(0, ""), [new SubCategory(0, "", 0)]);
+        this.categories = this.categories.filter(element => { return element.category.category_name !== "" });
 
         // questions
         for (let i = 0; i < this.questions.length; i++) {

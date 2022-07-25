@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -45,8 +45,10 @@ export class HttpService {
   // Returns Admin
   // Admin {ID: integer, Name: string, Password: string, Access: integer}
   // Input: username, password
-  getAdmin(username: string, password: string): Observable<any> {
-    return this.http.get(`${environment.apiAzureURL}/Player/Admin/${username}/${password}`)
+  getAdmin(username: string, password: string): Observable<HttpResponse<any>> {
+    return this.http.get(`${environment.apiAzureURL}/Player/Admin/${username}/${password}`, {
+      'observe': 'response'
+    });
   }
 
   // Returns List<Player>
@@ -69,5 +71,13 @@ export class HttpService {
   getTypes(): Observable<any> {
     return this.http.get<any>(`${environment.apiAzureURL}/Category/GetCategories`);
     // return this.http.get<any>(`${environment.apiBaseURL}/Type/GetTypes`);
+  }
+
+  // Returns HttpResponse
+  // Input: categoryName
+  createCategory(categoryName: string): Observable<HttpResponse<any>> {
+    return this.http.post(`${environment.apiAzureURL}/Category/CreateCategory/${categoryName}`, categoryName, {
+      'observe': 'response'
+    });
   }
 }
