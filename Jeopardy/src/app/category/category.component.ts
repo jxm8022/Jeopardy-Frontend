@@ -13,19 +13,38 @@ import { HttpService } from '../service/http.service';
 })
 export class CategoryComponent implements OnInit {
 
+  // data parameters for create.component.ts
+  categories!: Type[];
   type!: string;
 
+  // variables for category.component.html
   questions: QA[][] = [];
-  categories: Type[] = [];
   selection!: Type[];
   errorMessage = '';
 
   constructor(private api: HttpService, public modalRef: MdbModalRef<CategoryComponent>) { }
 
   ngOnInit(): void {
-    this.api.getTypes().subscribe(res => {
-      this.selection = res;
-    });
+    if (this.type) {
+      this.selection = this.categories;
+    } else {
+      this.api.getTypes().subscribe(res => {
+        this.selection = res;
+      });
+    }
+  }
+
+  categorySelected!: Category;
+  blank!: Category;
+  beepBoop: boolean = false;
+  selected(index: number) {
+    if (this.beepBoop) {
+      this.categorySelected = this.blank;
+      this.beepBoop = !this.beepBoop;
+    } else {
+      this.categorySelected = this.selection[index].category;
+      this.beepBoop = !this.beepBoop;
+    }
   }
 
   changed(index: number) {
@@ -50,10 +69,20 @@ export class CategoryComponent implements OnInit {
   }
 
   submit() {
-    if (this.questions.length === 5) {
-      this.modalRef.close(this.questions);
+    if (this.type) {
+      if (this.type === "subcategory") {
+        if (this.categorySelected) {
+          this.modalRef.close(this.categorySelected);
+        } else {
+          this.errorMessage = "Select a category!"
+        }
+      }
     } else {
-      this.errorMessage = "Select 5 categories!"
+      if (this.questions.length === 5) {
+        this.modalRef.close(this.questions);
+      } else {
+        this.errorMessage = "Select 5 categories!"
+      }
     }
   }
 }
