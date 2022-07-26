@@ -15,6 +15,7 @@ import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
 import { HttpClientModule } from '@angular/common/http';
 import { AdminComponent } from './admin/admin.component';
 import { CreateComponent } from './create/create.component';
+import { StatusbarComponent } from './statusbar/statusbar.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { CreateComponent } from './create/create.component';
     GameboardComponent,
     CategoryComponent,
     AdminComponent,
-    CreateComponent
+    CreateComponent,
+    StatusbarComponent
   ],
   imports: [
     BrowserModule,

@@ -29,6 +29,7 @@ export class CreateComponent implements OnInit {
   }
 
   createType: string = "";
+  message: string = "";
   errorMessage: string = "";
   opacity: string = "100%";
   modalRef: MdbModalRef<CategoryComponent> | null = null;
@@ -64,7 +65,7 @@ export class CreateComponent implements OnInit {
       this.api.createCategory(this.category).subscribe({
         'next': (res) => {
           if (res.status === 200) {
-            this.errorMessage = "Category created successfully!";
+            this.message = `Category ${this.category} created successfully!`;
             this.category = "";
           }
           if (res.status === 204) {
@@ -96,7 +97,7 @@ export class CreateComponent implements OnInit {
       this.api.createSubcategory(new SubCategory(-1, this.subcategory, this.categoryToAddTo.category_id)).subscribe({
         'next': (res) => {
           if (res.status === 200) {
-            this.errorMessage = "Subcategory created successfully!";
+            this.message = `Subcategory ${this.subcategory} created successfully!`;
             this.subcategory = "";
             this.displayCategorySelector(this.categories, this.createType);
           }
