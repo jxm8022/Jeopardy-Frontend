@@ -20,6 +20,14 @@ export class HttpService {
     // return this.http.get<any>(`${environment.apiBaseURL}/Question/GetQuestions/${category}`);
   }
 
+  // Returns List<Question>
+  // Question {question_id: int, question_entry: string, category_id: int}
+  getAllQuestions(subcategory: number): Observable<HttpResponse<any>> {
+    return this.http.get<any>(`${environment.apiAzureURL}/Question/GetAllQuestions/${subcategory}`, {
+      'observe': 'response'
+    });
+  }
+
   // Returns List<Team>
   // Team {ID: integer, Name: string, Score: integer}
   // Notes: the list is sorted according to score (highest to lowest)
@@ -91,6 +99,9 @@ export class HttpService {
     });
   }
 
+  // Returns HttpResponse
+  // Input: QA
+  // QA {question: Question, subcategories: SubCategory[]}
   createQuestion(question: Partial<any>): Observable<HttpResponse<any>> {
     return this.http.post(`${environment.apiAzureURL}/Question/CreateQuestion`, question, {
       'observe': 'response'

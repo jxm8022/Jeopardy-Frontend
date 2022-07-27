@@ -50,13 +50,20 @@ export class CreateComponent implements OnInit {
     })
     this.modalRef.onClose.subscribe((message: any) => {
       if (message) {
+        this.opacity = "100%";
         if (this.createType === "subcategory") {
           this.categoryToAddTo = message;
         }
         if (this.createType === "question") {
           this.subcategoryToAddTo = message;
+          this.api.getAllQuestions(this.subcategoryToAddTo.subcategory_id).subscribe({
+            'next': (res) => {
+              if (res.status === 200) {
+                this.existingQuestions = res.body;
+              }
+            }
+          });
         }
-        this.opacity = "100%";
       } else {
         this.displayCategorySelector(categories, type);
       }
@@ -122,6 +129,7 @@ export class CreateComponent implements OnInit {
 
   // CREATE QUESTION
   subcategoryToAddTo!: SubCategory;
+  existingQuestions: Question[] = [];
   question: string = "";
   answer: string = "";
   createQuestion(): void {
