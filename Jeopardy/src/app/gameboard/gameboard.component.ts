@@ -84,23 +84,13 @@ export class GameboardComponent implements OnInit {
       modalClass: 'modal-dialog-centered'
     })
     this.modalRef.onClose.subscribe((message: any) => {
-      console.log(message[0]);
-      console.log(message[1]);
-      // this.api.getTypes().subscribe(res => {
-      //   if (message) {
-      //     for (let i = 0; i < message.length; i++) {
-      //       for (let j = 0; j < res.length; j++) {
-      //         if (message[i][0].Question.Type_id === res[j].Id) {
-      //           this.subcategories[i] = res[j];
-      //         }
-      //       }
-      //       this.questionAndAnswer.push(message[i]);
-      //     }
-      //     this.opacity = "100%";
-      //   }
-      //   else
-      //     this.displayCategorySelector();
-      // });
+      if (message) {
+        this.opacity = "100%";
+        this.subcategories = message[0];
+        this.questionAndAnswer = message[1];
+      } else {
+        this.displayCategorySelector();
+      }
     })
   }
 

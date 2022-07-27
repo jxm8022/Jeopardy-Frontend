@@ -16,7 +16,14 @@ export class HttpService {
   // Input: category id
   // Notes: returns 5 QAs for a category
   getQuestions(subcategories: SubCategory[]): Observable<HttpResponse<any>> {
-    return this.http.get<any>(`${environment.apiAzureURL}/Question/GetQuestions/${subcategories}`, {
+    var url = "";
+    for (let i = 0; i < subcategories.length; i++) {
+      url += `${subcategories[i].subcategory_id}`;
+      if (i < subcategories.length - 1) {
+        url += "&";
+      }
+    }
+    return this.http.get<any>(`${environment.apiAzureURL}/Question/GetQuestions/${url}`, {
       'observe': 'response'
     });
     // return this.http.get<any>(`${environment.apiBaseURL}/Question/GetQuestions/${category}`);

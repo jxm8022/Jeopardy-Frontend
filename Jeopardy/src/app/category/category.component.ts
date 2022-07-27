@@ -59,7 +59,6 @@ export class CategoryComponent implements OnInit {
   }
 
   gameCategories: SubCategory[] = [];
-  questions: QA[][] = [];
   changed(index_i: number, index_j: number) {
     if (this.gameCategories.includes(this.selection[index_i].subcategories[index_j])) {
       this.gameCategories = this.gameCategories.filter(element => { return element !== this.selection[index_i].subcategories[index_j] });
@@ -84,11 +83,11 @@ export class CategoryComponent implements OnInit {
         }
       }
     } else {
-      if (this.questions.length === 5) {
+      if (this.gameCategories.length === 5) {
         this.api.getQuestions(this.gameCategories).subscribe({
           'next': (res) => {
             if (res.status === 200) {
-              this.modalRef.close([this.gameCategories, this.questions]);
+              this.modalRef.close([this.gameCategories, res.body]);
             }
           }
         });
