@@ -90,4 +90,10 @@ export class HttpService {
       'observe': 'response'
     });
   }
+
+  createQuestion(question: Partial<any>): Observable<HttpResponse<any>> {
+    return this.http.post(`${environment.apiAzureURL}/Question/CreateQuestion`, question, {
+      'observe': 'response'
+    });
+  }
 }

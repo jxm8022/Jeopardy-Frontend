@@ -32,6 +32,9 @@
             <input name="answer" [(ngModel)]="answer" class="form-control form-control-lg" type="text"
                 placeholder="Answer" aria-label=".form-control-lg answer" style="margin: 10px;">
         </form>
+        <p class="text-center" *ngIf="subcategoryToAddTo">
+            Creating question for {{subcategoryToAddTo.subcategory_name}}
+        </p>
         <div class="text-center" style="margin-bottom: 25px;">
             <p *ngIf="errorMessage" style="color: red;">{{errorMessage}}</p>
             <button type="button" class="btn btn-primary btn-lg" (click)="createQuestion()">Create</button>

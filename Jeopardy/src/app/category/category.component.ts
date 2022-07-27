@@ -47,6 +47,18 @@ export class CategoryComponent implements OnInit {
     }
   }
 
+  subcategorySelected!: SubCategory;
+  blankSub!: SubCategory;
+  selectedSubcategory(index_i: number, index_j: number) {
+    if (this.beepBoop) {
+      this.subcategorySelected = this.blankSub;
+      this.beepBoop = !this.beepBoop;
+    } else {
+      this.subcategorySelected = this.selection[index_i].subcategories[index_j];
+      this.beepBoop = !this.beepBoop;
+    }
+  }
+
   changed(index: number) {
     this.api.getQuestions(index + 1).subscribe(res => {
       if (this.categories.includes(this.selection[index])) {
@@ -75,6 +87,12 @@ export class CategoryComponent implements OnInit {
           this.modalRef.close(this.categorySelected);
         } else {
           this.errorMessage = "Select a category!"
+        }
+      } else if (this.type === "question") {
+        if (this.subcategorySelected) {
+          this.modalRef.close(this.subcategorySelected);
+        } else {
+          this.errorMessage = "Select a subcategory!"
         }
       }
     } else {

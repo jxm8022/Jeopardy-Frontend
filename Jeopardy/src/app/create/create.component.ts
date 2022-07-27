@@ -6,6 +6,9 @@ import { HttpService } from '../service/http.service';
 import { Type } from '../models/Type';
 import { Category } from '../models/Category';
 import { SubCategory } from '../models/SubCategory';
+import { QA } from '../models/QA';
+import { Question } from '../models/Question';
+import { Answer } from '../models/Answer';
 
 @Component({
   selector: 'app-create',
@@ -60,13 +63,14 @@ export class CreateComponent implements OnInit {
   category: string = "";
   createCategory(): void {
     if (this.categories.find(element => { return element.category.category_name === this.category })) {
-      this.errorMessage = "Category already exists!";
+      this.errorMessage = `Category ${this.category} already exists!`;
     } else if (this.category) {
       this.api.createCategory(this.category).subscribe({
         'next': (res) => {
           if (res.status === 200) {
             this.message = `Category ${this.category} created successfully!`;
             this.category = "";
+            this.errorMessage = "";
           }
           if (res.status === 204) {
             this.errorMessage = "Could not create category!";
@@ -92,14 +96,15 @@ export class CreateComponent implements OnInit {
       }
     })
     if (alreadyExists) {
-      this.errorMessage = "Subcategory already exists!";
+      this.errorMessage = `Subcategory ${this.subcategory} already exists!`;
     } else if (this.subcategory) {
       this.api.createSubcategory(new SubCategory(-1, this.subcategory, this.categoryToAddTo.category_id)).subscribe({
         'next': (res) => {
           if (res.status === 200) {
             this.message = `Subcategory ${this.subcategory} created successfully!`;
             this.subcategory = "";
-            this.displayCategorySelector(this.categories, this.createType);
+            this.errorMessage = "";
+            this.ngOnInit();
           }
           if (res.status === 204) {
             this.errorMessage = "Could not create subcategory!";
@@ -116,5 +121,25 @@ export class CreateComponent implements OnInit {
   question: string = "";
   answer: string = "";
   createQuestion(): void {
+    if (this.question && this.answer) {
+      console.log(new QA(new Question(-1, this.question, this.subcategoryToAddTo.subcategory_id), new Answer(-1, this.answer, -1)));
+      // this.api.createQuestion(new QA(new Question(-1, this.question, this.subcategoryToAddTo.subcategory_id), new Answer(-1, this.answer, -1))).subscribe({
+      //   'next': (res) => {
+      //     if (res.status === 200) {
+      //       this.message = `Subcategory ${this.subcategory} created successfully!`;
+      //       this.subcategory = "";
+      //       this.errorMessage = "";
+      //       this.ngOnInit();
+      //     }
+      //     if (res.status === 204) {
+      //       this.errorMessage = "Could not create subcategory!";
+      //     }
+      //   }
+      // });
+    } else {
+      if (!this.question && this.answer) { this.errorMessage = "Please enter a question!" }
+      else if (this.question && !this.answer) { this.errorMessage = "Please enter an answer!" }
+      else { this.errorMessage = "Please enter a question and answer!" }
+    }
   }
 }
