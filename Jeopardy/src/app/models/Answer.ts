@@ -2,8 +2,8 @@ import { IAnswer } from "./IAnswer";
 
 export class Answer implements IAnswer {
     constructor(
-        public Id: number,
-        public Entry: string,
-        public Question_id: number
+        public answer_id: number,
+        public answer_entry: string,
+        public question_id: number
     ) { }
 }

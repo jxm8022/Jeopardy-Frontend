@@ -1,5 +1,5 @@
 export interface IQuestion {
-    Id: number,
-    Entry: string,
-    Type_id: number
+    question_id: number,
+    question_entry: string,
+    category_id: number
 }

@@ -4,7 +4,7 @@ import { Question } from "./Question";
 
 export class QA implements IQA {
     constructor(
-        public Question: Question,
-        public Answer: Answer
+        public question: Question,
+        public answer: Answer
     ) { }
 }
