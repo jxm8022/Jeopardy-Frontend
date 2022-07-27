@@ -25,8 +25,11 @@ export class CreateComponent implements OnInit {
   ngOnInit(): void {
     this.api.getTypes().subscribe(res => {
       this.categories = res;
+      this.categories = [];
       if ((this.createType === "subcategory" || this.createType === "question") && this.categories.length > 0) {
         this.displayCategorySelector(this.categories, this.createType);
+      } else if (this.createType === "category") {
+        this.message = "There are no categories!";
       } else {
         this.canCreate = false;
         this.message = "There are no categories or subcategories!";
