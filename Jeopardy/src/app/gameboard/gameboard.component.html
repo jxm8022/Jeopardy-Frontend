@@ -28,14 +28,14 @@
                 </ng-container>
             </ng-container>
         </div>
-        <div class="text-center" *ngIf="teams[0].Name && teams[1].Name">
+        <div class="text-center" *ngIf="teams[0].team_name && teams[1].team_name">
             <form #form="ngForm" class="row mx-auto" style="width:85%; margin:50px;">
                 <ng-container *ngFor="let team of teams; let i = index; trackBy: trackBy">
                     <div [ngStyle]="{'width':width}">
                         <input name="team" [(ngModel)]="score[i]" class="form-control form-control-lg mx-auto"
                             type="text" placeholder="Score" aria-label=".form-control-lg team-name"
                             style="margin: 10px; width:100px;">
-                        <h1 class="text-dark text-break">{{teams[i].Name}}</h1>
+                        <h1 class="text-dark text-break">{{teams[i].team_name}}</h1>
                     </div>
                 </ng-container>
             </form>

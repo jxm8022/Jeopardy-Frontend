@@ -55,9 +55,9 @@ export class GameboardComponent implements OnInit {
   constructor(private route: Router, private api: HttpService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
-    if (this.teams[0].Name && this.teams[1].Name) {
+    if (this.teams[0].team_name && this.teams[1].team_name) {
       this.buttonName = "Submit Team";
-      this.teams = this.teams.filter(element => { return element.Name !== "" });
+      this.teams = this.teams.filter(element => { return element.team_name !== "" });
 
       let temp = [];
       let temp2d = [];
@@ -142,7 +142,7 @@ export class GameboardComponent implements OnInit {
       this.route.navigate(['home']);
     else {
       for (let i = 0; i < this.score.length; i++) {
-        this.teams[i].Score = this.score[i];
+        this.teams[i].team_score = this.score[i];
       }
       this.api.createTeams(this.teams).subscribe(res => {
         this.api.getSortedTeams().subscribe(res => {
@@ -150,8 +150,8 @@ export class GameboardComponent implements OnInit {
           for (let i = 0; i < this.teams.length; i++) {         // iterate through teams
             for (let j = 0; j < this.players[i].length; j++) {  // iterate through players
               for (let k = 0; k < this.sortedTeams.length; k++) {    // iterate through sorted teams to find team id for player
-                if ((this.sortedTeams[k].Name === this.teams[i].Name) && (this.sortedTeams[k].Score == this.teams[i].Score)) { // not sure why team.Score is string but it has '==' because the values match but not the types
-                  this.players[i][j].Team_id = this.sortedTeams[k].Id;
+                if ((this.sortedTeams[k].team_name === this.teams[i].team_name) && (this.sortedTeams[k].team_score == this.teams[i].team_score)) { // not sure why team.Score is string but it has '==' because the values match but not the types
+                  this.players[i][j].Team_id = this.sortedTeams[k].team_id;
                 }
               }
             }
