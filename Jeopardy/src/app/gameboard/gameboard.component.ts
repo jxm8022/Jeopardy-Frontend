@@ -25,12 +25,12 @@ export class GameboardComponent implements OnInit {
   @Input()
   players: Player[][] = [];
 
-  categories: Type[] = [
-    new Type(new Category(0, ""), [new SubCategory(0, "", 0)]),
-    new Type(new Category(0, ""), [new SubCategory(0, "", 0)]),
-    new Type(new Category(0, ""), [new SubCategory(0, "", 0)]),
-    new Type(new Category(0, ""), [new SubCategory(0, "", 0)]),
-    new Type(new Category(0, ""), [new SubCategory(0, "", 0)]),
+  subcategories: SubCategory[] = [
+    new SubCategory(0, "", 0),
+    new SubCategory(0, "", 0),
+    new SubCategory(0, "", 0),
+    new SubCategory(0, "", 0),
+    new SubCategory(0, "", 0)
   ];
   questionAndAnswer: QA[][] = [];
   isQuestionAnswered: boolean[][] = [];
@@ -55,20 +55,22 @@ export class GameboardComponent implements OnInit {
   constructor(private route: Router, private api: HttpService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
-    if (this.teams[0].team_name && this.teams[1].team_name) {
-      this.buttonName = "Submit Team";
-      this.teams = this.teams.filter(element => { return element.team_name !== "" });
+    if (this.teams.length > 1) {
+      if (this.teams[0].team_name && this.teams[1].team_name) {
+        this.buttonName = "Submit Team";
+        this.teams = this.teams.filter(element => { return element.team_name !== "" });
 
-      let temp = [];
-      let temp2d = [];
-      for (let i = 0; i < this.players.length; i++) {
-        temp = this.players[i].filter(element => { return element.Name !== "" });
-        temp2d.push(temp);
+        let temp = [];
+        let temp2d = [];
+        for (let i = 0; i < this.players.length; i++) {
+          temp = this.players[i].filter(element => { return element.Name !== "" });
+          temp2d.push(temp);
+        }
+        this.players = temp2d;
       }
-      this.players = temp2d;
+      this.width = this.width + (100 / this.teams.length) + '%';
+      this.score = new Array(this.teams.length).fill(0);
     }
-    this.width = this.width + (100 / this.teams.length) + '%';
-    this.score = new Array(this.teams.length).fill(0);
     this.isQuestionAnswered = new Array(5).fill([]);
     for (let i = 0; i < this.isQuestionAnswered.length; i++) {
       this.isQuestionAnswered[i] = new Array(5).fill(false);
@@ -82,21 +84,23 @@ export class GameboardComponent implements OnInit {
       modalClass: 'modal-dialog-centered'
     })
     this.modalRef.onClose.subscribe((message: any) => {
-      this.api.getTypes().subscribe(res => {
-        if (message) {
-          for (let i = 0; i < message.length; i++) {
-            for (let j = 0; j < res.length; j++) {
-              if (message[i][0].Question.Type_id === res[j].Id) {
-                this.categories[i] = res[j];
-              }
-            }
-            this.questionAndAnswer.push(message[i]);
-          }
-          this.opacity = "100%";
-        }
-        else
-          this.displayCategorySelector();
-      });
+      console.log(message[0]);
+      console.log(message[1]);
+      // this.api.getTypes().subscribe(res => {
+      //   if (message) {
+      //     for (let i = 0; i < message.length; i++) {
+      //       for (let j = 0; j < res.length; j++) {
+      //         if (message[i][0].Question.Type_id === res[j].Id) {
+      //           this.subcategories[i] = res[j];
+      //         }
+      //       }
+      //       this.questionAndAnswer.push(message[i]);
+      //     }
+      //     this.opacity = "100%";
+      //   }
+      //   else
+      //     this.displayCategorySelector();
+      // });
     })
   }
 

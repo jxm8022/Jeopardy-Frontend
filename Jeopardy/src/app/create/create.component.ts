@@ -25,7 +25,6 @@ export class CreateComponent implements OnInit {
   ngOnInit(): void {
     this.api.getTypes().subscribe(res => {
       this.categories = res;
-      this.categories = [];
       if ((this.createType === "subcategory" || this.createType === "question") && this.categories.length > 0) {
         this.displayCategorySelector(this.categories, this.createType);
       } else if (this.createType === "category") {
@@ -126,7 +125,7 @@ export class CreateComponent implements OnInit {
         }
       });
     } else {
-      this.errorMessage = "Please enter a subcategory name!"
+      this.errorMessage = "Please enter a subcategory name!";
     }
   }
 

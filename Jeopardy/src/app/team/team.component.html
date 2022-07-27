@@ -2,29 +2,35 @@
     <app-nav-bar></app-nav-bar>
     <img class="mx-auto d-block" src="../../assets/create_team.png" />
     <div class="text-center" style="margin-top: 30px;">
-        <p>Number of teams:</p>
-        <ng-container *ngFor="let number of groupAmounts">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefualt1"
-                    (change)="onRadioChange(number)" />
-                <label class="form-check-label" for="flexRadioDefault1">{{number}}</label>
+        <form>
+            <div class="form-group">
+                <label class="align-middle" for="formControlRange" style="padding-right: 10px;">Number of teams:
+                    {{numberOfTeams}}</label>
+                <input name="numTeams" [(ngModel)]="numberOfTeams" type="range" class="form-control-range align-middle"
+                    id="formControlRange" value="2" min="0" max="7" (change)="onSliderChange()">
             </div>
-        </ng-container>
+        </form>
     </div>
     <div class="text-center">
-        <form #form="ngForm" class="row mx-auto" style="width:85%; margin:50px;">
-            <ng-container *ngFor="let team of teamNames; let i = index; trackBy: trackBy">
-                <div [ngStyle]="{'width':width}">
-                    <input name="team" [(ngModel)]="teamNames[i]" class="form-control form-control-lg" type="text"
-                        placeholder="TEAM NAME {{i+1}}" aria-label=".form-control-lg team-name" style="margin: 10px;">
-                    <ng-container *ngFor="let teamPlayers of playerNames[i]; let y = index; trackBy: trackBy">
-                        <input name="member-{{i}}-{{y}}" [(ngModel)]="playerNames[i][y]"
-                            class="form-control form-control-lg" type="text" placeholder="TEAM MEMBER {{y}}"
-                            aria-label=".form-control-lg team-member" style="margin: 10px;">
-                    </ng-container>
-                </div>
-            </ng-container>
-        </form>
+        <ng-container *ngIf="numberOfTeams < 2">
+            <h3 style="padding-top: 20px;">Solo run!</h3>
+        </ng-container>
+        <ng-container *ngIf="numberOfTeams > 0">
+            <form #form="ngForm" class="row mx-auto" style="width:85%; margin:50px;">
+                <ng-container *ngFor="let team of teamNames; let i = index; trackBy: trackBy">
+                    <div [ngStyle]="{'width':width}">
+                        <input name="team" [(ngModel)]="teamNames[i]" class="form-control form-control-lg" type="text"
+                            placeholder="TEAM NAME {{i+1}}" aria-label=".form-control-lg team-name"
+                            style="margin: 10px;">
+                        <ng-container *ngFor="let teamPlayers of playerNames[i]; let y = index; trackBy: trackBy">
+                            <input name="member-{{i}}-{{y}}" [(ngModel)]="playerNames[i][y]"
+                                class="form-control form-control-lg" type="text" placeholder="TEAM MEMBER {{y}}"
+                                aria-label=".form-control-lg team-member" style="margin: 10px;">
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </form>
+        </ng-container>
     </div>
     <div class="text-center" style="margin-bottom: 25px;">
         <button type="button" class="btn btn-primary btn-lg" (click)="submitTeams()">Play</button>

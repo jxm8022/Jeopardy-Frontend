@@ -15,8 +15,10 @@ export class HttpService {
   // QA {Question: Question, Answer: Answer}
   // Input: category id
   // Notes: returns 5 QAs for a category
-  getQuestions(category: number): Observable<any> {
-    return this.http.get<any>(`${environment.apiAzureURL}/Question/GetQuestions/${category}`);
+  getQuestions(subcategories: SubCategory[]): Observable<HttpResponse<any>> {
+    return this.http.get<any>(`${environment.apiAzureURL}/Question/GetQuestions/${subcategories}`, {
+      'observe': 'response'
+    });
     // return this.http.get<any>(`${environment.apiBaseURL}/Question/GetQuestions/${category}`);
   }
 

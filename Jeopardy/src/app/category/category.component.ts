@@ -18,7 +18,6 @@ export class CategoryComponent implements OnInit {
   type!: string;
 
   // variables for category.component.html
-  questions: QA[][] = [];
   selection!: Type[];
   errorMessage = '';
 
@@ -59,25 +58,14 @@ export class CategoryComponent implements OnInit {
     }
   }
 
-  changed(index: number) {
-    this.api.getQuestions(index + 1).subscribe(res => {
-      if (this.categories.includes(this.selection[index])) {
-        // categories
-        this.categories[this.categories.indexOf(this.selection[index])] = new Type(new Category(0, ""), [new SubCategory(0, "", 0)]);
-        this.categories = this.categories.filter(element => { return element.category.category_name !== "" });
-
-        // questions
-        for (let i = 0; i < this.questions.length; i++) {
-          if (this.questions[i][0].question.category_id === index + 1) {
-            this.questions[i] = [];
-          }
-        }
-        this.questions = this.questions.filter(element => { return element.length !== 0 });
-      } else {
-        this.categories.push(this.selection[index]);
-        this.questions.push(res);
-      }
-    });
+  gameCategories: SubCategory[] = [];
+  questions: QA[][] = [];
+  changed(index_i: number, index_j: number) {
+    if (this.gameCategories.includes(this.selection[index_i].subcategories[index_j])) {
+      this.gameCategories = this.gameCategories.filter(element => { return element !== this.selection[index_i].subcategories[index_j] });
+    } else {
+      this.gameCategories.push(this.selection[index_i].subcategories[index_j]);
+    }
   }
 
   submit() {
@@ -86,18 +74,24 @@ export class CategoryComponent implements OnInit {
         if (this.categorySelected) {
           this.modalRef.close(this.categorySelected);
         } else {
-          this.errorMessage = "Select a category!"
+          this.errorMessage = "Select a category!";
         }
       } else if (this.type === "question") {
         if (this.subcategorySelected) {
           this.modalRef.close(this.subcategorySelected);
         } else {
-          this.errorMessage = "Select a subcategory!"
+          this.errorMessage = "Select a subcategory!";
         }
       }
     } else {
       if (this.questions.length === 5) {
-        this.modalRef.close(this.questions);
+        this.api.getQuestions(this.gameCategories).subscribe({
+          'next': (res) => {
+            if (res.status === 200) {
+              this.modalRef.close([this.gameCategories, this.questions]);
+            }
+          }
+        });
       } else {
         this.errorMessage = "Select 5 categories!"
       }

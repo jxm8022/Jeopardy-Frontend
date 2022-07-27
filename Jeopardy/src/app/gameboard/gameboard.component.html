@@ -3,13 +3,14 @@
     <div class="container">
         <div class="row">
             <ng-container *ngFor="let question of questionCost; let q = index">
-                <ng-container *ngFor="let category of categories; let c = index">
+                <ng-container *ngFor="let subcategory of subcategories; let c = index">
                     <ng-container *ngIf="!questionSelected">
                         <div class="box overflow-auto d-flex align-items-center"
                             [ngStyle]="{'background-color':getColor(q,c)}" (click)="flipCard(q,c)" aria-disabled="true"
                             id="question">
+                            {{q}} {{c}}
                             <h1 *ngIf="q == 0" class="mx-auto text-break text-dark">
-                                {{categories[c].category.category_name}}
+                                {{subcategories[c].subcategory_name}}
                             </h1>
                             <h1 *ngIf="q > 0" class="mx-auto text-break">
                                 <i>{{questionCost[q]}}</i>
@@ -28,7 +29,7 @@
                 </ng-container>
             </ng-container>
         </div>
-        <div class="text-center" *ngIf="teams[0].team_name && teams[1].team_name">
+        <div class="text-center" *ngIf="teams.length > 1">
             <form #form="ngForm" class="row mx-auto" style="width:85%; margin:50px;">
                 <ng-container *ngFor="let team of teams; let i = index; trackBy: trackBy">
                     <div [ngStyle]="{'width':width}">

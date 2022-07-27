@@ -58,15 +58,20 @@
 <ng-container *ngIf="!type">
     <div class="body">
         <div class="mb-3" *ngFor="let category of selection; let i = index" style="margin-left: 20px;">
-            <div class="form-check">
-                <input *ngIf="categories.length == 5 && !categories.includes(category)" class="form-check-input"
-                    type="checkbox" value="" id="{{category.category.category_name}}" (click)="changed(i)" disabled>
-                <input *ngIf="categories.length != 5  || categories.includes(category)" class="form-check-input"
-                    type="checkbox" value="" id="{{category.category.category_name}}" (click)="changed(i)">
-                <label class="form-check-label" for="{{category.category.category_name}}">
-                    {{category.category.category_name}}
-                </label>
-            </div>
+            <h5 *ngIf="category.subcategories">{{category.category.category_name}}</h5>
+            <ng-container *ngFor="let subcategory of category.subcategories; let j = index">
+                <div class="form-check">
+                    <input *ngIf="gameCategories.length == 5 && !gameCategories.includes(subcategory)"
+                        class="form-check-input" type="checkbox" value="" id="{{category.category.category_name}}"
+                        (click)="changed(i,j)" disabled>
+                    <input *ngIf="gameCategories.length != 5 || gameCategories.includes(subcategory)"
+                        class="form-check-input" type="checkbox" value="" id="{{category.category.category_name}}"
+                        (click)="changed(i,j)">
+                    <label class="form-check-label" for="{{category.category.category_name}}">
+                        {{subcategory.subcategory_name}}
+                    </label>
+                </div>
+            </ng-container>
         </div>
         <button type="submit" class="btn btn-warning" style="margin-left: 40px;" (click)="submit()">
             Done

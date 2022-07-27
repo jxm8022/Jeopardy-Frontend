@@ -9,8 +9,7 @@ import { Team } from '../models/Team';
 })
 export class TeamComponent implements OnInit {
 
-  groupAmounts: number[] = [2, 3, 4, 5];
-  teamNumber: number = 2;
+  numberOfTeams: number = 2;
 
   teamNames: string[] = [];
   playerNames: string[][] = [];
@@ -23,12 +22,12 @@ export class TeamComponent implements OnInit {
   width: string = "";
 
   constructor() {
-    this.teamNames = Array(this.teamNumber).fill("");
+    this.teamNames = Array(this.numberOfTeams).fill("");
     this.fillPlayers(2);
   }
 
   ngOnInit(): void {
-    this.width = this.width = this.width + (100 / this.teamNumber) + '%';
+    this.width = this.width = this.width + (100 / this.numberOfTeams) + '%';
   }
 
   fillPlayers(x: number): void {
@@ -41,12 +40,11 @@ export class TeamComponent implements OnInit {
     }
   }
 
-  onRadioChange(i: number): void {
+  onSliderChange(): void {
     this.width = "";
-    this.width = this.width = this.width + (100 / i) + '%';
-    this.teamNumber = i;
-    this.teamNames = Array(i).fill("");
-    this.fillPlayers(i);
+    this.width = this.width = this.width + (100 / this.numberOfTeams) + '%';
+    this.teamNames = Array(this.numberOfTeams).fill("");
+    this.fillPlayers(this.numberOfTeams);
   }
 
   submitTeams(): void {
