@@ -68,7 +68,7 @@ export class CategoryComponent implements OnInit {
 
         // questions
         for (let i = 0; i < this.questions.length; i++) {
-          if (this.questions[i][0].Question.Type_id === index + 1) {
+          if (this.questions[i][0].question.category_id === index + 1) {
             this.questions[i] = [];
           }
         }

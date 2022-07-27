@@ -121,21 +121,25 @@ export class CreateComponent implements OnInit {
   question: string = "";
   answer: string = "";
   createQuestion(): void {
+    console.log(this.question);
+    console.log(this.answer);
     if (this.question && this.answer) {
+      console.log("calling api");
       console.log(new QA(new Question(-1, this.question, this.subcategoryToAddTo.subcategory_id), new Answer(-1, this.answer, -1)));
-      // this.api.createQuestion(new QA(new Question(-1, this.question, this.subcategoryToAddTo.subcategory_id), new Answer(-1, this.answer, -1))).subscribe({
-      //   'next': (res) => {
-      //     if (res.status === 200) {
-      //       this.message = `Subcategory ${this.subcategory} created successfully!`;
-      //       this.subcategory = "";
-      //       this.errorMessage = "";
-      //       this.ngOnInit();
-      //     }
-      //     if (res.status === 204) {
-      //       this.errorMessage = "Could not create subcategory!";
-      //     }
-      //   }
-      // });
+      this.api.createQuestion(new QA(new Question(-1, this.question, this.subcategoryToAddTo.subcategory_id), new Answer(-1, this.answer, -1))).subscribe({
+        'next': (res) => {
+          if (res.status === 200) {
+            this.message = `Question '${this.question}' created successfully!`;
+            this.question = "";
+            this.answer = "";
+            this.errorMessage = "";
+            this.ngOnInit();
+          }
+          if (res.status === 204) {
+            this.errorMessage = "Could not create question!";
+          }
+        }
+      });
     } else {
       if (!this.question && this.answer) { this.errorMessage = "Please enter a question!" }
       else if (this.question && !this.answer) { this.errorMessage = "Please enter an answer!" }

@@ -129,8 +129,8 @@ export class GameboardComponent implements OnInit {
       }
     } else if ((question !== 0 || this.questionSelected)) {
       if (question !== 0) { // this is here because when showing the question, exiting out has question and category set to 0
-        this.currentQuestion = this.questionAndAnswer[category][question - 1].Question.Entry; // -1 from question because the category row
-        this.currentAnswer = this.questionAndAnswer[category][question - 1].Answer.Entry;
+        this.currentQuestion = this.questionAndAnswer[category][question - 1].question.question_entry; // -1 from question because the category row
+        this.currentAnswer = this.questionAndAnswer[category][question - 1].answer.answer_entry;
         this.isQuestionAnswered[category][question - 1] = true;
       }
       this.questionSelected = !this.questionSelected;
