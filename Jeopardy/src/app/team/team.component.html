@@ -1,5 +1,5 @@
-<ng-container *ngIf="!game">
-    <app-nav-bar></app-nav-bar>
+<app-nav-bar></app-nav-bar>
+<ng-container *ngIf="!game && newGame">
     <img class="mx-auto d-block" src="../../assets/create_team.png" />
     <div class="text-center" style="margin-top: 30px;">
         <form>
@@ -32,10 +32,14 @@
             </form>
         </ng-container>
     </div>
+    <p *ngIf="message" class="text-center" style="color: red;">{{message}}</p>
     <div class="text-center" style="margin-bottom: 25px;">
         <button type="button" class="btn btn-primary btn-lg" (click)="submitTeams()">Play</button>
     </div>
 </ng-container>
 <ng-container *ngIf="game">
     <app-gameboard [teams]="teams" [players]="players"></app-gameboard>
+</ng-container>
+<ng-container *ngIf="savedGames">
+    <app-savedgames></app-savedgames>
 </ng-container>

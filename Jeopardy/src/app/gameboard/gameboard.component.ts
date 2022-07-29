@@ -56,25 +56,22 @@ export class GameboardComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.teams.length > 1) {
-      if (this.teams[0].team_name && this.teams[1].team_name) {
-        this.buttonName = "Submit Team";
-        this.teams = this.teams.filter(element => { return element.team_name !== "" });
-
-        let temp = [];
-        let temp2d = [];
-        for (let i = 0; i < this.players.length; i++) {
-          temp = this.players[i].filter(element => { return element.Name !== "" });
-          temp2d.push(temp);
-        }
-        this.players = temp2d;
+      this.buttonName = "Submit Team";
+    } else {
+      // if no team name was specified for team size 1
+      if (this.teams.length === 1) {
+        if (this.teams[0].team_name.length < 1)
+          this.teams[0].team_name = "PredefinedTeam";
       }
-      this.width = this.width + (100 / this.teams.length) + '%';
-      this.score = new Array(this.teams.length).fill(0);
     }
+    this.width = this.width + (100 / this.teams.length) + '%';
+    this.score = new Array(this.teams.length).fill(0);
+    // boolean array to hold questions answered
     this.isQuestionAnswered = new Array(5).fill([]);
     for (let i = 0; i < this.isQuestionAnswered.length; i++) {
       this.isQuestionAnswered[i] = new Array(5).fill(false);
     }
+
     this.displayCategorySelector();
   }
 

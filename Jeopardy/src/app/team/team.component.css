@@ -4,5 +4,5 @@ img {
 }
 
 button:hover {
-    transform: rotate(5deg) scale(10);
+    transform: rotate(5deg) scale(5);
 }

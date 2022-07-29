@@ -18,8 +18,12 @@ export class TeamComponent implements OnInit {
   players: Player[][] = [];
 
   game: boolean = false;
+  newGame: boolean = false;
+  savedGames: boolean = true;
 
   width: string = "";
+
+  message: string = "";
 
   constructor() {
     this.teamNames = Array(this.numberOfTeams).fill("");
@@ -48,15 +52,34 @@ export class TeamComponent implements OnInit {
   }
 
   submitTeams(): void {
-    for (let i = 0; i < this.teamNames.length; i++) {
-      this.teams.push(new Team(-1, this.teamNames[i], 0));
-      this.players.push([]);
-      for (let j = 0; j < this.playerNames[i].length; j++) {
-        this.players[i].push(new Player(-1, this.playerNames[i][j], -1));
+    if (this.checkTeams()) {
+      for (let i = 0; i < this.teamNames.length; i++) {
+        this.teams.push(new Team(-1, this.teamNames[i], 0));
+        this.players.push([]);
+        this.playerNames[i] = this.playerNames[i].filter(element => { return element !== "" });
+        for (let j = 0; j < this.playerNames[i].length; j++) {
+          this.players[i].push(new Player(-1, this.playerNames[i][j], -1));
+        }
+      }
+      this.game = !this.game;
+    }
+  }
+
+  checkTeams(): boolean {
+    var actualTeams = this.teamNames.filter(element => { return element !== "" });
+    if (actualTeams.length !== this.numberOfTeams) {
+      this.message = "Missing a team name!";
+      return false;
+    } else {
+      for (let i = 0; i < this.playerNames.length; i++) {
+        var actualPlayers = this.playerNames[i].filter(element => { return element !== "" });
+        if (actualPlayers.length < 1) {
+          this.message = "Teams need at least one player!";
+          return false;
+        }
       }
     }
-
-    this.game = !this.game;
+    return true;
   }
 
   trackBy(index: any, item: any) {

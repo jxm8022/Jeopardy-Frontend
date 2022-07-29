@@ -1,4 +1,3 @@
-<app-nav-bar></app-nav-bar>
 <div class="d-flex justify-content-center" [ngStyle]="{'opacity': opacity}">
     <div class="container">
         <div class="row">
@@ -29,7 +28,7 @@
                 </ng-container>
             </ng-container>
         </div>
-        <div class="text-center" *ngIf="teams.length > 1">
+        <div class="text-center" *ngIf="teams.length > 0">
             <form #form="ngForm" class="row mx-auto" style="width:85%; margin:50px;">
                 <ng-container *ngFor="let team of teams; let i = index; trackBy: trackBy">
                     <div [ngStyle]="{'width':width}">
