@@ -18,8 +18,8 @@ export class TeamComponent implements OnInit {
   players: Player[][] = [];
 
   game: boolean = false;
-  newGame: boolean = false;
-  savedGames: boolean = true;
+  newGame: boolean = true;
+  savedGames: boolean = false;
 
   width: string = "";
 
@@ -31,6 +31,7 @@ export class TeamComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // find saved games HERE
     this.width = this.width = this.width + (100 / this.numberOfTeams) + '%';
   }
 

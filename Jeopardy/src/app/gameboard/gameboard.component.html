@@ -40,9 +40,15 @@
                 </ng-container>
             </form>
         </div>
+        <p *ngIf="message" class="text-center" style="color: red;">{{message}}</p>
         <div class="text-center" style="margin-bottom: 25px;">
-            <button type="button" class="btn btn-primary btn-lg"
-                (click)="winnerWinnerChickenDinner()">{{buttonName}}</button>
+            <button *ngIf="canSaveGame" type="button" class="btn btn-primary btn-lg" (click)="saveGame()"
+                style="margin: 10px;">Save
+                Game</button>
+            <button *ngIf="winner" type="button" class="btn btn-primary btn-lg" (click)="winnerWinnerChickenDinner()"
+                style="margin: 10px;">{{buttonName}}</button>
+            <button *ngIf="!winner" type="button" class="btn btn-primary btn-lg" (click)="winnerWinnerChickenDinner()"
+                style="margin: 10px;" disabled>{{buttonName}}</button>
         </div>
     </div>
 </div>

@@ -47,6 +47,7 @@ export class GameboardComponent implements OnInit {
   showAnswer: boolean = false;
 
   winner: boolean = false;
+  canSaveGame: boolean = true;
 
   opacity: string = '100%';
   width: string = "";
@@ -58,6 +59,7 @@ export class GameboardComponent implements OnInit {
     if (this.teams.length > 1) {
       this.buttonName = "Submit Team";
     } else {
+      this.canSaveGame = false;
       // if no team name was specified for team size 1
       if (this.teams.length === 1) {
         if (this.teams[0].team_name.length < 1)
@@ -103,6 +105,7 @@ export class GameboardComponent implements OnInit {
   }
 
   flipCard(question: number, category: number): void {
+    this.message = "";
     if (question === 0 && this.questionSelected) {
       this.showAnswer = !this.showAnswer;
       if (!this.showAnswer) {
@@ -115,6 +118,7 @@ export class GameboardComponent implements OnInit {
           }
         }
         if (counter === (this.isQuestionAnswered.length * this.isQuestionAnswered[0].length)) {
+          this.canSaveGame = false;
           this.winner = true;
         }
       }
@@ -128,10 +132,17 @@ export class GameboardComponent implements OnInit {
     }
   }
 
+  saveGame(): void {
+
+  }
+
+  message: string = "";
   winnerWinnerChickenDinner(): void {
     if (this.buttonName === "Go Home")
       this.route.navigate(['home']);
-    else {
+    else if (!this.winner) {
+      this.message = "The game is not complete! Consider saving...";
+    } else {
       for (let i = 0; i < this.score.length; i++) {
         this.teams[i].team_score = this.score[i];
       }
