@@ -16,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AdminComponent } from './admin/admin.component';
 import { CreateComponent } from './create/create.component';
 import { StatusbarComponent } from './statusbar/statusbar.component';
+import { SavedgamesComponent } from './savedgames/savedgames.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { StatusbarComponent } from './statusbar/statusbar.component';
     CategoryComponent,
     AdminComponent,
     CreateComponent,
-    StatusbarComponent
+    StatusbarComponent,
+    SavedgamesComponent
   ],
   imports: [
     BrowserModule,
