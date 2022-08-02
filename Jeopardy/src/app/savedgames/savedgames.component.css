@@ -2,3 +2,15 @@ img {
     width: 50%;
     margin-top: 50px;
 }
+
+.box {
+    background-color: #2bbfe0;
+    width: 45%;
+    float: left;
+    margin: 20px;
+    height: 200px;
+}
+
+.box:hover {
+    transform: scale(.95);
+}

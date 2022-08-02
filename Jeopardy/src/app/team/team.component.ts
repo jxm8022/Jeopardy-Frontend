@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { GameUI } from '../models/GameUI';
 import { Player } from '../models/Player';
 import { Team } from '../models/Team';
+import { HttpService } from '../service/http.service';
 
 @Component({
   selector: 'app-team',
@@ -19,13 +21,15 @@ export class TeamComponent implements OnInit {
 
   game: boolean = false;
   newGame: boolean = true;
-  savedGames: boolean = false;
+  savedGames!: GameUI[];
+  noGames!: GameUI[];
 
   width: string = "";
 
   message: string = "";
+  errorMessage: string = "";
 
-  constructor() {
+  constructor(private api: HttpService) {
     this.teamNames = Array(this.numberOfTeams).fill("");
     this.fillPlayers(2);
   }
@@ -33,6 +37,18 @@ export class TeamComponent implements OnInit {
   ngOnInit(): void {
     // find saved games HERE
     this.width = this.width = this.width + (100 / this.numberOfTeams) + '%';
+
+    this.api.getSavedGames().subscribe({
+      'next': (res) => {
+        if (res.status === 200) {
+          this.newGame = false;
+          this.savedGames = res.body;
+        }
+        if (res.status === 204) {
+          this.errorMessage = "Could not retrieved games!";
+        }
+      }
+    });
   }
 
   fillPlayers(x: number): void {
@@ -81,6 +97,13 @@ export class TeamComponent implements OnInit {
       }
     }
     return true;
+  }
+
+  gameToPlay!: GameUI;
+  chooseGame(game: GameUI): void {
+    this.game = true;
+    this.gameToPlay = game;
+    this.savedGames = this.noGames;
   }
 
   trackBy(index: any, item: any) {

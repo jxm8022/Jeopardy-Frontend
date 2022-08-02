@@ -37,9 +37,12 @@
         <button type="button" class="btn btn-primary btn-lg" (click)="submitTeams()">Play</button>
     </div>
 </ng-container>
-<ng-container *ngIf="game">
+<ng-container *ngIf="game && !gameToPlay">
     <app-gameboard [teams]="teams" [players]="players"></app-gameboard>
 </ng-container>
+<ng-container *ngIf="game && gameToPlay">
+    <app-gameboard [gameToPlay]="gameToPlay"></app-gameboard>
+</ng-container>
 <ng-container *ngIf="savedGames">
-    <app-savedgames></app-savedgames>
+    <app-savedgames [savedGames]="savedGames" (itemEvent)="chooseGame($event)"></app-savedgames>
 </ng-container>

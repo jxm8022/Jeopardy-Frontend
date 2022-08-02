@@ -116,4 +116,12 @@ export class HttpService {
       'observe': 'response'
     });
   }
+
+  // Returns List<GameUI>
+  // GameUI {game: Game, teams: Team[], subcategories: Subcategory[], questions: QA[], boardstate: Boardstate[]}
+  getSavedGames(): Observable<HttpResponse<any>> {
+    return this.http.get<any>(`${environment.apiAzureURL}/Game/GetSavedGames`, {
+      'observe': 'response'
+    });
+  }
 }

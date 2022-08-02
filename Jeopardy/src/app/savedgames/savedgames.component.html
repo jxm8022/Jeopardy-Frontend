@@ -1,2 +1,15 @@
 <img class="mx-auto d-block" src="../../assets/play_game.png" />
-<p>savedgames works!</p>
+<div class="d-flex justify-content-center">
+    <div class="container">
+        <div class="row">
+            <div class="box" *ngFor="let game of savedGames; let i = index;" (click)="chooseGame(game)">
+                <p>GAME_ID: {{game.game.game_id}}</p>
+                <p>TEAMS:</p>
+                <div *ngFor="let team of game.teams; let j = index;">
+                    <p>{{team.team_name}}: {{team.team_score}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-statusbar [statusMessage]="message"></app-statusbar>

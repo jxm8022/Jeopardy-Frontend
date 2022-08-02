@@ -2,9 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { CategoryComponent } from '../category/category.component';
+import { Answer } from '../models/Answer';
 import { Category } from '../models/Category';
+import { GameUI } from '../models/GameUI';
 import { Player } from '../models/Player';
 import { QA } from '../models/QA';
+import { Question } from '../models/Question';
 import { SubCategory } from '../models/SubCategory';
 import { Team } from '../models/Team';
 import { Type } from '../models/Type';
@@ -24,6 +27,9 @@ export class GameboardComponent implements OnInit {
 
   @Input()
   players: Player[][] = [];
+
+  @Input()
+  gameToPlay!: GameUI;
 
   subcategories: SubCategory[] = [
     new SubCategory(0, "", 0),
@@ -56,25 +62,52 @@ export class GameboardComponent implements OnInit {
   constructor(private route: Router, private api: HttpService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
-    if (this.teams.length > 1) {
+    if (this.gameToPlay) {
       this.buttonName = "Submit Team";
-    } else {
-      this.canSaveGame = false;
-      // if no team name was specified for team size 1
-      if (this.teams.length === 1) {
-        if (this.teams[0].team_name.length < 1)
-          this.teams[0].team_name = "PredefinedTeam";
+      this.teams = this.gameToPlay.teams;
+      this.width = this.width + (100 / this.teams.length) + '%';
+      this.isQuestionAnswered = new Array(5).fill([]);
+      this.questionAndAnswer = new Array(5).fill([]);
+      for (let i = 0; i < this.isQuestionAnswered.length; i++) {
+        this.isQuestionAnswered[i] = new Array(5).fill(false);
+        this.questionAndAnswer[i] = new Array(5).fill(new QA(new Question(0, "", 0), new Answer(0, "", 0)));
       }
-    }
-    this.width = this.width + (100 / this.teams.length) + '%';
-    this.score = new Array(this.teams.length).fill(0);
-    // boolean array to hold questions answered
-    this.isQuestionAnswered = new Array(5).fill([]);
-    for (let i = 0; i < this.isQuestionAnswered.length; i++) {
-      this.isQuestionAnswered[i] = new Array(5).fill(false);
-    }
+      for (let i = 0; i < this.gameToPlay.boardstate.length; i++) {
+        this.isQuestionAnswered[this.gameToPlay.boardstate[i].x_position][this.gameToPlay.boardstate[i].y_position] = this.gameToPlay.boardstate[i].answered;
+        this.questionAndAnswer[this.gameToPlay.boardstate[i].x_position][this.gameToPlay.boardstate[i].y_position] = this.gameToPlay.questions.filter(element => { return this.gameToPlay.boardstate[i].question_id === element.question.question_id })[0];
+      }
+      for (let i = 0; i < this.questionAndAnswer.length; i++) {
+        for (let j = 0; j < this.gameToPlay.subcategories.length; j++) {
+          if (this.gameToPlay.subcategories[j].subcategory_id === this.questionAndAnswer[i][0].question.category_id) {
+            this.subcategories[i] = this.gameToPlay.subcategories[j];
+          }
+        }
+      }
+      for (let i = 0; i < this.gameToPlay.teams.length; i++) {
+        this.score.push(this.gameToPlay.teams[i].team_score);
+      }
+      console.log(this.score);
+    } else {
+      if (this.teams.length > 1) {
+        this.buttonName = "Submit Team";
+      } else {
+        this.canSaveGame = false;
+        // if no team name was specified for team size 1
+        if (this.teams.length === 1) {
+          if (this.teams[0].team_name.length < 1)
+            this.teams[0].team_name = "PredefinedTeam";
+        }
+      }
+      this.width = this.width + (100 / this.teams.length) + '%';
+      this.score = new Array(this.teams.length).fill(0);
+      // boolean array to hold questions answered
+      this.isQuestionAnswered = new Array(5).fill([]);
+      for (let i = 0; i < this.isQuestionAnswered.length; i++) {
+        this.isQuestionAnswered[i] = new Array(5).fill(false);
+      }
 
-    this.displayCategorySelector();
+      this.displayCategorySelector();
+    }
   }
 
   displayCategorySelector(): void {
@@ -166,7 +199,7 @@ export class GameboardComponent implements OnInit {
     }
   }
 
-  trackBy(index: any, item: any) {
+  trackBy(index: any, item: any): any {
     return index;
   }
 }
