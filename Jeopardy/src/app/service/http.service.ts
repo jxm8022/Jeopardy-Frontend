@@ -124,4 +124,13 @@ export class HttpService {
       'observe': 'response'
     });
   }
+
+  // Returns HttpResponse
+  // Input: GameUI
+  // GameUI {game: Game, teams: Team[], subcategories: Subcategory[], questions: QA[], boardstate: Boardstate[]}
+  createSavedGame(gameUI: Partial<any>): Observable<HttpResponse<any>> {
+    return this.http.post(`${environment.apiAzureURL}/Game/CreateSavedGame`, gameUI, {
+      'observe': 'response'
+    });
+  }
 }

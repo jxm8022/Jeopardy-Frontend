@@ -30,6 +30,8 @@ export class GameboardComponent implements OnInit {
 
   @Input()
   gameToPlay!: GameUI;
+  gameToSave!: GameUI;
+  currentGame!: GameUI;
 
   subcategories: SubCategory[] = [
     new SubCategory(0, "", 0),
@@ -86,7 +88,6 @@ export class GameboardComponent implements OnInit {
       for (let i = 0; i < this.gameToPlay.teams.length; i++) {
         this.score.push(this.gameToPlay.teams[i].team_score);
       }
-      console.log(this.score);
     } else {
       if (this.teams.length > 1) {
         this.buttonName = "Submit Team";
@@ -166,7 +167,21 @@ export class GameboardComponent implements OnInit {
   }
 
   saveGame(): void {
-
+    if (this.canSaveGame) {
+      for (let i = 0; i < this.score.length; i++) {
+        this.teams[i].team_score = this.score[i];
+      }
+      this.api.createSavedGame(this.gameToSave).subscribe({
+        'next': (res) => {
+          if (res.status === 200) {
+            this.message = "Game saved successfully!";
+          }
+          if (res.status === 204) {
+            this.message = "Could not save game!";
+          }
+        }
+      });
+    }
   }
 
   message: string = "";

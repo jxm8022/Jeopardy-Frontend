@@ -28,10 +28,6 @@ export class SavedgamesComponent implements OnInit {
       this.message = "Games retrieved successfully!";
       this.savedGames.push(new GameUI(new Game(0, 0, 0), [new Team(0, "boop", 0)], [new SubCategory(0, "beep", 0)], [new QA(new Question(0, "", 0), new Answer(0, "", 0))], [new Boardstate(0, 0, 0, false, 0, 0)]));
       this.savedGames.push(new GameUI(new Game(0, 0, 0), [new Team(0, "boop", 0)], [new SubCategory(0, "beep", 0)], [new QA(new Question(0, "", 0), new Answer(0, "", 0))], [new Boardstate(0, 0, 0, false, 0, 0)]));
-      this.savedGames.push(new GameUI(new Game(0, 0, 0), [new Team(0, "boop", 0)], [new SubCategory(0, "beep", 0)], [new QA(new Question(0, "", 0), new Answer(0, "", 0))], [new Boardstate(0, 0, 0, false, 0, 0)]));
-      this.savedGames.push(new GameUI(new Game(0, 0, 0), [new Team(0, "boop", 0)], [new SubCategory(0, "beep", 0)], [new QA(new Question(0, "", 0), new Answer(0, "", 0))], [new Boardstate(0, 0, 0, false, 0, 0)]));
-      this.savedGames.push(new GameUI(new Game(0, 0, 0), [new Team(0, "boop", 0)], [new SubCategory(0, "beep", 0)], [new QA(new Question(0, "", 0), new Answer(0, "", 0))], [new Boardstate(0, 0, 0, false, 0, 0)]));
-      this.savedGames.push(new GameUI(new Game(0, 0, 0), [new Team(0, "boop", 0)], [new SubCategory(0, "beep", 0)], [new QA(new Question(0, "", 0), new Answer(0, "", 0))], [new Boardstate(0, 0, 0, false, 0, 0)]));
     }
   }
 
