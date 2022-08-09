@@ -3,8 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="box" *ngFor="let game of savedGames; let i = index;" (click)="chooseGame(game)">
-                <p>GAME_ID: {{game.game.game_id}}</p>
-                <p>TEAMS:</p>
+                <h4>TEAMS:</h4>
                 <div *ngFor="let team of game.teams; let j = index;">
                     <p>{{team.team_name}}: {{team.team_score}}</p>
                 </div>

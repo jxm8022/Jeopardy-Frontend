@@ -4,11 +4,14 @@ img {
 }
 
 .box {
+    border-style: outset;
+    border-width: 7px;
     background-color: #2bbfe0;
     width: 45%;
     float: left;
     margin: 20px;
     height: 200px;
+    padding: 20px;
 }
 
 .box:hover {
