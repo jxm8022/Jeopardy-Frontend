@@ -11,6 +11,9 @@ export class HttpService {
 
   constructor(private http: HttpClient) { }
 
+  // =====================================================================================================
+  //                                      QUESTION
+
   // Returns List<QA>
   // QA {Question: Question, Answer: Answer}
   // Input: category id
@@ -37,6 +40,18 @@ export class HttpService {
     });
   }
 
+  // Returns HttpResponse
+  // Input: QA
+  // QA {question: Question, subcategories: SubCategory[]}
+  createQuestion(question: Partial<any>): Observable<HttpResponse<any>> {
+    return this.http.post(`${environment.apiAzureURL}/Question/CreateQuestion`, question, {
+      'observe': 'response'
+    });
+  }
+
+  // =====================================================================================================
+  //                                      TEAM
+
   // Returns List<Team>
   // Team {ID: integer, Name: string, Score: integer}
   // Notes: the list is sorted according to score (highest to lowest)
@@ -45,20 +60,8 @@ export class HttpService {
     // return this.http.get<any>(`${environment.apiBaseURL}/Team/SortedTeams`);
   }
 
-  // Does not return anything
-  // Input: Team {ID: integer, Name: string, Score: integer}
-  // Notes: used to update team score
-  updateTeam(p: Partial<any>): Observable<unknown> {
-    return this.http.put(`${environment.apiAzureURL}/Team/UpdateTeam`, p);
-    // return this.http.put(`${environment.apiBaseURL}/Team/UpdateTeam`, p);
-  }
-
-  // Returns id of created Team
-  // Input: Team {ID: integer, Name: string, Score: integer}
-  createTeams(p: Partial<any>): Observable<any> {
-    return this.http.post(`${environment.apiAzureURL}/Team/CreateTeams`, p);
-    // return this.http.post(`${environment.apiBaseURL}/Team/CreateTeams`, p);
-  }
+  // =====================================================================================================
+  //                                      PLAYER
 
   // Returns Admin
   // Admin {ID: integer, Name: string, Password: string, Access: integer}
@@ -71,18 +74,24 @@ export class HttpService {
 
   // Returns List<Player>
   // Player {ID: integer, Name: string, Team_ID: integer}
+  // Notes: the list is all players to make sure no duplicate players
+  getPlayers(): Observable<HttpResponse<any>> {
+    return this.http.get<any>(`${environment.apiAzureURL}/Player/GetPlayers`, {
+      'observe': 'response'
+    });
+    // return this.http.get<any>(`${environment.apiBaseURL}/Team/SortedTeams`);
+  }
+
+  // Returns List<Player>
+  // Player {ID: integer, Name: string, Team_ID: integer}
   // Input: team id
   getMemebers(team_id: number): Observable<any> {
     return this.http.get<any>(`${environment.apiAzureURL}/Player/GetMembers/${team_id}`);
     // return this.http.get<any>(`${environment.apiBaseURL}/Player/GetMembers/${team_id}`);
   }
 
-  // Does not return anything
-  // Input: Player {ID: integer, Name: string, Team_ID: integer}
-  createPlayers(p: Partial<any>): Observable<any> {
-    return this.http.post(`${environment.apiAzureURL}/Player/CreatePlayers`, p);
-    // return this.http.post(`${environment.apiBaseURL}/Player/CreatePlayers`, p);
-  }
+  // =====================================================================================================
+  //                                      CATEGORY
 
   // Returns List<Type>
   // Type {category: Category, subcategories: SubCategories[]}
@@ -108,19 +117,21 @@ export class HttpService {
     });
   }
 
-  // Returns HttpResponse
-  // Input: QA
-  // QA {question: Question, subcategories: SubCategory[]}
-  createQuestion(question: Partial<any>): Observable<HttpResponse<any>> {
-    return this.http.post(`${environment.apiAzureURL}/Question/CreateQuestion`, question, {
-      'observe': 'response'
-    });
-  }
+  // =====================================================================================================
+  //                                      GAME
 
   // Returns List<GameUI>
   // GameUI {game: Game, teams: Team[], subcategories: Subcategory[], questions: QA[], boardstate: Boardstate[]}
   getSavedGames(): Observable<HttpResponse<any>> {
     return this.http.get<any>(`${environment.apiAzureURL}/Game/GetSavedGames`, {
+      'observe': 'response'
+    });
+  }
+
+  // Returns HttpResponse
+  // Input: GameUI
+  updateSavedGame(gameUI: Partial<any>): Observable<HttpResponse<any>> {
+    return this.http.put(`${environment.apiAzureURL}/Game/UpdatingSavedGame`, gameUI, {
       'observe': 'response'
     });
   }
