@@ -3,14 +3,11 @@ import { Router } from '@angular/router';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { CategoryComponent } from '../category/category.component';
 import { Answer } from '../models/Answer';
-import { Category } from '../models/Category';
+import { Boardstate } from '../models/Boardstate';
 import { GameUI } from '../models/GameUI';
-import { Player } from '../models/Player';
 import { QA } from '../models/QA';
 import { Question } from '../models/Question';
 import { SubCategory } from '../models/SubCategory';
-import { Team } from '../models/Team';
-import { Type } from '../models/Type';
 import { HttpService } from '../service/http.service';
 
 @Component({
@@ -21,25 +18,14 @@ import { HttpService } from '../service/http.service';
 export class GameboardComponent implements OnInit {
 
   @Input()
-  teams: Team[] = [];
-
-  sortedTeams: Team[] = [];
-
-  @Input()
-  players: Player[][] = [];
+  newGameToPlay!: GameUI;
 
   @Input()
   gameToPlay!: GameUI;
   gameToSave!: GameUI;
   currentGame!: GameUI;
+  existingGame: boolean = false;
 
-  subcategories: SubCategory[] = [
-    new SubCategory(0, "", 0),
-    new SubCategory(0, "", 0),
-    new SubCategory(0, "", 0),
-    new SubCategory(0, "", 0),
-    new SubCategory(0, "", 0)
-  ];
   questionAndAnswer: QA[][] = [];
   isQuestionAnswered: boolean[][] = [];
   questionCost: number[] = [0, 100, 200, 300, 400, 500];
@@ -48,6 +34,7 @@ export class GameboardComponent implements OnInit {
 
   currentQuestion: string = "Question";
   currentAnswer: string = "Answer";
+  currentTeam: number = 0; // index of current team
 
   buttonName: string = "Go Home";
 
@@ -65,11 +52,16 @@ export class GameboardComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.gameToPlay) {
-      this.buttonName = "Submit Team";
-      this.teams = this.gameToPlay.teams;
-      this.width = this.width + (100 / this.teams.length) + '%';
+      // LOADING IN A PREVIOUSLY SAVED GAME TO THE CURRENT GAME
+      this.existingGame = true;
+      this.currentGame = this.gameToPlay;
+      this.buttonName = "Submit";
+      this.currentGame.teams = this.gameToPlay.teams;
+      this.width = this.width + (100 / this.currentGame.teams.length) + '%';
+      this.currentTeam = this.gameToPlay.game.current_team;
       this.isQuestionAnswered = new Array(5).fill([]);
       this.questionAndAnswer = new Array(5).fill([]);
+      this.score = new Array(this.gameToPlay.teams.length).fill(0);
       for (let i = 0; i < this.isQuestionAnswered.length; i++) {
         this.isQuestionAnswered[i] = new Array(5).fill(false);
         this.questionAndAnswer[i] = new Array(5).fill(new QA(new Question(0, "", 0), new Answer(0, "", 0)));
@@ -78,29 +70,32 @@ export class GameboardComponent implements OnInit {
         this.isQuestionAnswered[this.gameToPlay.boardstate[i].x_position][this.gameToPlay.boardstate[i].y_position] = this.gameToPlay.boardstate[i].answered;
         this.questionAndAnswer[this.gameToPlay.boardstate[i].x_position][this.gameToPlay.boardstate[i].y_position] = this.gameToPlay.questions.filter(element => { return this.gameToPlay.boardstate[i].question_id === element.question.question_id })[0];
       }
+      let correctSubcategoryOrder = [];
       for (let i = 0; i < this.questionAndAnswer.length; i++) {
         for (let j = 0; j < this.gameToPlay.subcategories.length; j++) {
-          if (this.gameToPlay.subcategories[j].subcategory_id === this.questionAndAnswer[i][0].question.category_id) {
-            this.subcategories[i] = this.gameToPlay.subcategories[j];
+          if (this.questionAndAnswer[i][0].question.category_id === this.gameToPlay.subcategories[j].subcategory_id) {
+            correctSubcategoryOrder.push(this.gameToPlay.subcategories[j]);
           }
         }
       }
-      for (let i = 0; i < this.gameToPlay.teams.length; i++) {
-        this.score.push(this.gameToPlay.teams[i].team_score);
-      }
+      this.currentGame.subcategories = correctSubcategoryOrder;
     } else {
-      if (this.teams.length > 1) {
-        this.buttonName = "Submit Team";
+      this.currentGame = this.newGameToPlay;
+      this.currentGame.subcategories = new Array(5).fill(new SubCategory(0, "", 0));
+      if (this.currentGame.teams.length > 1) {
+        // MORE THAN ONE TEAM MEANS INFORMATION CAN/WILL BE SAVED TO THE DATABASE
+        this.buttonName = "Submit";
       } else {
+        // ONE TEAM OR NO TEAM WAS SELECTED TO PLAY AND THE INFORMATION WILL NOT BE SAVED
         this.canSaveGame = false;
         // if no team name was specified for team size 1
-        if (this.teams.length === 1) {
-          if (this.teams[0].team_name.length < 1)
-            this.teams[0].team_name = "PredefinedTeam";
+        if (this.currentGame.teams.length === 1) {
+          if (this.currentGame.teams[0].team_name.length < 1)
+            this.currentGame.teams[0].team_name = "PredefinedTeam";
         }
       }
-      this.width = this.width + (100 / this.teams.length) + '%';
-      this.score = new Array(this.teams.length).fill(0);
+      this.width = this.width + (100 / this.currentGame.teams.length) + '%';
+      this.score = new Array(this.currentGame.teams.length).fill(0);
       // boolean array to hold questions answered
       this.isQuestionAnswered = new Array(5).fill([]);
       for (let i = 0; i < this.isQuestionAnswered.length; i++) {
@@ -119,7 +114,7 @@ export class GameboardComponent implements OnInit {
     this.modalRef.onClose.subscribe((message: any) => {
       if (message) {
         this.opacity = "100%";
-        this.subcategories = message[0];
+        this.currentGame.subcategories = message[0];
         this.questionAndAnswer = message[1];
       } else {
         this.displayCategorySelector();
@@ -151,6 +146,12 @@ export class GameboardComponent implements OnInit {
               counter++;
           }
         }
+        if (this.currentTeam < this.currentGame.teams.length - 1) {
+          this.currentTeam++;
+        } else {
+          this.currentTeam = 0;
+        }
+        this.currentGame.game.current_team = this.currentTeam;
         if (counter === (this.isQuestionAnswered.length * this.isQuestionAnswered[0].length)) {
           this.canSaveGame = false;
           this.winner = true;
@@ -167,20 +168,64 @@ export class GameboardComponent implements OnInit {
   }
 
   saveGame(): void {
+    this.message = "";
     if (this.canSaveGame) {
       for (let i = 0; i < this.score.length; i++) {
-        this.teams[i].team_score = this.score[i];
+        this.currentGame.teams[i].team_score += this.score[i];
       }
-      this.api.createSavedGame(this.gameToSave).subscribe({
-        'next': (res) => {
-          if (res.status === 200) {
-            this.message = "Game saved successfully!";
-          }
-          if (res.status === 204) {
-            this.message = "Could not save game!";
+      this.gameToSave = this.currentGame;
+      let newBoardstate = [];
+      this.message = "Saving game...";
+      if (this.existingGame) {
+        for (let i = 0; i < this.questionAndAnswer.length; i++) {
+          for (let j = 0; j < this.questionAndAnswer[i].length; j++) {
+            for (let k = 0; k < this.currentGame.boardstate.length; k++) {
+              if (this.currentGame.boardstate[k].question_id === this.questionAndAnswer[i][j].question.question_id)
+                newBoardstate.push(new Boardstate(this.currentGame.boardstate[k].boardstate_id, i, j, this.isQuestionAnswered[i][j], this.questionAndAnswer[i][j].question.question_id, 0));
+            }
           }
         }
-      });
+        this.gameToSave.boardstate = newBoardstate;
+        this.api.updateSavedGame(this.gameToSave).subscribe({
+          'next': (res) => {
+            if (res.status === 200) {
+              this.message = "Game saved successfully!";
+              this.canSaveGame = false;
+              this.buttonName = "Go Home";
+              this.winner = true;
+            }
+            if (res.status === 204) {
+              this.message = "Could not save game!";
+            }
+          },
+          'error': (err) => {
+            this.message = "An error occurred. Contact the game creator!";
+          }
+        });
+      } else {
+        for (let i = 0; i < this.questionAndAnswer.length; i++) {
+          for (let j = 0; j < this.questionAndAnswer[i].length; j++) {
+            newBoardstate.push(new Boardstate(0, i, j, this.isQuestionAnswered[i][j], this.questionAndAnswer[i][j].question.question_id, 0));
+          }
+        }
+        this.gameToSave.boardstate = newBoardstate;
+        this.api.createSavedGame(this.gameToSave).subscribe({
+          'next': (res) => {
+            if (res.status === 200) {
+              this.message = "Game saved successfully!";
+              this.canSaveGame = false;
+              this.buttonName = "Go Home";
+              this.winner = true;
+            }
+            if (res.status === 204) {
+              this.message = "Could not save game!";
+            }
+          },
+          'error': (err) => {
+            this.message = "An error occurred. Contact the game creator!";
+          }
+        });
+      }
     }
   }
 
@@ -192,25 +237,22 @@ export class GameboardComponent implements OnInit {
       this.message = "The game is not complete! Consider saving...";
     } else {
       for (let i = 0; i < this.score.length; i++) {
-        this.teams[i].team_score = this.score[i];
+        this.currentGame.teams[i].team_score += this.score[i];
       }
-      this.api.createTeams(this.teams).subscribe(res => {
-        this.api.getSortedTeams().subscribe(res => {
-          this.sortedTeams = res;
-          for (let i = 0; i < this.teams.length; i++) {         // iterate through teams
-            for (let j = 0; j < this.players[i].length; j++) {  // iterate through players
-              for (let k = 0; k < this.sortedTeams.length; k++) {    // iterate through sorted teams to find team id for player
-                if ((this.sortedTeams[k].team_name === this.teams[i].team_name) && (this.sortedTeams[k].team_score == this.teams[i].team_score)) { // not sure why team.Score is string but it has '==' because the values match but not the types
-                  this.players[i][j].Team_id = this.sortedTeams[k].team_id;
-                }
-              }
-            }
+      this.currentGame.game.game_winner = 1;
+      this.api.updateSavedGame(this.currentGame).subscribe({
+        'next': (res) => {
+          if (res.status === 200) {
+            this.message = "Game finished successfully!";
+            this.canSaveGame = false;
+            this.buttonName = "Go Home";
+            this.winner = true;
           }
-          this.api.createPlayers(this.players).subscribe(res => {
-            this.route.navigate(['home']);
-          });
-        })
-      })
+          if (res.status === 204) {
+            this.message = "Could not finish game!";
+          }
+        }
+      });
     }
   }
 
