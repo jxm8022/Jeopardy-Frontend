@@ -17,6 +17,8 @@ import { HttpService } from '../service/http.service';
 })
 export class GameboardComponent implements OnInit {
 
+  adminActive: boolean = false;
+
   @Input()
   newGameToPlay!: GameUI;
 
@@ -51,6 +53,9 @@ export class GameboardComponent implements OnInit {
   constructor(private route: Router, private api: HttpService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
+    if (sessionStorage.getItem("adminActive") === "true") {
+      this.adminActive = true;
+    }
     if (this.gameToPlay) {
       // LOADING IN A PREVIOUSLY SAVED GAME TO THE CURRENT GAME
       this.existingGame = true;
@@ -173,61 +178,65 @@ export class GameboardComponent implements OnInit {
   saveGame(): void {
     this.message = "";
     if (this.canSaveGame) {
-      for (let i = 0; i < this.score.length; i++) {
-        this.currentGame.teams[i].team_score += this.score[i];
-      }
-      this.gameToSave = this.currentGame;
-      let newBoardstate = [];
-      this.message = "Saving game...";
-      if (this.existingGame) {
-        for (let i = 0; i < this.questionAndAnswer.length; i++) {
-          for (let j = 0; j < this.questionAndAnswer[i].length; j++) {
-            for (let k = 0; k < this.currentGame.boardstate.length; k++) {
-              if (this.currentGame.boardstate[k].question_id === this.questionAndAnswer[i][j].question.question_id)
-                newBoardstate.push(new Boardstate(this.currentGame.boardstate[k].boardstate_id, i, j, this.isQuestionAnswered[i][j], this.questionAndAnswer[i][j].question.question_id, 0));
-            }
-          }
+      if (this.adminActive) {
+        for (let i = 0; i < this.score.length; i++) {
+          this.currentGame.teams[i].team_score += this.score[i];
         }
-        this.gameToSave.boardstate = newBoardstate;
-        this.api.updateSavedGame(this.gameToSave).subscribe({
-          'next': (res) => {
-            if (res.status === 200) {
-              this.message = "Game saved successfully!";
-              this.canSaveGame = false;
-              this.buttonName = "Go Home";
-              this.winner = true;
+        this.gameToSave = this.currentGame;
+        let newBoardstate = [];
+        this.message = "Saving game...";
+        if (this.existingGame) {
+          for (let i = 0; i < this.questionAndAnswer.length; i++) {
+            for (let j = 0; j < this.questionAndAnswer[i].length; j++) {
+              for (let k = 0; k < this.currentGame.boardstate.length; k++) {
+                if (this.currentGame.boardstate[k].question_id === this.questionAndAnswer[i][j].question.question_id)
+                  newBoardstate.push(new Boardstate(this.currentGame.boardstate[k].boardstate_id, i, j, this.isQuestionAnswered[i][j], this.questionAndAnswer[i][j].question.question_id, 0));
+              }
             }
-            if (res.status === 204) {
-              this.message = "Could not save game!";
-            }
-          },
-          'error': (err) => {
-            this.message = "An error occurred. Contact the game creator!";
           }
-        });
+          this.gameToSave.boardstate = newBoardstate;
+          this.api.updateSavedGame(this.gameToSave).subscribe({
+            'next': (res) => {
+              if (res.status === 200) {
+                this.message = "Game saved successfully!";
+                this.canSaveGame = false;
+                this.buttonName = "Go Home";
+                this.winner = true;
+              }
+              if (res.status === 204) {
+                this.message = "Could not save game!";
+              }
+            },
+            'error': (err) => {
+              this.message = "An error occurred. Contact the game creator!";
+            }
+          });
+        } else {
+          for (let i = 0; i < this.questionAndAnswer.length; i++) {
+            for (let j = 0; j < this.questionAndAnswer[i].length; j++) {
+              newBoardstate.push(new Boardstate(0, i, j, this.isQuestionAnswered[i][j], this.questionAndAnswer[i][j].question.question_id, 0));
+            }
+          }
+          this.gameToSave.boardstate = newBoardstate;
+          this.api.createSavedGame(this.gameToSave).subscribe({
+            'next': (res) => {
+              if (res.status === 200) {
+                this.message = "Game saved successfully!";
+                this.canSaveGame = false;
+                this.buttonName = "Go Home";
+                this.winner = true;
+              }
+              if (res.status === 204) {
+                this.message = "Could not save game!";
+              }
+            },
+            'error': (err) => {
+              this.message = "An error occurred. Contact the game creator!";
+            }
+          });
+        }
       } else {
-        for (let i = 0; i < this.questionAndAnswer.length; i++) {
-          for (let j = 0; j < this.questionAndAnswer[i].length; j++) {
-            newBoardstate.push(new Boardstate(0, i, j, this.isQuestionAnswered[i][j], this.questionAndAnswer[i][j].question.question_id, 0));
-          }
-        }
-        this.gameToSave.boardstate = newBoardstate;
-        this.api.createSavedGame(this.gameToSave).subscribe({
-          'next': (res) => {
-            if (res.status === 200) {
-              this.message = "Game saved successfully!";
-              this.canSaveGame = false;
-              this.buttonName = "Go Home";
-              this.winner = true;
-            }
-            if (res.status === 204) {
-              this.message = "Could not save game!";
-            }
-          },
-          'error': (err) => {
-            this.message = "An error occurred. Contact the game creator!";
-          }
-        });
+        this.message = "You are not logged in as an admin! Return to the home screen to log in as admin! This game will not be saved!";
       }
     }
   }

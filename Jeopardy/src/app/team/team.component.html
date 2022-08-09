@@ -1,6 +1,10 @@
 <app-nav-bar></app-nav-bar>
 <ng-container *ngIf="!game && newGame">
     <img class="mx-auto d-block" src="../../assets/create_team.png" />
+    <p *ngIf="!adminActive" class="text-center" style="color: red; padding-top: 30px;">Games will not save
+        unless you
+        are an
+        admin!</p>
     <div class="text-center" style="margin-top: 30px;">
         <form>
             <div class="form-group">

@@ -17,6 +17,8 @@ import { HttpService } from '../service/http.service';
 })
 export class TeamComponent implements OnInit {
 
+  adminActive: boolean = false;
+
   newGameToPlay: GameUI = new GameUI(new Game(0, 0, 0), [new Team(0, "", 0)], [[new Player(0, "", 0)]], [new SubCategory(0, "", 0)], [new QA(new Question(0, "", 0), new Answer(0, "", 0))], [new Boardstate(0, 0, 0, false, 0, 0)]);
 
   numberOfTeams: number = 2;
@@ -47,6 +49,10 @@ export class TeamComponent implements OnInit {
   ngOnInit(): void {
     // find saved games HERE
     this.width = this.width = this.width + (100 / this.numberOfTeams) + '%';
+
+    if (sessionStorage.getItem("adminActive") === "true") {
+      this.adminActive = true;
+    }
 
     this.api.getSortedTeams().subscribe(res => {
       if (res) {
