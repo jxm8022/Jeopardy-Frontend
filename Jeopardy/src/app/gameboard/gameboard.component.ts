@@ -252,19 +252,23 @@ export class GameboardComponent implements OnInit {
         this.currentGame.teams[i].team_score += this.score[i];
       }
       this.currentGame.game.game_winner = 1;
-      this.api.updateSavedGame(this.currentGame).subscribe({
-        'next': (res) => {
-          if (res.status === 200) {
-            this.message = "Game finished successfully!";
-            this.canSaveGame = false;
-            this.buttonName = "Go Home";
-            this.winner = true;
+      if (this.adminActive) {
+        this.api.updateSavedGame(this.currentGame).subscribe({
+          'next': (res) => {
+            if (res.status === 200) {
+              this.message = "Game finished successfully!";
+              this.canSaveGame = false;
+              this.buttonName = "Go Home";
+              this.winner = true;
+            }
+            if (res.status === 204) {
+              this.message = "Could not finish game!";
+            }
           }
-          if (res.status === 204) {
-            this.message = "Could not finish game!";
-          }
-        }
-      });
+        });
+      } else {
+        this.message = "You are not logged in as an admin! Return to the home screen to log in as admin! This game will not be saved!";
+      }
     }
   }
 
