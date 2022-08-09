@@ -88,6 +88,9 @@ export class GameboardComponent implements OnInit {
       } else {
         // ONE TEAM OR NO TEAM WAS SELECTED TO PLAY AND THE INFORMATION WILL NOT BE SAVED
         this.canSaveGame = false;
+        if (this.currentGame.teams[0].team_name === "solo") {
+          this.currentGame.teams = [];
+        }
         // if no team name was specified for team size 1
         if (this.currentGame.teams.length === 1) {
           if (this.currentGame.teams[0].team_name.length < 1)

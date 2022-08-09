@@ -103,20 +103,25 @@ export class TeamComponent implements OnInit {
 
   submitTeams(): void {
     this.errorMessage = "";
-    if (this.checkTeams()) {
-      for (let i = 0; i < this.teamNames.length; i++) {
-        this.teams.push(new Team(-1, this.teamNames[i], 0));
-        this.players.push([]);
-        this.playerNames[i] = this.playerNames[i].filter(element => { return element !== "" });
-        for (let j = 0; j < this.playerNames[i].length; j++) {
-          this.players[i].push(new Player(-1, this.playerNames[i][j], -1));
+    if (this.numberOfTeams > 0) {
+      if (this.checkTeams()) {
+        for (let i = 0; i < this.teamNames.length; i++) {
+          this.teams.push(new Team(-1, this.teamNames[i], 0));
+          this.players.push([]);
+          this.playerNames[i] = this.playerNames[i].filter(element => { return element !== "" });
+          for (let j = 0; j < this.playerNames[i].length; j++) {
+            this.players[i].push(new Player(-1, this.playerNames[i][j], -1));
+          }
         }
+
+        // add to new game to play GameUI
+        this.newGameToPlay.teams = this.teams;
+        this.newGameToPlay.players = this.players;
+
+        this.game = !this.game;
       }
-
-      // add to new game to play GameUI
-      this.newGameToPlay.teams = this.teams;
-      this.newGameToPlay.players = this.players;
-
+    } else {
+      this.newGameToPlay.teams[0].team_name = "solo";
       this.game = !this.game;
     }
   }
@@ -124,11 +129,13 @@ export class TeamComponent implements OnInit {
   checkTeams(): boolean {
     // checking for empty input and existing information
     let actualTeams = this.teamNames.filter(element => { return element !== "" });
-    for (let i = 0; i < this.existingTeams.length; i++) {
-      for (let j = 0; j < actualTeams.length; j++) {
-        if (this.existingTeams[i].team_name === actualTeams[j]) {
-          this.message = "Team name already exists!";
-          return false;
+    if (this.numberOfTeams > 1) {
+      for (let i = 0; i < this.existingTeams.length; i++) {
+        for (let j = 0; j < actualTeams.length; j++) {
+          if (this.existingTeams[i].team_name === actualTeams[j]) {
+            this.message = "Team name already exists!";
+            return false;
+          }
         }
       }
     }
@@ -138,11 +145,13 @@ export class TeamComponent implements OnInit {
     } else {
       for (let i = 0; i < this.playerNames.length; i++) {
         let actualPlayers = this.playerNames[i].filter(element => { return element !== "" });
-        for (let j = 0; j < this.existingPlayers.length; j++) {
-          for (let k = 0; k < actualPlayers.length; k++) {
-            if (this.existingPlayers[j].player_name === actualPlayers[k]) {
-              this.message = "Player name already exists!";
-              return false;
+        if (this.numberOfTeams > 1) {
+          for (let j = 0; j < this.existingPlayers.length; j++) {
+            for (let k = 0; k < actualPlayers.length; k++) {
+              if (this.existingPlayers[j].player_name === actualPlayers[k]) {
+                this.message = "Player name already exists!";
+                return false;
+              }
             }
           }
         }

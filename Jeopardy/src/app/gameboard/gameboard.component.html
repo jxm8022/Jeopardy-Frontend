@@ -41,7 +41,8 @@
                 </ng-container>
             </form>
         </div>
-        <p class="text-center">Current Team: {{currentGame.teams[currentTeam].team_name}}</p>
+        <p class="text-center" *ngIf="currentGame.teams.length > 1">Current Team:
+            {{currentGame.teams[currentTeam].team_name}}</p>
         <p *ngIf="message" class="text-center" style="color: red;">{{message}}</p>
         <div class="text-center" style="margin-bottom: 25px;">
             <button *ngIf="canSaveGame" type="button" class="btn btn-primary btn-lg" (click)="saveGame()"
