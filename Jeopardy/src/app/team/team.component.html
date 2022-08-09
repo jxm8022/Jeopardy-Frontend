@@ -38,11 +38,15 @@
     </div>
 </ng-container>
 <ng-container *ngIf="game && !gameToPlay">
-    <app-gameboard [teams]="teams" [players]="players"></app-gameboard>
+    <app-gameboard [newGameToPlay]="newGameToPlay"></app-gameboard>
 </ng-container>
 <ng-container *ngIf="game && gameToPlay">
     <app-gameboard [gameToPlay]="gameToPlay"></app-gameboard>
 </ng-container>
 <ng-container *ngIf="savedGames">
     <app-savedgames [savedGames]="savedGames" (itemEvent)="chooseGame($event)"></app-savedgames>
+    <div class="text-center" style="margin-bottom: 25px;">
+        <button type="button" class="btn btn-primary btn-lg" (click)="createNewGame()">New Game</button>
+    </div>
 </ng-container>
+<app-statusbar [statusMessage]="errorMessage"></app-statusbar>

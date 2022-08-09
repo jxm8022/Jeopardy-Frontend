@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Answer } from '../models/Answer';
+import { Boardstate } from '../models/Boardstate';
+import { Game } from '../models/Game';
 import { GameUI } from '../models/GameUI';
 import { Player } from '../models/Player';
+import { QA } from '../models/QA';
+import { Question } from '../models/Question';
+import { SubCategory } from '../models/SubCategory';
 import { Team } from '../models/Team';
 import { HttpService } from '../service/http.service';
 
@@ -11,6 +17,8 @@ import { HttpService } from '../service/http.service';
 })
 export class TeamComponent implements OnInit {
 
+  newGameToPlay: GameUI = new GameUI(new Game(0, 0, 0), [new Team(0, "", 0)], [[new Player(0, "", 0)]], [new SubCategory(0, "", 0)], [new QA(new Question(0, "", 0), new Answer(0, "", 0))], [new Boardstate(0, 0, 0, false, 0, 0)]);
+
   numberOfTeams: number = 2;
 
   teamNames: string[] = [];
@@ -18,6 +26,8 @@ export class TeamComponent implements OnInit {
 
   teams: Team[] = [];
   players: Player[][] = [];
+  existingTeams: Team[] = [];
+  existingPlayers: Player[] = [];
 
   game: boolean = false;
   newGame: boolean = true;
@@ -38,16 +48,39 @@ export class TeamComponent implements OnInit {
     // find saved games HERE
     this.width = this.width = this.width + (100 / this.numberOfTeams) + '%';
 
-    this.api.getSavedGames().subscribe({
-      'next': (res) => {
-        if (res.status === 200) {
-          this.newGame = false;
-          this.savedGames = res.body;
-        }
-        if (res.status === 204) {
-          this.errorMessage = "Could not retrieved games!";
-        }
+    this.api.getSortedTeams().subscribe(res => {
+      if (res) {
+        this.existingTeams = res;
+      } else {
+        this.errorMessage = "No teams!";
       }
+      this.api.getPlayers().subscribe({
+        'next': (res) => {
+          if (res.status === 200) {
+            this.existingPlayers = res.body;
+          }
+          if (res.status === 204) {
+            this.errorMessage = "No players!";
+          }
+          this.api.getSavedGames().subscribe({
+            'next': (res) => {
+              if (res.status === 200) {
+                this.newGame = false;
+                this.savedGames = res.body;
+              }
+              if (res.status === 204) {
+                this.errorMessage = "No saved games!";
+              }
+            },
+            'error': (err) => {
+              this.errorMessage = "An error occurred. Contact the game creator!";
+            }
+          });
+        },
+        'error': (err) => {
+          this.errorMessage = "An error occurred. Contact the game creator!";
+        }
+      });
     });
   }
 
@@ -69,6 +102,7 @@ export class TeamComponent implements OnInit {
   }
 
   submitTeams(): void {
+    this.errorMessage = "";
     if (this.checkTeams()) {
       for (let i = 0; i < this.teamNames.length; i++) {
         this.teams.push(new Team(-1, this.teamNames[i], 0));
@@ -78,18 +112,40 @@ export class TeamComponent implements OnInit {
           this.players[i].push(new Player(-1, this.playerNames[i][j], -1));
         }
       }
+
+      // add to new game to play GameUI
+      this.newGameToPlay.teams = this.teams;
+      this.newGameToPlay.players = this.players;
+
       this.game = !this.game;
     }
   }
 
   checkTeams(): boolean {
-    var actualTeams = this.teamNames.filter(element => { return element !== "" });
+    // checking for empty input and existing information
+    let actualTeams = this.teamNames.filter(element => { return element !== "" });
+    for (let i = 0; i < this.existingTeams.length; i++) {
+      for (let j = 0; j < actualTeams.length; j++) {
+        if (this.existingTeams[i].team_name === actualTeams[j]) {
+          this.message = "Team name already exists!";
+          return false;
+        }
+      }
+    }
     if (actualTeams.length !== this.numberOfTeams) {
       this.message = "Missing a team name!";
       return false;
     } else {
       for (let i = 0; i < this.playerNames.length; i++) {
-        var actualPlayers = this.playerNames[i].filter(element => { return element !== "" });
+        let actualPlayers = this.playerNames[i].filter(element => { return element !== "" });
+        for (let j = 0; j < this.existingPlayers.length; j++) {
+          for (let k = 0; k < actualPlayers.length; k++) {
+            if (this.existingPlayers[j].player_name === actualPlayers[k]) {
+              this.message = "Player name already exists!";
+              return false;
+            }
+          }
+        }
         if (actualPlayers.length < 1) {
           this.message = "Teams need at least one player!";
           return false;
@@ -103,6 +159,11 @@ export class TeamComponent implements OnInit {
   chooseGame(game: GameUI): void {
     this.game = true;
     this.gameToPlay = game;
+    this.savedGames = this.noGames;
+  }
+
+  createNewGame(): void {
+    this.newGame = true;
     this.savedGames = this.noGames;
   }
 
