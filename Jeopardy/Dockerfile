@@ -6,7 +6,7 @@ COPY ./Jeopardy/package.json ./Jeopardy/package-lock.json ./
 
 RUN npm install
 
-COPY . .
+COPY ./Jeopardy .
 
 RUN pwd
 
