@@ -23,14 +23,14 @@ export class CreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.message = "Loading categories...";
     this.api.getTypes().subscribe(res => {
-      this.message = "";
       this.categories = res;
       if ((this.createType === "subcategory" || this.createType === "question") && this.categories != null) {
         this.displayCategorySelector(this.categories, this.createType);
       } else if (this.createType === "category") {
-        this.message = "There are no categories!";
+        if (!res) {
+          this.message = "There are no categories!";
+        }
       } else {
         this.canCreate = false;
         this.message = "There are no categories or subcategories!";
@@ -80,20 +80,21 @@ export class CreateComponent implements OnInit {
     if (this.categories) {
       if (this.categories.find(element => { return element.category.category_name === this.category })) {
         this.errorMessage = `Category ${this.category} already exists!`;
+      } else if (this.category) {
+        this.api.createCategory(this.category).subscribe({
+          'next': (res) => {
+            if (res.status === 200) {
+              this.message = `Category ${this.category} created successfully!`;
+              this.categories.push(new Type(new Category(0, this.category), []));
+              this.category = "";
+              this.errorMessage = "";
+            }
+            if (res.status === 204) {
+              this.errorMessage = "Could not create category!";
+            }
+          }
+        });
       }
-    } else if (this.category) {
-      this.api.createCategory(this.category).subscribe({
-        'next': (res) => {
-          if (res.status === 200) {
-            this.message = `Category ${this.category} created successfully!`;
-            this.category = "";
-            this.errorMessage = "";
-          }
-          if (res.status === 204) {
-            this.errorMessage = "Could not create category!";
-          }
-        }
-      });
     } else {
       this.errorMessage = "Please enter a category name!"
     }
@@ -140,6 +141,7 @@ export class CreateComponent implements OnInit {
   answer: string = "";
   createQuestion(): void {
     if (this.question && this.answer) {
+      this.existingQuestions = [];
       this.api.createQuestion(new QA(new Question(-1, this.question, this.subcategoryToAddTo.subcategory_id), new Answer(-1, this.answer, -1))).subscribe({
         'next': (res) => {
           if (res.status === 200) {
