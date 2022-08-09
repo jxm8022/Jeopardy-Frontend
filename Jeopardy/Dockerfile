@@ -8,10 +8,6 @@ RUN npm install
 
 COPY ./Jeopardy .
 
-RUN pwd
-
-RUN ls -la
-
 RUN npm run build --prod
 
 FROM nginx:1.15.8-alpine
