@@ -7,8 +7,8 @@
     <ng-container *ngFor="let team of teams; let i = index;">
         <div class="row">
             <h1 class="mx-auto" [ngStyle]="{'width':width}">{{i+1}}.</h1>
-            <h1 class="mx-auto" [ngStyle]="{'width':width}"><i>{{team.Name}}</i></h1>
-            <h1 class="mx-auto" [ngStyle]="{'width':width}"><i>{{team.Score}}</i></h1>
+            <h1 class="mx-auto" [ngStyle]="{'width':width}"><i>{{team.team_name}}</i></h1>
+            <h1 class="mx-auto" [ngStyle]="{'width':width}"><i>{{team.team_score}}</i></h1>
         </div>
         <hr class="mx-auto">
     </ng-container>

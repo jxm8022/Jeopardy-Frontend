@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
+import { Category } from '../models/Category';
 import { QA } from '../models/QA';
+import { SubCategory } from '../models/SubCategory';
 import { Type } from '../models/Type';
 import { HttpService } from '../service/http.service';
 
@@ -11,45 +13,87 @@ import { HttpService } from '../service/http.service';
 })
 export class CategoryComponent implements OnInit {
 
-  questions: QA[][] = [];
-  categories: Type[] = [];
+  // data parameters for create.component.ts
+  categories!: Type[];
+  type!: string;
+
+  // variables for category.component.html
   selection!: Type[];
   errorMessage = '';
 
   constructor(private api: HttpService, public modalRef: MdbModalRef<CategoryComponent>) { }
 
   ngOnInit(): void {
-    this.api.getTypes().subscribe(res => {
-      this.selection = res;
-    });
+    if (this.type) {
+      this.selection = this.categories;
+    } else {
+      this.api.getTypes().subscribe(res => {
+        this.selection = res;
+      });
+    }
   }
 
-  changed(index: number) {
-    this.api.getQuestions(index + 1).subscribe(res => {
-      if (this.categories.includes(this.selection[index])) {
-        // categories
-        this.categories[this.categories.indexOf(this.selection[index])] = new Type(-1, "");
-        this.categories = this.categories.filter(element => { return element.Category !== "" });
+  categorySelected!: Category;
+  blank!: Category;
+  beepBoop: boolean = false;
+  selected(index: number) {
+    if (this.beepBoop) {
+      this.categorySelected = this.blank;
+      this.beepBoop = !this.beepBoop;
+    } else {
+      this.categorySelected = this.selection[index].category;
+      this.beepBoop = !this.beepBoop;
+    }
+  }
 
-        // questions
-        for (let i = 0; i < this.questions.length; i++) {
-          if (this.questions[i][0].Question.Type_id === index + 1) {
-            this.questions[i] = [];
-          }
-        }
-        this.questions = this.questions.filter(element => { return element.length !== 0 });
-      } else {
-        this.categories.push(this.selection[index]);
-        this.questions.push(res);
-      }
-    });
+  subcategorySelected!: SubCategory;
+  blankSub!: SubCategory;
+  selectedSubcategory(index_i: number, index_j: number) {
+    if (this.beepBoop) {
+      this.subcategorySelected = this.blankSub;
+      this.beepBoop = !this.beepBoop;
+    } else {
+      this.subcategorySelected = this.selection[index_i].subcategories[index_j];
+      this.beepBoop = !this.beepBoop;
+    }
+  }
+
+  gameCategories: SubCategory[] = [];
+  changed(index_i: number, index_j: number) {
+    if (this.gameCategories.includes(this.selection[index_i].subcategories[index_j])) {
+      this.gameCategories = this.gameCategories.filter(element => { return element !== this.selection[index_i].subcategories[index_j] });
+    } else {
+      this.gameCategories.push(this.selection[index_i].subcategories[index_j]);
+    }
   }
 
   submit() {
-    if (this.questions.length === 5) {
-      this.modalRef.close(this.questions);
+    if (this.type) {
+      if (this.type === "subcategory") {
+        if (this.categorySelected) {
+          this.modalRef.close(this.categorySelected);
+        } else {
+          this.errorMessage = "Select a category!";
+        }
+      } else if (this.type === "question") {
+        if (this.subcategorySelected) {
+          this.modalRef.close(this.subcategorySelected);
+        } else {
+          this.errorMessage = "Select a subcategory!";
+        }
+      }
     } else {
-      this.errorMessage = "Select 5 categories!"
+      if (this.gameCategories.length === 5) {
+        this.api.getQuestions(this.gameCategories).subscribe({
+          'next': (res) => {
+            if (res.status === 200) {
+              this.modalRef.close([this.gameCategories, res.body]);
+            }
+          }
+        });
+      } else {
+        this.errorMessage = "Select 5 categories!"
+      }
     }
   }
 }

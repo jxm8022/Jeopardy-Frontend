@@ -1,20 +1,81 @@
 <div class="modal-header">
-    <h5 class="modal-title mx-auto" id="exampleModalLabel">Choose your categories:</h5>
+    <ng-container *ngIf="type === 'subcategory'">
+        <h5 class="modal-title mx-auto" id="exampleModalLabel">Choose a category:</h5>
+    </ng-container>
+    <ng-container *ngIf="type === 'question'">
+        <h5 class="modal-title mx-auto" id="exampleModalLabel">Choose a subcategory:</h5>
+    </ng-container>
+    <ng-container *ngIf="!type">
+        <h5 class="modal-title mx-auto" id="exampleModalLabel">Choose five subcategories:</h5>
+    </ng-container>
 </div>
-<div class="body">
-    <div class="mb-3" *ngFor="let category of selection; let i = index" style="margin-left: 20px;">
-        <div class="form-check">
-            <input *ngIf="categories.length == 5 && !categories.includes(category)" class="form-check-input"
-                type="checkbox" value="" id="{{category.Category}}" (click)="changed(i)" disabled>
-            <input *ngIf="categories.length != 5  || categories.includes(category)" class="form-check-input"
-                type="checkbox" value="" id="{{category.Category}}" (click)="changed(i)">
-            <label class="form-check-label" for="{{category.Category}}">
-                {{category.Category}}
-            </label>
+<!-- MODAL BODY FOR SELECTING CATEGORY FOR SUBCATEGORY CREATION -->
+<ng-container *ngIf="type === 'subcategory'">
+    <div class="body">
+        <div class="mb-3" *ngFor="let category of selection; let i = index" style="margin-left: 20px;">
+            <div class="form-check">
+                <input *ngIf="categorySelected && category.category != categorySelected" class="form-check-input"
+                    type="checkbox" value="" id="{{category.category.category_name}}" (click)="selected(i)" disabled>
+                <input *ngIf="!categorySelected || category.category == categorySelected" class="form-check-input"
+                    type="checkbox" value="" id="{{category.category.category_name}}" (click)="selected(i)">
+                <label class="form-check-label" for="{{category.category.category_name}}">
+                    {{category.category.category_name}}
+                </label>
+            </div>
         </div>
+        <button type="submit" class="btn btn-warning" style="margin-left: 40px;" (click)="submit()">
+            Done
+        </button>
+        <p style="display: inline-block; margin-left: 10pt; color:brown;" *ngIf="errorMessage">{{errorMessage}}</p>
     </div>
-    <button type="submit" class="btn btn-warning" style="margin-left: 40px;" (click)="submit()">
-        Done
-    </button>
-    <p style="display: inline-block; margin-left: 10pt; color:brown;" *ngIf="errorMessage">{{errorMessage}}</p>
-</div>
+</ng-container>
+<!-- MODAL BODY FOR SELECTING SUBCATEGORY FOR QUESTION CREATION -->
+<ng-container *ngIf="type === 'question'">
+    <div class="body">
+        <div class="mb-3" *ngFor="let category of selection; let i = index" style="margin-left: 20px;">
+            <h5 *ngIf="category.subcategories">{{category.category.category_name}}</h5>
+            <ng-container *ngFor="let subcategory of category.subcategories; let j = index">
+                <div class="form-check">
+                    <input *ngIf="subcategorySelected && subcategory != subcategorySelected" class="form-check-input"
+                        type="checkbox" value="" id="{{category.category.category_name}}"
+                        (click)="selectedSubcategory(i,j)" disabled>
+                    <input *ngIf="!subcategorySelected || subcategory == subcategorySelected" class="form-check-input"
+                        type="checkbox" value="" id="{{category.category.category_name}}"
+                        (click)="selectedSubcategory(i,j)">
+                    <label class="form-check-label" for="{{category.category.category_name}}">
+                        {{subcategory.subcategory_name}}
+                    </label>
+                </div>
+            </ng-container>
+        </div>
+        <button type="submit" class="btn btn-warning" style="margin-left: 40px;" (click)="submit()">
+            Done
+        </button>
+        <p style="display: inline-block; margin-left: 10pt; color:brown;" *ngIf="errorMessage">{{errorMessage}}</p>
+    </div>
+</ng-container>
+<!-- MODAL BODY FOR SELECTING SUBCATEGORY FOR GAME CATEGORIES    -->
+<ng-container *ngIf="!type">
+    <div class="body">
+        <div class="mb-3" *ngFor="let category of selection; let i = index" style="margin-left: 20px;">
+            <h5 *ngIf="category.subcategories">{{category.category.category_name}}</h5>
+            <ng-container *ngFor="let subcategory of category.subcategories; let j = index">
+                <div class="form-check">
+                    <input *ngIf="gameCategories.length == 5 && !gameCategories.includes(subcategory)"
+                        class="form-check-input" type="checkbox" value="" id="{{category.category.category_name}}"
+                        (click)="changed(i,j)" disabled>
+                    <input *ngIf="gameCategories.length != 5 || gameCategories.includes(subcategory)"
+                        class="form-check-input" type="checkbox" value="" id="{{category.category.category_name}}"
+                        (click)="changed(i,j)">
+                    <label class="form-check-label" for="{{category.category.category_name}}">
+                        {{subcategory.subcategory_name}}
+                    </label>
+                </div>
+            </ng-container>
+        </div>
+        <button type="submit" class="btn btn-warning" style="margin-left: 40px;" (click)="submit()">
+            Done
+        </button>
+        <p style="display: inline-block; margin-left: 10pt; color:brown;" *ngIf="errorMessage">{{errorMessage}}</p>
+    </div>
+</ng-container>

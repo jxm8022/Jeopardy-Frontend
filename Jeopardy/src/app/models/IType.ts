@@ -1,4 +1,7 @@
+import { Category } from "./Category";
+import { SubCategory } from "./SubCategory";
+
 export interface IType {
-    Id: number,
-    Category: string
+    category: Category,
+    subcategories: SubCategory[]
 }

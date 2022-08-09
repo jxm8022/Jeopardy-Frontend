@@ -6,25 +6,34 @@
     padding: 10px;
 }
 
-hr {
+.admin {
+    width: 7%;
+    margin: 15px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+}
+
+.mainHr {
     border-top: 4px solid;
     width: 75%;
 }
 
-#create {
+.adminHr {
+    border-top: 4px solid;
+    width: 30%;
+}
+
+#mainOptions {
     width: 100%;
     margin: 50px 0;
 }
 
-#leaderboard {
-    width: 100%;
-    padding: 50px 0;
+#adminOptions {
+    width: 45%;
+    margin: 10px 0;
 }
 
-#create:hover {
+#mainOptions:hover {
     transform: rotate(-3deg) scale(1.3);
-}
-
-#leaderboard:hover {
-    transform: rotate(3deg) scale(1.3);
 }

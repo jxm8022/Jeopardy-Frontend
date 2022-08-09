@@ -25,7 +25,7 @@ export class LeaderboardComponent implements OnInit {
         this.teams = res;
         this.opacity = "100%";
       }
-    })
+    });
   }
 
 }

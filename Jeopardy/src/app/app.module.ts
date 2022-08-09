@@ -13,6 +13,10 @@ import { FormsModule } from '@angular/forms';
 import { CategoryComponent } from './category/category.component';
 import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
 import { HttpClientModule } from '@angular/common/http';
+import { AdminComponent } from './admin/admin.component';
+import { CreateComponent } from './create/create.component';
+import { StatusbarComponent } from './statusbar/statusbar.component';
+import { SavedgamesComponent } from './savedgames/savedgames.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +27,11 @@ import { HttpClientModule } from '@angular/common/http';
     HomeComponent,
     LeaderboardComponent,
     GameboardComponent,
-    CategoryComponent
+    CategoryComponent,
+    AdminComponent,
+    CreateComponent,
+    StatusbarComponent,
+    SavedgamesComponent
   ],
   imports: [
     BrowserModule,

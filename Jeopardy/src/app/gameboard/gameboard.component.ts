@@ -2,10 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { CategoryComponent } from '../category/category.component';
-import { Player } from '../models/Player';
+import { Answer } from '../models/Answer';
+import { Boardstate } from '../models/Boardstate';
+import { GameUI } from '../models/GameUI';
 import { QA } from '../models/QA';
-import { Team } from '../models/Team';
-import { Type } from '../models/Type';
+import { Question } from '../models/Question';
+import { SubCategory } from '../models/SubCategory';
 import { HttpService } from '../service/http.service';
 
 @Component({
@@ -15,21 +17,17 @@ import { HttpService } from '../service/http.service';
 })
 export class GameboardComponent implements OnInit {
 
-  @Input()
-  teams: Team[] = [];
-
-  sortedTeams: Team[] = [];
+  adminActive: boolean = false;
 
   @Input()
-  players: Player[][] = [];
+  newGameToPlay!: GameUI;
 
-  categories: Type[] = [
-    new Type(-1, "Category 1"),
-    new Type(-1, "Category 2"),
-    new Type(-1, "Category 3"),
-    new Type(-1, "Category 4"),
-    new Type(-1, "Category 5"),
-  ];
+  @Input()
+  gameToPlay!: GameUI;
+  gameToSave!: GameUI;
+  currentGame!: GameUI;
+  existingGame: boolean = false;
+
   questionAndAnswer: QA[][] = [];
   isQuestionAnswered: boolean[][] = [];
   questionCost: number[] = [0, 100, 200, 300, 400, 500];
@@ -38,6 +36,7 @@ export class GameboardComponent implements OnInit {
 
   currentQuestion: string = "Question";
   currentAnswer: string = "Answer";
+  currentTeam: number = 0; // index of current team
 
   buttonName: string = "Go Home";
 
@@ -45,6 +44,7 @@ export class GameboardComponent implements OnInit {
   showAnswer: boolean = false;
 
   winner: boolean = false;
+  canSaveGame: boolean = true;
 
   opacity: string = '100%';
   width: string = "";
@@ -53,25 +53,65 @@ export class GameboardComponent implements OnInit {
   constructor(private route: Router, private api: HttpService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
-    if (this.teams[0].Name && this.teams[1].Name) {
-      this.buttonName = "Submit Team";
-      this.teams = this.teams.filter(element => { return element.Name !== "" });
-
-      let temp = [];
-      let temp2d = [];
-      for (let i = 0; i < this.players.length; i++) {
-        temp = this.players[i].filter(element => { return element.Name !== "" });
-        temp2d.push(temp);
+    if (sessionStorage.getItem("adminActive") === "true") {
+      this.adminActive = true;
+    }
+    if (this.gameToPlay) {
+      // LOADING IN A PREVIOUSLY SAVED GAME TO THE CURRENT GAME
+      this.existingGame = true;
+      this.currentGame = this.gameToPlay;
+      this.buttonName = "Submit";
+      this.currentGame.teams = this.gameToPlay.teams;
+      this.width = this.width + (100 / this.currentGame.teams.length) + '%';
+      this.currentTeam = this.gameToPlay.game.current_team;
+      this.isQuestionAnswered = new Array(5).fill([]);
+      this.questionAndAnswer = new Array(5).fill([]);
+      this.score = new Array(this.gameToPlay.teams.length).fill(0);
+      for (let i = 0; i < this.isQuestionAnswered.length; i++) {
+        this.isQuestionAnswered[i] = new Array(5).fill(false);
+        this.questionAndAnswer[i] = new Array(5).fill(new QA(new Question(0, "", 0), new Answer(0, "", 0)));
       }
-      this.players = temp2d;
+      for (let i = 0; i < this.gameToPlay.boardstate.length; i++) {
+        this.isQuestionAnswered[this.gameToPlay.boardstate[i].x_position][this.gameToPlay.boardstate[i].y_position] = this.gameToPlay.boardstate[i].answered;
+        this.questionAndAnswer[this.gameToPlay.boardstate[i].x_position][this.gameToPlay.boardstate[i].y_position] = this.gameToPlay.questions.filter(element => { return this.gameToPlay.boardstate[i].question_id === element.question.question_id })[0];
+      }
+      let correctSubcategoryOrder = [];
+      for (let i = 0; i < this.questionAndAnswer.length; i++) {
+        for (let j = 0; j < this.gameToPlay.subcategories.length; j++) {
+          if (this.questionAndAnswer[i][0].question.category_id === this.gameToPlay.subcategories[j].subcategory_id) {
+            correctSubcategoryOrder.push(this.gameToPlay.subcategories[j]);
+          }
+        }
+      }
+      this.currentGame.subcategories = correctSubcategoryOrder;
+    } else {
+      this.currentGame = this.newGameToPlay;
+      this.currentGame.subcategories = new Array(5).fill(new SubCategory(0, "", 0));
+      if (this.currentGame.teams.length > 1) {
+        // MORE THAN ONE TEAM MEANS INFORMATION CAN/WILL BE SAVED TO THE DATABASE
+        this.buttonName = "Submit";
+      } else {
+        // ONE TEAM OR NO TEAM WAS SELECTED TO PLAY AND THE INFORMATION WILL NOT BE SAVED
+        this.canSaveGame = false;
+        if (this.currentGame.teams[0].team_name === "solo") {
+          this.currentGame.teams = [];
+        }
+        // if no team name was specified for team size 1
+        if (this.currentGame.teams.length === 1) {
+          if (this.currentGame.teams[0].team_name.length < 1)
+            this.currentGame.teams[0].team_name = "PredefinedTeam";
+        }
+      }
+      this.width = this.width + (100 / this.currentGame.teams.length) + '%';
+      this.score = new Array(this.currentGame.teams.length).fill(0);
+      // boolean array to hold questions answered
+      this.isQuestionAnswered = new Array(5).fill([]);
+      for (let i = 0; i < this.isQuestionAnswered.length; i++) {
+        this.isQuestionAnswered[i] = new Array(5).fill(false);
+      }
+
+      this.displayCategorySelector();
     }
-    this.width = this.width + (100 / this.teams.length) + '%';
-    this.score = new Array(this.teams.length).fill(0);
-    this.isQuestionAnswered = new Array(5).fill([]);
-    for (let i = 0; i < this.isQuestionAnswered.length; i++) {
-      this.isQuestionAnswered[i] = new Array(5).fill(false);
-    }
-    this.displayCategorySelector();
   }
 
   displayCategorySelector(): void {
@@ -80,21 +120,13 @@ export class GameboardComponent implements OnInit {
       modalClass: 'modal-dialog-centered'
     })
     this.modalRef.onClose.subscribe((message: any) => {
-      this.api.getTypes().subscribe(res => {
-        if (message) {
-          for (let i = 0; i < message.length; i++) {
-            for (let j = 0; j < res.length; j++) {
-              if (message[i][0].Question.Type_id === res[j].Id) {
-                this.categories[i] = res[j];
-              }
-            }
-            this.questionAndAnswer.push(message[i]);
-          }
-          this.opacity = "100%";
-        }
-        else
-          this.displayCategorySelector();
-      });
+      if (message) {
+        this.opacity = "100%";
+        this.currentGame.subcategories = message[0];
+        this.questionAndAnswer = message[1];
+      } else {
+        this.displayCategorySelector();
+      }
     })
   }
 
@@ -110,6 +142,7 @@ export class GameboardComponent implements OnInit {
   }
 
   flipCard(question: number, category: number): void {
+    this.message = "";
     if (question === 0 && this.questionSelected) {
       this.showAnswer = !this.showAnswer;
       if (!this.showAnswer) {
@@ -121,48 +154,121 @@ export class GameboardComponent implements OnInit {
               counter++;
           }
         }
+        if (this.currentTeam < this.currentGame.teams.length - 1) {
+          this.currentTeam++;
+        } else {
+          this.currentTeam = 0;
+        }
+        this.currentGame.game.current_team = this.currentTeam;
         if (counter === (this.isQuestionAnswered.length * this.isQuestionAnswered[0].length)) {
+          this.canSaveGame = false;
           this.winner = true;
         }
       }
     } else if ((question !== 0 || this.questionSelected)) {
       if (question !== 0) { // this is here because when showing the question, exiting out has question and category set to 0
-        this.currentQuestion = this.questionAndAnswer[category][question - 1].Question.Entry; // -1 from question because the category row
-        this.currentAnswer = this.questionAndAnswer[category][question - 1].Answer.Entry;
+        this.currentQuestion = this.questionAndAnswer[category][question - 1].question.question_entry; // -1 from question because the category row
+        this.currentAnswer = this.questionAndAnswer[category][question - 1].answer.answer_entry;
         this.isQuestionAnswered[category][question - 1] = true;
       }
       this.questionSelected = !this.questionSelected;
     }
   }
 
-  winnerWinnerChickenDinner(): void {
-    if (this.buttonName === "Go Home")
-      this.route.navigate(['home']);
-    else {
-      for (let i = 0; i < this.score.length; i++) {
-        this.teams[i].Score = this.score[i];
-      }
-      this.api.createTeams(this.teams).subscribe(res => {
-        this.api.getSortedTeams().subscribe(res => {
-          this.sortedTeams = res;
-          for (let i = 0; i < this.teams.length; i++) {         // iterate through teams
-            for (let j = 0; j < this.players[i].length; j++) {  // iterate through players
-              for (let k = 0; k < this.sortedTeams.length; k++) {    // iterate through sorted teams to find team id for player
-                if ((this.sortedTeams[k].Name === this.teams[i].Name) && (this.sortedTeams[k].Score == this.teams[i].Score)) { // not sure why team.Score is string but it has '==' because the values match but not the types
-                  this.players[i][j].Team_id = this.sortedTeams[k].Id;
-                }
+  saveGame(): void {
+    this.message = "";
+    if (this.canSaveGame) {
+      if (this.adminActive) {
+        for (let i = 0; i < this.score.length; i++) {
+          this.currentGame.teams[i].team_score += this.score[i];
+        }
+        this.gameToSave = this.currentGame;
+        let newBoardstate = [];
+        this.message = "Saving game...";
+        if (this.existingGame) {
+          for (let i = 0; i < this.questionAndAnswer.length; i++) {
+            for (let j = 0; j < this.questionAndAnswer[i].length; j++) {
+              for (let k = 0; k < this.currentGame.boardstate.length; k++) {
+                if (this.currentGame.boardstate[k].question_id === this.questionAndAnswer[i][j].question.question_id)
+                  newBoardstate.push(new Boardstate(this.currentGame.boardstate[k].boardstate_id, i, j, this.isQuestionAnswered[i][j], this.questionAndAnswer[i][j].question.question_id, 0));
               }
             }
           }
-          this.api.createPlayers(this.players).subscribe(res => {
-            this.route.navigate(['home']);
+          this.gameToSave.boardstate = newBoardstate;
+          this.api.updateSavedGame(this.gameToSave).subscribe({
+            'next': (res) => {
+              if (res.status === 200) {
+                this.message = "Game saved successfully!";
+                this.canSaveGame = false;
+                this.buttonName = "Go Home";
+                this.winner = true;
+              }
+              if (res.status === 204) {
+                this.message = "Could not save game!";
+              }
+            },
+            'error': (err) => {
+              this.message = "An error occurred. Contact the game creator!";
+            }
           });
-        })
-      })
+        } else {
+          for (let i = 0; i < this.questionAndAnswer.length; i++) {
+            for (let j = 0; j < this.questionAndAnswer[i].length; j++) {
+              newBoardstate.push(new Boardstate(0, i, j, this.isQuestionAnswered[i][j], this.questionAndAnswer[i][j].question.question_id, 0));
+            }
+          }
+          this.gameToSave.boardstate = newBoardstate;
+          this.api.createSavedGame(this.gameToSave).subscribe({
+            'next': (res) => {
+              if (res.status === 200) {
+                this.message = "Game saved successfully!";
+                this.canSaveGame = false;
+                this.buttonName = "Go Home";
+                this.winner = true;
+              }
+              if (res.status === 204) {
+                this.message = "Could not save game!";
+              }
+            },
+            'error': (err) => {
+              this.message = "An error occurred. Contact the game creator!";
+            }
+          });
+        }
+      } else {
+        this.message = "You are not logged in as an admin! Return to the home screen to log in as admin! This game will not be saved!";
+      }
     }
   }
 
-  trackBy(index: any, item: any) {
+  message: string = "";
+  winnerWinnerChickenDinner(): void {
+    if (this.buttonName === "Go Home")
+      this.route.navigate(['home']);
+    else if (!this.winner) {
+      this.message = "The game is not complete! Consider saving...";
+    } else {
+      for (let i = 0; i < this.score.length; i++) {
+        this.currentGame.teams[i].team_score += this.score[i];
+      }
+      this.currentGame.game.game_winner = 1;
+      this.api.updateSavedGame(this.currentGame).subscribe({
+        'next': (res) => {
+          if (res.status === 200) {
+            this.message = "Game finished successfully!";
+            this.canSaveGame = false;
+            this.buttonName = "Go Home";
+            this.winner = true;
+          }
+          if (res.status === 204) {
+            this.message = "Could not finish game!";
+          }
+        }
+      });
+    }
+  }
+
+  trackBy(index: any, item: any): any {
     return index;
   }
 }

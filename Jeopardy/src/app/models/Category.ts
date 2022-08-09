@@ -2,7 +2,7 @@ import { ICategory } from "./ICategory";
 
 export class Category implements ICategory {
     constructor(
-        public Id: number,
-        public Category: string
+        public category_id: number,
+        public category_name: string
     ) { }
 }
