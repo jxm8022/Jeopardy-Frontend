@@ -23,9 +23,11 @@ export class CreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.message = "Loading categories...";
     this.api.getTypes().subscribe(res => {
+      this.message = "";
       this.categories = res;
-      if ((this.createType === "subcategory" || this.createType === "question") && this.categories.length > 0) {
+      if ((this.createType === "subcategory" || this.createType === "question") && this.categories != null) {
         this.displayCategorySelector(this.categories, this.createType);
       } else if (this.createType === "category") {
         this.message = "There are no categories!";
@@ -75,8 +77,10 @@ export class CreateComponent implements OnInit {
   // CREATE CATEGORY
   category: string = "";
   createCategory(): void {
-    if (this.categories.find(element => { return element.category.category_name === this.category })) {
-      this.errorMessage = `Category ${this.category} already exists!`;
+    if (this.categories) {
+      if (this.categories.find(element => { return element.category.category_name === this.category })) {
+        this.errorMessage = `Category ${this.category} already exists!`;
+      }
     } else if (this.category) {
       this.api.createCategory(this.category).subscribe({
         'next': (res) => {
@@ -135,11 +139,7 @@ export class CreateComponent implements OnInit {
   question: string = "";
   answer: string = "";
   createQuestion(): void {
-    console.log(this.question);
-    console.log(this.answer);
     if (this.question && this.answer) {
-      console.log("calling api");
-      console.log(new QA(new Question(-1, this.question, this.subcategoryToAddTo.subcategory_id), new Answer(-1, this.answer, -1)));
       this.api.createQuestion(new QA(new Question(-1, this.question, this.subcategoryToAddTo.subcategory_id), new Answer(-1, this.answer, -1))).subscribe({
         'next': (res) => {
           if (res.status === 200) {
