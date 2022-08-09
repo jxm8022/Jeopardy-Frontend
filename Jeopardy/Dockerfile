@@ -8,7 +8,7 @@ RUN npm install
 
 COPY . .
 
-RUN cwd
+RUN pwd
 
 RUN npm run build --prod
 
