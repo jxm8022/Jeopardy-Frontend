@@ -33,5 +33,5 @@ jobs:
       uses: Azure/webapps-deploy@v2
       with:
         app-name: 'junipardy'
-        publish-profile: ${{secrets.AZURE_PUBLISHPROFILE_JUNIPARDY}}
+        publish-profile: ${{secrets.AZURE_PUBLISH_PROFILE_JUNIPARDY}}
         images: index.docker.io/${{ secrets.DOCKERHUB_USERNAME }}/junipardyui:${{ github.sha }}
