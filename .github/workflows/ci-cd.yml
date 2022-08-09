@@ -1,0 +1,37 @@
+name: Docker CI-CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Docker Setup Buildx
+      uses: docker/setup-buildx-action@v2.0.0
+    - name: Docker Login
+      uses: docker/login-action@v2.0.0
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v3.0.0
+      with:
+        context: .
+        file: ./Jeopardy/Dockerfile
+        push: true
+        tags: index.docker.io/${{ secrets.DOCKERHUB_USERNAME }}/junipardyui:${{ github.sha }}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Azure WebApp
+      uses: Azure/webapps-deploy@v2
+      with:
+        app-name: 'junipardy'
+        publish-profile: ${{secrets.AZURE_PUBLISH_PROFILE_JUNIPARDY}}
+        images: index.docker.io/${{ secrets.DOCKERHUB_USERNAME }}/junipardyui:${{ github.sha }}
