@@ -5,36 +5,19 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-    workflow_dispatch:
-  
-permissions:
-  pull-requests: read
-
+  workflow_dispatch:
 jobs:
-
   build:
     runs-on: ubuntu-latest
-    needs: analysis
     steps:
     - uses: actions/checkout@v3
-    
-    - name: Run a multi-line script
-      run: |
-        cd ./Jeopardy
-        sudo apt install nodejs
-        sudo apt install npm
-        npm install -g @angular/cli
-        npm install --force @angular-devkit/build-angular
-    
     - name: Docker Setup Buildx
       uses: docker/setup-buildx-action@v1.6.0
-    
     - name: Docker Login
       uses: docker/login-action@v1.14.1
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
-        
     - name: Build and push Docker images
       uses: docker/build-push-action@v2.10.0
       with:
@@ -42,10 +25,6 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: index.docker.io/${{ secrets.DOCKERHUB_USERNAME }}/junipardyui:${{ github.sha }}
-    
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
-
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -53,6 +32,6 @@ jobs:
     - name: Azure WebApp
       uses: Azure/webapps-deploy@v2
       with:
-        app-name: 'junipardy'
+        app-name: 'junipardyui'
         publish-profile: ${{secrets.AZURE_PUBLISHPROFILE_JUNIPARDY}}
-        images: index.docker.io/${{ secrets.DOCKERHUB_USERNAME }}/junipardy:${{ github.sha }}
+        images: index.docker.io/${{ secrets.DOCKERHUB_USERNAME }}/junipardyui:${{ github.sha }}
