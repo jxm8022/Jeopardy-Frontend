@@ -1,5 +1,5 @@
 export interface IPlayer {
-    Id: number,
-    Name: string,
-    Team_id: number
+    player_id: number,
+    player_name: string,
+    team_id: number
 }
