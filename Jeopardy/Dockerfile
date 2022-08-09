@@ -2,7 +2,7 @@ FROM node:16.15.0-alpine As builder
 
 WORKDIR /usr/src/app
 
-COPY package.json package-lock.json ./
+COPY ./Jeopardy/package.json ./Jeopardy/package-lock.json ./
 
 RUN npm install
 
