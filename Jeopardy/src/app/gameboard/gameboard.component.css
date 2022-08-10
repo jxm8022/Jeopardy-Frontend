@@ -47,3 +47,13 @@ hr {
         height: 140px;
     }
 }
+
+@media (max-width: 400px) {
+    .box {
+        width: 14%;
+    }
+
+    h1 {
+        font-size: 100%;
+    }
+}

@@ -11,3 +11,9 @@ nav {
     background-image: linear-gradient(#ffa81257, white);
     height: 100px;
 }
+
+@media (max-width: 400px) {
+    img {
+        width: 75%;
+    }
+}

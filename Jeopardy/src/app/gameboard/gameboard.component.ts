@@ -122,6 +122,9 @@ export class GameboardComponent implements OnInit {
     this.modalRef.onClose.subscribe((message: any) => {
       if (message) {
         this.opacity = "100%";
+        if (message === "goodbye") {
+          this.route.navigate(['home']);
+        }
         this.currentGame.subcategories = message[0];
         this.questionAndAnswer = message[1];
       } else {
