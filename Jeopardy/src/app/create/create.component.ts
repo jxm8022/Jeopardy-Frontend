@@ -55,6 +55,9 @@ export class CreateComponent implements OnInit {
     this.modalRef.onClose.subscribe((message: any) => {
       if (message) {
         this.opacity = "100%";
+        if (message === "goodbye") {
+          this.router.navigate(['home']);
+        }
         if (this.createType === "subcategory") {
           this.categoryToAddTo = message;
         }

@@ -67,6 +67,10 @@ export class CategoryComponent implements OnInit {
     }
   }
 
+  goHome() {
+    this.modalRef.close("goodbye");
+  }
+
   submit() {
     if (this.type) {
       if (this.type === "subcategory") {
