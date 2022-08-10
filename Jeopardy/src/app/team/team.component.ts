@@ -109,6 +109,7 @@ export class TeamComponent implements OnInit {
 
   submitTeams(): void {
     this.errorMessage = "";
+    this.message = "";
     if (this.numberOfTeams > 0) {
       if (this.checkTeams()) {
         for (let i = 0; i < this.teamNames.length; i++) {
