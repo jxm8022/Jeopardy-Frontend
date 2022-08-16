@@ -32,13 +32,24 @@
             <form #form="ngForm" class="row mx-auto" style="width:85%; margin:50px;">
                 <ng-container *ngFor="let team of teamNames; let i = index; trackBy: trackBy">
                     <div [ngStyle]="{'width':width}">
-                        <input name="team" [(ngModel)]="teamNames[i]" class="form-control form-control-lg" type="text"
-                            placeholder="TEAM NAME {{i+1}}" aria-label=".form-control-lg team-name"
-                            style="margin: 10px;">
+                        <input list="teamOptions" name="team" [(ngModel)]="teamNames[i]"
+                            class="form-control form-control-lg" type="text" placeholder="TEAM NAME {{i+1}}"
+                            aria-label=".form-control-lg team-name" style="margin: 10px;">
+                        <datalist id="teamOptions">
+                            <ng-container *ngFor="let team of existingTeams;">
+                                <option value="{{team.team_name}}"></option>
+                            </ng-container>
+                        </datalist>
                         <ng-container *ngFor="let teamPlayers of playerNames[i]; let y = index; trackBy: trackBy">
-                            <input name="member-{{i}}-{{y}}" [(ngModel)]="playerNames[i][y]"
+                            <input list="playerOptions" name="member-{{i}}-{{y}}" [(ngModel)]="playerNames[i][y]"
                                 class="form-control form-control-lg" type="text" placeholder="TEAM MEMBER {{y+1}}"
                                 aria-label=".form-control-lg team-member" style="margin: 10px;">
+                            <datalist id="playerOptions">
+                                <ng-container *ngFor="let players of existingPlayers;">
+                                    <option value="{{players.player_name}}">
+                                    </option>
+                                </ng-container>
+                            </datalist>
                         </ng-container>
                     </div>
                 </ng-container>

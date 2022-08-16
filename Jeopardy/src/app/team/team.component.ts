@@ -142,10 +142,10 @@ export class TeamComponent implements OnInit {
     // checking for empty input and existing information
     let actualTeams = this.teamNames.filter(element => { return element !== "" });
     if (this.numberOfTeams > 1) {
-      for (let i = 0; i < this.existingTeams.length; i++) {
+      for (let i = 0; i < actualTeams.length; i++) {
         for (let j = 0; j < actualTeams.length; j++) {
-          if (this.existingTeams[i].team_name === actualTeams[j]) {
-            this.message = "Team name already exists!";
+          if (actualTeams[i] === actualTeams[j] && i !== j) {
+            this.message = "Team name already taken!";
             return false;
           }
         }
@@ -158,11 +158,22 @@ export class TeamComponent implements OnInit {
       for (let i = 0; i < this.playerNames.length; i++) {
         let actualPlayers = this.playerNames[i].filter(element => { return element !== "" });
         if (this.numberOfTeams > 1) {
-          for (let j = 0; j < this.existingPlayers.length; j++) {
+          for (let j = 0; j < actualPlayers.length; j++) {
+            // check if same name is used in same team
             for (let k = 0; k < actualPlayers.length; k++) {
-              if (this.existingPlayers[j].player_name === actualPlayers[k]) {
+              if (actualPlayers[j] === actualPlayers[k] && j !== k) {
                 this.message = "Player name already exists!";
                 return false;
+              }
+            }
+            // check if same name is used in other teams
+            for (let k = 0; k < this.playerNames.length; k++) {
+              let actualPlayers2 = this.playerNames[k].filter(element => { return element !== "" });
+              for (let l = 0; l < actualPlayers2.length; l++) {
+                if (actualPlayers[j] === actualPlayers2[l] && (i !== k)) {
+                  this.message = "Player name already taken!";
+                  return false;
+                }
               }
             }
           }
