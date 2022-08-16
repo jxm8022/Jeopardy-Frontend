@@ -22,6 +22,7 @@ export class TeamComponent implements OnInit {
   newGameToPlay: GameUI = new GameUI(new Game(0, 0, 0), [new Team(0, "", 0)], [[new Player(0, "", 0)]], [new SubCategory(0, "", 0)], [new QA(new Question(0, "", 0), new Answer(0, "", 0))], [new Boardstate(0, 0, 0, false, 0, 0)]);
 
   numberOfTeams: number = 2;
+  numberOfPlayers: number = 4;
 
   teamNames: string[] = [];
   playerNames: string[][] = [];
@@ -43,7 +44,7 @@ export class TeamComponent implements OnInit {
 
   constructor(private api: HttpService) {
     this.teamNames = Array(this.numberOfTeams).fill("");
-    this.fillPlayers(2);
+    this.fillPlayers(this.numberOfTeams, this.numberOfPlayers);
   }
 
   ngOnInit(): void {
@@ -90,21 +91,25 @@ export class TeamComponent implements OnInit {
     });
   }
 
-  fillPlayers(x: number): void {
+  fillPlayers(numTeams: number, numPlayers: number): void {
     this.playerNames = [];
-    for (let i = 0; i < x; i++) {
+    for (let i = 0; i < numTeams; i++) {
       this.playerNames.push([]);
-      for (let j = 0; j < 4; j++) {
+      for (let j = 0; j < numPlayers; j++) {
         this.playerNames[i].push("");
       }
     }
   }
 
-  onSliderChange(): void {
+  onTeamChange(): void {
     this.width = "";
     this.width = this.width = this.width + (100 / this.numberOfTeams) + '%';
     this.teamNames = Array(this.numberOfTeams).fill("");
-    this.fillPlayers(this.numberOfTeams);
+    this.fillPlayers(this.numberOfTeams, this.numberOfPlayers);
+  }
+
+  onPlayerChange(): void {
+    this.fillPlayers(this.numberOfTeams, this.numberOfPlayers);
   }
 
   submitTeams(): void {
