@@ -11,7 +11,16 @@
                 <label class="align-middle" for="formControlRange" style="padding-right: 10px;">Number of teams:
                     {{numberOfTeams}}</label>
                 <input name="numTeams" [(ngModel)]="numberOfTeams" type="range" class="form-control-range align-middle"
-                    id="formControlRange" value="2" min="0" max="7" (change)="onSliderChange()">
+                    id="formControlRange" value="2" min="0" max="7" (change)="onTeamChange()">
+            </div>
+        </form>
+        <form>
+            <div class="form-group">
+                <label class="align-middle" for="formControlRange" style="padding-right: 10px;">Number of players:
+                    {{numberOfPlayers}}</label>
+                <input name="numPlayers" [(ngModel)]="numberOfPlayers" type="range"
+                    class="form-control-range align-middle" id="formControlRange" value="4" min="1" max="6"
+                    (change)="onPlayerChange()">
             </div>
         </form>
     </div>
@@ -28,7 +37,7 @@
                             style="margin: 10px;">
                         <ng-container *ngFor="let teamPlayers of playerNames[i]; let y = index; trackBy: trackBy">
                             <input name="member-{{i}}-{{y}}" [(ngModel)]="playerNames[i][y]"
-                                class="form-control form-control-lg" type="text" placeholder="TEAM MEMBER {{y}}"
+                                class="form-control form-control-lg" type="text" placeholder="TEAM MEMBER {{y+1}}"
                                 aria-label=".form-control-lg team-member" style="margin: 10px;">
                         </ng-container>
                     </div>
