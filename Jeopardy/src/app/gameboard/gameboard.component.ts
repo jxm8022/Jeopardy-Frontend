@@ -144,11 +144,43 @@ export class GameboardComponent implements OnInit {
     return '#2bbfe0';
   }
 
+  timerStart: boolean = false;
+  time: number = 30;
+  interval: any;
+  startTimer(): void {
+    this.interval = setInterval(() => {
+      if (this.time > 0) {
+        this.time--;
+      } else {
+        this.time = 30;
+        this.timerStart = false;
+      }
+    }, 1000)
+  }
+
+  pauseTimer(): void {
+    clearInterval(this.interval);
+  }
+
+  audio: HTMLAudioElement = new Audio("../../assets/junipardy_music.mp3");
+  musicOn: boolean = false;
   flipCard(question: number, category: number): void {
+    this.audio.load();
+    if (!this.musicOn) {
+      this.musicOn = !this.musicOn;
+      this.audio.play();
+      this.timerStart = !this.timerStart;
+      this.startTimer();
+    }
     this.message = "";
     if (question === 0 && this.questionSelected) {
       this.showAnswer = !this.showAnswer;
+      this.audio.pause();
+      this.pauseTimer();
       if (!this.showAnswer) {
+        this.time = 30;
+        this.timerStart = !this.timerStart;
+        this.musicOn = !this.musicOn;
         this.questionSelected = !this.questionSelected;
         let counter = 0;
         for (let i = 0; i < this.isQuestionAnswered.length; i++) {
