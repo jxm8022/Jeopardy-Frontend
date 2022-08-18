@@ -17,6 +17,7 @@ import { AdminComponent } from './admin/admin.component';
 import { CreateComponent } from './create/create.component';
 import { StatusbarComponent } from './statusbar/statusbar.component';
 import { SavedgamesComponent } from './savedgames/savedgames.component';
+import { PlayersComponent } from './players/players.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { SavedgamesComponent } from './savedgames/savedgames.component';
     AdminComponent,
     CreateComponent,
     StatusbarComponent,
-    SavedgamesComponent
+    SavedgamesComponent,
+    PlayersComponent
   ],
   imports: [
     BrowserModule,
