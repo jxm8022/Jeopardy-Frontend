@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpService } from '../service/http.service';
+import { HttpService } from '../../service/http.service';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
-import { Team } from '../models/Team';
-import { Player } from '../models/Player';
+import { Team } from '../../models/Team';
+import { Player } from '../../models/Player';
 
 @Component({
   selector: 'app-players',

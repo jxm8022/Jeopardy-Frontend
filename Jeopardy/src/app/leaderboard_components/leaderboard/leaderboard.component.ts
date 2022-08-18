@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Player } from '../models/Player';
-import { Team } from '../models/Team';
-import { HttpService } from '../service/http.service';
+import { Player } from '../../models/Player';
+import { Team } from '../../models/Team';
+import { HttpService } from '../../service/http.service';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { PlayersComponent } from '../players/players.component';
 
