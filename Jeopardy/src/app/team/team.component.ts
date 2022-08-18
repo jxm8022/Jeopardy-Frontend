@@ -31,6 +31,7 @@ export class TeamComponent implements OnInit {
   players: Player[][] = [];
   existingTeams: Team[] = [];
   existingPlayers: Player[] = [];
+  existingPlayersForTeam: Player[][] = [];
 
   game: boolean = false;
   newGame: boolean = true;
@@ -44,6 +45,7 @@ export class TeamComponent implements OnInit {
 
   constructor(private api: HttpService) {
     this.teamNames = Array(this.numberOfTeams).fill("");
+    this.existingPlayersForTeam = Array(this.numberOfTeams).fill([]);
     this.fillPlayers(this.numberOfTeams, this.numberOfPlayers);
   }
 
@@ -89,6 +91,18 @@ export class TeamComponent implements OnInit {
         }
       });
     });
+  }
+
+  getColumnId(index: number): string {
+    return `playerOptions-${index}`;
+  }
+
+  filterPlayers(team_name: string, index: number): void {
+    let teamId = 0;
+    this.existingTeams.forEach(element => {
+      if (element.team_name === team_name) teamId = element.team_id;
+    });
+    this.existingPlayersForTeam[index] = this.existingPlayers.filter(element => { return element.team_id === teamId });
   }
 
   fillPlayers(numTeams: number, numPlayers: number): void {
@@ -139,8 +153,60 @@ export class TeamComponent implements OnInit {
   }
 
   checkTeams(): boolean {
-    // checking for empty input and existing information
     let actualTeams = this.teamNames.filter(element => { return element !== "" });
+    // check for new teams having new people (new teams need new players and cannot have existing players)
+    let checkPlayers = true;
+    if (this.numberOfTeams > 1) {
+      for (let i = 0; i < actualTeams.length; i++) {
+        for (let j = 0; j < this.existingTeams.length; j++) {
+          if (actualTeams[i] === this.existingTeams[j].team_name) {
+            checkPlayers = false;
+          }
+        }
+        if (checkPlayers) {
+          for (let j = 0; j < this.playerNames[i].length; j++) {
+            for (let k = 0; k < this.existingPlayers.length; k++) {
+              if (this.playerNames[i][j] === this.existingPlayers[k].player_name) {
+                this.message = "New teams cannot have existing players!";
+                return false;
+              }
+            }
+          }
+        }
+        checkPlayers = true;
+      }
+    }
+    // check for existing teams with new people (existing teams cannot add new players)
+    if (this.numberOfTeams > 1) {
+      let checkForNewPlayers = false;
+      if (this.numberOfTeams > 1) {
+        for (let i = 0; i < actualTeams.length; i++) {
+          for (let j = 0; j < this.existingTeams.length; j++) {
+            if (actualTeams[i] === this.existingTeams[j].team_name) {
+              checkForNewPlayers = true;
+            }
+          }
+          if (checkForNewPlayers) {
+            let playerExists = false;
+            let actualPlayers = this.playerNames[i].filter(element => { return element !== "" });
+            for (let j = 0; j < actualPlayers.length; j++) {
+              for (let k = 0; k < this.existingPlayers.length; k++) {
+                if (this.playerNames[i][j] === this.existingPlayers[k].player_name) {
+                  playerExists = true;
+                }
+              }
+              if (!playerExists) {
+                this.message = "Existing teams cannot have new players!";
+                return false;
+              }
+              playerExists = false;
+            }
+          }
+          checkForNewPlayers = false;
+        }
+      }
+    }
+    // checking for empty input and existing information
     if (this.numberOfTeams > 1) {
       for (let i = 0; i < actualTeams.length; i++) {
         for (let j = 0; j < actualTeams.length; j++) {
