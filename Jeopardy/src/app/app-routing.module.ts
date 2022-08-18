@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin/admin.component';
 import { CreateComponent } from './create/create.component';
 import { HomeComponent } from './home/home.component';
-import { LeaderboardComponent } from './leaderboard/leaderboard.component';
+import { LeaderboardComponent } from './leaderboard_components/leaderboard/leaderboard.component';
 import { StartComponent } from './start/start.component';
 import { TeamComponent } from './team/team.component';
 
