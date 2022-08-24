@@ -14,7 +14,7 @@ export class PlayerService {
   // Player {ID: integer, Name: string, Team_ID: integer}
   // Notes: the list is all players to make sure no duplicate players
   getPlayers(): Observable<HttpResponse<any>> {
-    return this.http.get<any>(`${environment.apiAzureURL}/Player/GetPlayers`, {
+    return this.http.get<any>(`${environment.apiAzureURL}/Player/GetAllPlayers`, {
       'observe': 'response'
     });
     // return this.http.get<any>(`${environment.apiBaseURL}/Team/SortedTeams`);
