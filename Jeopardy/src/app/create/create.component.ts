@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { CategoryComponent } from '../category/category.component';
-import { HttpService } from '../service/http.service';
 import { Type } from '../models/Type';
 import { Category } from '../models/Category';
 import { SubCategory } from '../models/SubCategory';
 import { QA } from '../models/QA';
 import { Question } from '../models/Question';
 import { Answer } from '../models/Answer';
+import { CategoryService } from '../services/category.service';
+import { QuestionService } from '../services/question.service';
 
 @Component({
   selector: 'app-create',
@@ -17,13 +18,13 @@ import { Answer } from '../models/Answer';
 })
 export class CreateComponent implements OnInit {
 
-  constructor(private api: HttpService, private router: Router, private modalService: MdbModalService) {
+  constructor(private categoryService: CategoryService, private questionService: QuestionService, private router: Router, private modalService: MdbModalService) {
     var url = this.router.url.split("/");
     this.createType = url[url.length - 1];
   }
 
   ngOnInit(): void {
-    this.api.getTypes().subscribe(res => {
+    this.categoryService.getTypes().subscribe(res => {
       this.categories = res;
       if ((this.createType === "subcategory" || this.createType === "question") && this.categories != null) {
         this.displayCategorySelector(this.categories, this.createType);
@@ -63,7 +64,7 @@ export class CreateComponent implements OnInit {
         }
         if (this.createType === "question") {
           this.subcategoryToAddTo = message;
-          this.api.getAllQuestions(this.subcategoryToAddTo.subcategory_id).subscribe({
+          this.questionService.getAllQuestions(this.subcategoryToAddTo.subcategory_id).subscribe({
             'next': (res) => {
               if (res.status === 200) {
                 this.existingQuestions = res.body;
@@ -84,7 +85,7 @@ export class CreateComponent implements OnInit {
       if (this.categories.find(element => { return element.category.category_name === this.category })) {
         this.errorMessage = `Category ${this.category} already exists!`;
       } else if (this.category) {
-        this.api.createCategory(this.category).subscribe({
+        this.categoryService.createCategory(this.category).subscribe({
           'next': (res) => {
             if (res.status === 200) {
               this.message = `Category ${this.category} created successfully!`;
@@ -119,7 +120,7 @@ export class CreateComponent implements OnInit {
     if (alreadyExists) {
       this.errorMessage = `Subcategory ${this.subcategory} already exists!`;
     } else if (this.subcategory) {
-      this.api.createSubcategory(new SubCategory(-1, this.subcategory, this.categoryToAddTo.category_id)).subscribe({
+      this.categoryService.createSubcategory(new SubCategory(-1, this.subcategory, this.categoryToAddTo.category_id)).subscribe({
         'next': (res) => {
           if (res.status === 200) {
             this.message = `Subcategory ${this.subcategory} created successfully!`;
@@ -145,7 +146,7 @@ export class CreateComponent implements OnInit {
   createQuestion(): void {
     if (this.question && this.answer) {
       this.existingQuestions = [];
-      this.api.createQuestion(new QA(new Question(-1, this.question, this.subcategoryToAddTo.subcategory_id), new Answer(-1, this.answer, -1))).subscribe({
+      this.questionService.createQuestion(new QA(new Question(-1, this.question, this.subcategoryToAddTo.subcategory_id), new Answer(-1, this.answer, -1))).subscribe({
         'next': (res) => {
           if (res.status === 200) {
             this.message = `Question '${this.question}' created successfully!`;

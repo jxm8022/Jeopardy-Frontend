@@ -8,7 +8,9 @@ import { QA } from '../models/QA';
 import { Question } from '../models/Question';
 import { SubCategory } from '../models/SubCategory';
 import { Team } from '../models/Team';
-import { HttpService } from '../service/http.service';
+import { GameService } from '../services/game.service';
+import { PlayerService } from '../services/player.service';
+import { TeamService } from '../services/team.service';
 
 @Component({
   selector: 'app-team',
@@ -43,7 +45,7 @@ export class TeamComponent implements OnInit {
   message: string = "";
   errorMessage: string = "";
 
-  constructor(private api: HttpService) {
+  constructor(private teamService: TeamService, private playerService: PlayerService, private gameService: GameService) {
     this.teamNames = Array(this.numberOfTeams).fill("");
     this.existingPlayersForTeam = Array(this.numberOfTeams).fill([]);
     this.fillPlayers(this.numberOfTeams, this.numberOfPlayers);
@@ -57,13 +59,13 @@ export class TeamComponent implements OnInit {
       this.adminActive = true;
     }
 
-    this.api.getSortedTeams().subscribe(res => {
+    this.teamService.getSortedTeams().subscribe(res => {
       if (res) {
         this.existingTeams = res;
       } else {
         this.errorMessage = "No teams!";
       }
-      this.api.getPlayers().subscribe({
+      this.playerService.getPlayers().subscribe({
         'next': (res) => {
           if (res.status === 200) {
             this.existingPlayers = res.body;
@@ -71,7 +73,7 @@ export class TeamComponent implements OnInit {
           if (res.status === 204) {
             this.errorMessage = "No players!";
           }
-          this.api.getSavedGames().subscribe({
+          this.gameService.getSavedGames().subscribe({
             'next': (res) => {
               if (res.status === 200) {
                 this.newGame = false;

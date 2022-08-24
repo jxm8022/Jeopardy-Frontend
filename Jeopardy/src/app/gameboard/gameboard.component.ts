@@ -8,7 +8,7 @@ import { GameUI } from '../models/GameUI';
 import { QA } from '../models/QA';
 import { Question } from '../models/Question';
 import { SubCategory } from '../models/SubCategory';
-import { HttpService } from '../service/http.service';
+import { GameService } from '../services/game.service';
 
 @Component({
   selector: 'app-gameboard',
@@ -50,7 +50,7 @@ export class GameboardComponent implements OnInit {
   width: string = "";
   modalRef: MdbModalRef<CategoryComponent> | null = null;
 
-  constructor(private route: Router, private api: HttpService, private modalService: MdbModalService) { }
+  constructor(private gameService: GameService, private route: Router, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
     if (sessionStorage.getItem("adminActive") === "true") {
@@ -230,7 +230,7 @@ export class GameboardComponent implements OnInit {
             }
           }
           this.gameToSave.boardstate = newBoardstate;
-          this.api.updateSavedGame(this.gameToSave).subscribe({
+          this.gameService.updateSavedGame(this.gameToSave).subscribe({
             'next': (res) => {
               if (res.status === 200) {
                 this.message = "Game saved successfully!";
@@ -253,7 +253,7 @@ export class GameboardComponent implements OnInit {
             }
           }
           this.gameToSave.boardstate = newBoardstate;
-          this.api.createSavedGame(this.gameToSave).subscribe({
+          this.gameService.createSavedGame(this.gameToSave).subscribe({
             'next': (res) => {
               if (res.status === 200) {
                 this.message = "Game saved successfully!";
@@ -288,7 +288,7 @@ export class GameboardComponent implements OnInit {
       }
       this.currentGame.game.game_winner = 1;
       if (this.adminActive) {
-        this.api.updateSavedGame(this.currentGame).subscribe({
+        this.gameService.updateSavedGame(this.currentGame).subscribe({
           'next': (res) => {
             if (res.status === 200) {
               this.message = "Game finished successfully!";

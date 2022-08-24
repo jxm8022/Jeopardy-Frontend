@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Player } from '../../models/Player';
 import { Team } from '../../models/Team';
-import { HttpService } from '../../service/http.service';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { PlayersComponent } from '../players/players.component';
+import { TeamService } from 'src/app/services/team.service';
 
 @Component({
   selector: 'app-leaderboard',
@@ -21,11 +21,11 @@ export class LeaderboardComponent implements OnInit {
 
   modalRef: MdbModalRef<PlayersComponent> | null = null;
 
-  constructor(private api: HttpService, private modalService: MdbModalService) { }
+  constructor(private teamService: TeamService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
     this.width = this.width + 100 / 3 + "%";
-    this.api.getSortedTeams().subscribe(res => {
+    this.teamService.getSortedTeams().subscribe(res => {
       if (res) {
         this.teams = res;
         this.navOpacity = "100%";
