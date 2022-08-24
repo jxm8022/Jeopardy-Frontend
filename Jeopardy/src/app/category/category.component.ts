@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { Category } from '../models/Category';
-import { QA } from '../models/QA';
 import { SubCategory } from '../models/SubCategory';
 import { Type } from '../models/Type';
-import { HttpService } from '../service/http.service';
+import { CategoryService } from '../services/category.service';
+import { QuestionService } from '../services/question.service';
 
 @Component({
   selector: 'app-category',
@@ -21,13 +21,13 @@ export class CategoryComponent implements OnInit {
   selection!: Type[];
   errorMessage = '';
 
-  constructor(private api: HttpService, public modalRef: MdbModalRef<CategoryComponent>) { }
+  constructor(private categoryService: CategoryService, private questionService: QuestionService, public modalRef: MdbModalRef<CategoryComponent>) { }
 
   ngOnInit(): void {
     if (this.type) {
       this.selection = this.categories;
     } else {
-      this.api.getTypes().subscribe(res => {
+      this.categoryService.getTypes().subscribe(res => {
         this.selection = res;
       });
     }
@@ -88,7 +88,7 @@ export class CategoryComponent implements OnInit {
       }
     } else {
       if (this.gameCategories.length === 5) {
-        this.api.getQuestions(this.gameCategories).subscribe({
+        this.questionService.getQuestions(this.gameCategories).subscribe({
           'next': (res) => {
             if (res.status === 200) {
               this.modalRef.close([this.gameCategories, res.body]);

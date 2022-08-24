@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { sha256 } from 'js-sha256';
 import { Admin } from '../models/Admin';
-import { HttpService } from '../service/http.service';
+import { AdminService } from '../services/admin.service';
 
 @Component({
   selector: 'app-admin',
@@ -11,7 +11,7 @@ import { HttpService } from '../service/http.service';
 })
 export class AdminComponent implements OnInit {
 
-  constructor(private api: HttpService, private router: Router) { }
+  constructor(private adminService: AdminService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -23,7 +23,7 @@ export class AdminComponent implements OnInit {
   errorMessage: string = "";
 
   login(): void {
-    this.api.getAdmin(this.username, sha256(this.password)).subscribe({
+    this.adminService.getAdmin(this.username, sha256(this.password)).subscribe({
       'next': (res) => {
         if (res.status === 200) {
           this.admin = res.body;
