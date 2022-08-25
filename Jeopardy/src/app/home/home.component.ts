@@ -17,4 +17,17 @@ export class HomeComponent implements OnInit {
 
   adminActive: boolean = false;
 
+  logout(): void {
+    sessionStorage.setItem("adminActive", "false");
+    this.adminActive = false;
+  }
+
+  open: boolean = false;
+  hover(): void {
+    this.open = true;
+  }
+
+  notHover(): void {
+    this.open = false;
+  }
 }

@@ -7,7 +7,7 @@ img:hover {
     transform: rotate(3deg) scale(1.3);
 }
 
-nav {
+.nav-bar {
     background-image: linear-gradient(#ffa81257, white);
     height: 100px;
 }
