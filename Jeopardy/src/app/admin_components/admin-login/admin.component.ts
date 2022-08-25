@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { sha256 } from 'js-sha256';
-import { Admin } from '../models/Admin';
-import { AdminService } from '../services/admin.service';
+import { Admin } from '../../models/Admin';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-admin',
@@ -14,7 +14,12 @@ export class AdminComponent implements OnInit {
   constructor(private adminService: AdminService, private router: Router) { }
 
   ngOnInit(): void {
+    if (sessionStorage.getItem("adminActive") === "true") {
+      this.adminActive = true;
+    }
   }
+
+  adminActive: boolean = false;
 
   admin: Admin = { admin_id: -1, admin_name: "", admin_password: "", admin_access: -1 };
 

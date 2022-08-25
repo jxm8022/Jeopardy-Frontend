@@ -1,11 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminComponent } from './admin/admin.component';
+import { AddAdminComponent } from './admin_components/add-admin/add-admin.component';
+import { AdminComponent } from './admin_components/admin-login/admin.component';
 import { CreateComponent } from './create/create.component';
+import { DeleteAdminComponent } from './admin_components/delete-admin/delete-admin.component';
 import { HomeComponent } from './home/home.component';
 import { LeaderboardComponent } from './leaderboard_components/leaderboard/leaderboard.component';
 import { StartComponent } from './start/start.component';
 import { TeamComponent } from './team/team.component';
+import { UpdateAdminComponent } from './admin_components/update-admin/update-admin.component';
 
 const routes: Routes = [
   {
@@ -25,8 +28,24 @@ const routes: Routes = [
     component: TeamComponent
   },
   {
-    path: 'home/admin',
+    path: 'home/admin/login',
     component: AdminComponent
+  },
+  {
+    path: 'home/admin/settings',
+    component: AdminComponent
+  },
+  {
+    path: 'home/admin/settings/add',
+    component: AddAdminComponent
+  },
+  {
+    path: 'home/admin/settings/update',
+    component: UpdateAdminComponent
+  },
+  {
+    path: 'home/admin/settings/delete',
+    component: DeleteAdminComponent
   },
   {
     path: 'home/create/:type',

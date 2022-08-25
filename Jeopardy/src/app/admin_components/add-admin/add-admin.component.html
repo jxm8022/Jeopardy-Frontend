@@ -1,0 +1,27 @@
+<app-nav-bar></app-nav-bar>
+<img class="mx-auto d-block" src="../../assets/add_admin.png" />
+<form #form="ngForm" class="row mx-auto forms">
+    <input name="admin_Name" [(ngModel)]="admin.admin_name" class="form-control form-control-lg" type="text"
+        placeholder="Admin Name" aria-label=".form-control-lg category" style="margin: 10px;">
+</form>
+<form #form="ngForm" class="row mx-auto forms">
+    <input name="admin_Password" [(ngModel)]="admin.admin_password" class="form-control form-control-lg" type="password"
+        placeholder="Admin Password" aria-label=".form-control-lg category" style="margin: 10px;">
+</form>
+<form #form="ngForm" class="row mx-auto forms">
+    <input name="admin_Access" [(ngModel)]="admin.admin_access" class="form-control form-control-lg" type="number"
+        placeholder="Admin Access" aria-label=".form-control-lg category" value="3" min="1" max="3"
+        style="margin: 10px;">
+</form>
+<p class="text-center">Admin access levels: <b>1</b> - all access, <b>2</b> - create and update access, <b>3</b> -
+    update access</p>
+<div class="text-center" style="margin-bottom: 25px;">
+    <p *ngIf="errorMessage" style="color: red;">{{errorMessage}}</p>
+    <button type="button" class="btn btn-primary btn-lg" (click)="addAdmin()">Create</button>
+</div>
+<div class="text-center">
+    <h5>Existing admins:</h5>
+    <ng-container *ngFor="let admin of admins">
+        <p>{{admin.admin_name}}</p>
+    </ng-container>
+</div>
