@@ -1,0 +1,32 @@
+<app-nav-bar></app-nav-bar>
+<div [ngStyle]="{'opacity': opacity}">
+    <img class="mx-auto d-block" src="../../assets/add_subcategory.png" />
+    <form #form="ngForm" class="row mx-auto forms">
+        <input name="subcategory" [(ngModel)]="subcategory" class="form-control form-control-lg" type="text"
+            placeholder="Subcategory" aria-label=".form-control-lg subcategory" style="margin: 10px;">
+    </form>
+    <p class="text-center" *ngIf="categoryToAddTo">Creating subcategory for {{categoryToAddTo.category_name}}</p>
+    <div class="text-center" style="margin-bottom: 25px;">
+        <p *ngIf="errorMessage" style="color: red;">{{errorMessage}}</p>
+        <ng-container *ngIf="canCreate">
+            <button type="button" class="btn btn-primary btn-lg" (click)="createSubcategory()">Create</button>
+        </ng-container>
+        <ng-container *ngIf="!canCreate">
+            <button type="button" class="btn btn-primary btn-lg" (click)="createSubcategory()" disabled>Create</button>
+        </ng-container>
+    </div>
+    <div class="text-center">
+        <ng-container *ngFor="let category of categories">
+            <ng-container *ngIf="category.category === categoryToAddTo">
+                <h5>Existing subcategories for {{categoryToAddTo.category_name}}:</h5>
+                <ng-container *ngIf="!category.subcategories">
+                    <p>No subcategories for this category!</p>
+                </ng-container>
+                <ng-container *ngFor="let subcategory of category.subcategories">
+                    <p>{{subcategory.subcategory_name}}</p>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </div>
+</div>
+<app-statusbar [statusMessage]="message"></app-statusbar>

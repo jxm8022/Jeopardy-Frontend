@@ -14,13 +14,16 @@ import { CategoryComponent } from './category/category.component';
 import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
 import { HttpClientModule } from '@angular/common/http';
 import { AdminComponent } from './admin_components/admin-login/admin.component';
-import { CreateComponent } from './create/create.component';
 import { StatusbarComponent } from './statusbar/statusbar.component';
 import { SavedgamesComponent } from './savedgames/savedgames.component';
 import { PlayersComponent } from './leaderboard_components/players/players.component';
 import { AddAdminComponent } from './admin_components/add-admin/add-admin.component';
 import { UpdateAdminComponent } from './admin_components/update-admin/update-admin.component';
 import { DeleteAdminComponent } from './admin_components/delete-admin/delete-admin.component';
+import { CreateCategoryComponent } from './create_components/create-category/create-category.component';
+import { CreateSubcategoryComponent } from './create_components/create-subcategory/create-subcategory.component';
+import { CreateQuestionComponent } from './create_components/create-question/create-question.component';
+import { CreateMenuComponent } from './create_components/create-menu/create-menu.component';
 
 @NgModule({
   declarations: [
@@ -33,13 +36,16 @@ import { DeleteAdminComponent } from './admin_components/delete-admin/delete-adm
     GameboardComponent,
     CategoryComponent,
     AdminComponent,
-    CreateComponent,
     StatusbarComponent,
     SavedgamesComponent,
     PlayersComponent,
     AddAdminComponent,
     UpdateAdminComponent,
-    DeleteAdminComponent
+    DeleteAdminComponent,
+    CreateCategoryComponent,
+    CreateSubcategoryComponent,
+    CreateQuestionComponent,
+    CreateMenuComponent
   ],
   imports: [
     BrowserModule,
