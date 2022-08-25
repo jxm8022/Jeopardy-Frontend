@@ -1,1 +1,35 @@
-<p>update-admin works!</p>
+<app-nav-bar></app-nav-bar>
+<img class="mx-auto d-block" src="../../assets/update_admin.png" />
+<ng-container *ngIf="!update">
+    <div class="d-flex justify-content-center">
+        <div class="container">
+            <div class="row">
+                <div class="box text-center" *ngFor="let admin of admins; let i = index;" (click)="chooseAdmin(admin)">
+                    <h1>{{admin.admin_name}}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<ng-container *ngIf="update">
+    <form #form="ngForm" class="row mx-auto forms">
+        <input name="admin_Name" [(ngModel)]="newAdmin.admin_name" class="form-control form-control-lg" type="text"
+            placeholder="Admin Name" aria-label=".form-control-lg category" style="margin: 10px;">
+    </form>
+    <form #form="ngForm" class="row mx-auto forms">
+        <input name="admin_Password" [(ngModel)]="newAdmin.admin_password" class="form-control form-control-lg"
+            type="password" placeholder="Admin Password" aria-label=".form-control-lg category" style="margin: 10px;">
+    </form>
+    <form #form="ngForm" class="row mx-auto forms">
+        <input name="admin_Access" [(ngModel)]="newAdmin.admin_access" class="form-control form-control-lg"
+            type="number" placeholder="Admin Access" aria-label=".form-control-lg category" value="3" min="1" max="3"
+            style="margin: 10px;">
+    </form>
+    <p class="text-center">Admin access levels: <b>1</b> - all access, <b>2</b> - create and update access, <b>3</b> -
+        update access</p>
+    <div class="text-center" style="margin-bottom: 25px;">
+        <p *ngIf="errorMessage" style="color: red;">{{errorMessage}}</p>
+        <button type="button" class="btn btn-primary btn-lg" (click)="updateAdmin()">Update</button>
+    </div>
+</ng-container>
+<app-statusbar [statusMessage]="message"></app-statusbar>
