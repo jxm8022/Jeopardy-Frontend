@@ -20,7 +20,7 @@ export class UpdateAdminComponent implements OnInit {
           this.admins = res.body;
         }
       }
-    })
+    });
   }
 
   admins: Admin[] = [];
