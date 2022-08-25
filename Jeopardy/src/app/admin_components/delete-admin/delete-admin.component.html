@@ -1,1 +1,11 @@
-<p>delete-admin works!</p>
+<app-nav-bar></app-nav-bar>
+<img class="mx-auto d-block" src="../../assets/update_admin.png" />
+<div class="d-flex justify-content-center">
+    <div class="container">
+        <div class="row">
+            <div class="box text-center" *ngFor="let admin of admins; let i = index;" (click)="deleteAdmin(admin)">
+                <h1>{{admin.admin_name}}</h1>
+            </div>
+        </div>
+    </div>
+</div>
