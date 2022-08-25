@@ -33,6 +33,8 @@ export class AdminComponent implements OnInit {
         if (res.status === 200) {
           this.admin = res.body;
           sessionStorage.setItem("adminActive", "true");
+          sessionStorage.setItem("adminName", this.admin.admin_name);
+          sessionStorage.setItem("adminAccess", this.admin.admin_access.toString());
           this.router.navigate(['home']);
         }
         if (res.status === 204) {
