@@ -51,7 +51,7 @@ export class AdminService {
   // Admin {ID: integer, Name: string, Password: string, Access: integer}
   // Input: admin_id
   deleteAdmin(admin_id: number): Observable<HttpResponse<any>> {
-    return this.http.get(`${environment.apiAzureURL}/Admin/DeleteAdmin/${admin_id}`, {
+    return this.http.delete(`${environment.apiAzureURL}/Admin/DeleteAdmin/${admin_id}`, {
       'observe': 'response'
     });
   }
