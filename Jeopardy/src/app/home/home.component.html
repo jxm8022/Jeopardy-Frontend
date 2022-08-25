@@ -13,12 +13,7 @@
         <hr class="mx-auto adminHr">
         <input id="adminOptions" type="image" src="../../assets/leaderboard.png" [routerLink]="['leaderboard']" />
         <hr class="mx-auto adminHr">
-        <input id="adminOptions" type="image" src="../../assets/add_category.png" [routerLink]="['create/category']" />
-        <hr class="mx-auto adminHr">
-        <input id="adminOptions" type="image" src="../../assets/add_subcategory.png"
-            [routerLink]="['create/subcategory']" />
-        <hr class="mx-auto adminHr">
-        <input id="adminOptions" type="image" src="../../assets/add_question.png" [routerLink]="['create/question']" />
+        <input id="adminOptions" type="image" src="../../assets/create.png" [routerLink]="['create']" />
     </div>
     <div (click)="logout()" (mouseenter)="hover()" (mouseleave)="notHover()" class="logout">
         <svg *ngIf="!open" width="40" height="40" fill="currentColor" class="bi bi-door-closed nav-item"

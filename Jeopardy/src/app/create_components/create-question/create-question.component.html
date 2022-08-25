@@ -1,0 +1,32 @@
+<app-nav-bar></app-nav-bar>
+<div [ngStyle]="{'opacity': opacity}">
+    <img class="mx-auto d-block" src="../../assets/add_question.png" />
+    <form #form="ngForm" class="row mx-auto forms">
+        <input name="question" [(ngModel)]="question" class="form-control form-control-lg" type="text"
+            placeholder="Question" aria-label=".form-control-lg question" style="margin: 10px;">
+        <input name="answer" [(ngModel)]="answer" class="form-control form-control-lg" type="text" placeholder="Answer"
+            aria-label=".form-control-lg answer" style="margin: 10px;">
+    </form>
+    <p class="text-center" *ngIf="subcategoryToAddTo">
+        Creating question for {{subcategoryToAddTo.subcategory_name}}
+    </p>
+    <div class="text-center" style="margin-bottom: 25px;">
+        <p *ngIf="errorMessage" style="color: red;">{{errorMessage}}</p>
+        <ng-container *ngIf="canCreate">
+            <button type="button" class="btn btn-primary btn-lg" (click)="createQuestion()">Create</button>
+        </ng-container>
+        <ng-container *ngIf="!canCreate">
+            <button type="button" class="btn btn-primary btn-lg" (click)="createQuestion()" disabled>Create</button>
+        </ng-container>
+    </div>
+    <div class="text-center">
+        <h5 *ngIf="subcategoryToAddTo">Existing questions for {{subcategoryToAddTo.subcategory_name}}:</h5>
+        <ng-container *ngIf="existingQuestions.length === 0">
+            <p>No questions for this category!</p>
+        </ng-container>
+        <ng-container *ngFor="let question of existingQuestions">
+            <p>{{question.question_entry}}</p>
+        </ng-container>
+    </div>
+</div>
+<app-statusbar [statusMessage]="message"></app-statusbar>

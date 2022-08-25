@@ -1,0 +1,17 @@
+<app-nav-bar></app-nav-bar>
+<img class="mx-auto d-block" src="../../assets/add_category.png" />
+<form #form="ngForm" class="row mx-auto forms">
+    <input name="category" [(ngModel)]="category" class="form-control form-control-lg" type="text"
+        placeholder="Category" aria-label=".form-control-lg category" style="margin: 10px;">
+</form>
+<div class="text-center" style="margin-bottom: 25px;">
+    <p *ngIf="errorMessage" style="color: red;">{{errorMessage}}</p>
+    <button type="button" class="btn btn-primary btn-lg" (click)="createCategory()">Create</button>
+</div>
+<div class="text-center">
+    <h5>Existing categories:</h5>
+    <ng-container *ngFor="let category of categories">
+        <p>{{category.category.category_name}}</p>
+    </ng-container>
+</div>
+<app-statusbar [statusMessage]="message"></app-statusbar>

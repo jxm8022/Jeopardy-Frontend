@@ -2,13 +2,16 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AddAdminComponent } from './admin_components/add-admin/add-admin.component';
 import { AdminComponent } from './admin_components/admin-login/admin.component';
-import { CreateComponent } from './create/create.component';
 import { DeleteAdminComponent } from './admin_components/delete-admin/delete-admin.component';
 import { HomeComponent } from './home/home.component';
 import { LeaderboardComponent } from './leaderboard_components/leaderboard/leaderboard.component';
 import { StartComponent } from './start/start.component';
 import { TeamComponent } from './team/team.component';
 import { UpdateAdminComponent } from './admin_components/update-admin/update-admin.component';
+import { CreateMenuComponent } from './create_components/create-menu/create-menu.component';
+import { CreateCategoryComponent } from './create_components/create-category/create-category.component';
+import { CreateSubcategoryComponent } from './create_components/create-subcategory/create-subcategory.component';
+import { CreateQuestionComponent } from './create_components/create-question/create-question.component';
 
 const routes: Routes = [
   {
@@ -48,8 +51,20 @@ const routes: Routes = [
     component: DeleteAdminComponent
   },
   {
-    path: 'home/create/:type',
-    component: CreateComponent
+    path: 'home/create',
+    component: CreateMenuComponent
+  },
+  {
+    path: 'home/create/category',
+    component: CreateCategoryComponent
+  },
+  {
+    path: 'home/create/subcategory',
+    component: CreateSubcategoryComponent
+  },
+  {
+    path: 'home/create/question',
+    component: CreateQuestionComponent
   }
 ];
 
