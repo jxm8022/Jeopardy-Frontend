@@ -22,14 +22,14 @@ export class AddAdminComponent implements OnInit {
           this.admins = res.body;
         }
       }
-    })
+    });
   }
 
   admin: Admin = new Admin(0, "", "", 3);
   errorMessage: string = "";
 
   addAdmin(): void {
-    if (this.checkAdmins()) {
+    if (this.checkAdmin()) {
       this.admin.admin_password = sha256(this.admin.admin_password);
       this.adminService.createAdmin(this.admin).subscribe({
         'next': res => {
@@ -42,7 +42,7 @@ export class AddAdminComponent implements OnInit {
     }
   }
 
-  checkAdmins(): boolean {
+  checkAdmin(): boolean {
     this.errorMessage = "";
     if (this.admin.admin_name.length < 1) {
       this.errorMessage = "Admin name must be more than 1 character long!";
