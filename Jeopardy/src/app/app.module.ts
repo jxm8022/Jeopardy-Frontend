@@ -13,11 +13,14 @@ import { FormsModule } from '@angular/forms';
 import { CategoryComponent } from './category/category.component';
 import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
 import { HttpClientModule } from '@angular/common/http';
-import { AdminComponent } from './admin/admin.component';
+import { AdminComponent } from './admin_components/admin-login/admin.component';
 import { CreateComponent } from './create/create.component';
 import { StatusbarComponent } from './statusbar/statusbar.component';
 import { SavedgamesComponent } from './savedgames/savedgames.component';
 import { PlayersComponent } from './leaderboard_components/players/players.component';
+import { AddAdminComponent } from './admin_components/add-admin/add-admin.component';
+import { UpdateAdminComponent } from './admin_components/update-admin/update-admin.component';
+import { DeleteAdminComponent } from './admin_components/delete-admin/delete-admin.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +36,10 @@ import { PlayersComponent } from './leaderboard_components/players/players.compo
     CreateComponent,
     StatusbarComponent,
     SavedgamesComponent,
-    PlayersComponent
+    PlayersComponent,
+    AddAdminComponent,
+    UpdateAdminComponent,
+    DeleteAdminComponent
   ],
   imports: [
     BrowserModule,
