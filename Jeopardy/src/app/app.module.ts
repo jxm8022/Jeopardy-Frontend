@@ -24,6 +24,14 @@ import { CreateCategoryComponent } from './create_components/create-category/cre
 import { CreateSubcategoryComponent } from './create_components/create-subcategory/create-subcategory.component';
 import { CreateQuestionComponent } from './create_components/create-question/create-question.component';
 import { CreateMenuComponent } from './create_components/create-menu/create-menu.component';
+import { UpdateMenuComponent } from './update_components/update-menu/update-menu.component';
+import { UpdateCategoryComponent } from './update_components/update-category/update-category.component';
+import { UpdateSubcategoryComponent } from './update_components/update-subcategory/update-subcategory.component';
+import { UpdateQuestionComponent } from './update_components/update-question/update-question.component';
+import { DeleteMenuComponent } from './delete_components/delete-menu/delete-menu.component';
+import { DeleteCategoryComponent } from './delete_components/delete-category/delete-category.component';
+import { DeleteSubcategoryComponent } from './delete_components/delete-subcategory/delete-subcategory.component';
+import { DeleteQuestionComponent } from './delete_components/delete-question/delete-question.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +53,15 @@ import { CreateMenuComponent } from './create_components/create-menu/create-menu
     CreateCategoryComponent,
     CreateSubcategoryComponent,
     CreateQuestionComponent,
-    CreateMenuComponent
+    CreateMenuComponent,
+    UpdateMenuComponent,
+    UpdateCategoryComponent,
+    UpdateSubcategoryComponent,
+    UpdateQuestionComponent,
+    DeleteMenuComponent,
+    DeleteCategoryComponent,
+    DeleteSubcategoryComponent,
+    DeleteQuestionComponent
   ],
   imports: [
     BrowserModule,

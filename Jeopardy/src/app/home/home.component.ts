@@ -11,12 +11,14 @@ export class HomeComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit(): void {
+    this.adminAccess = Number(sessionStorage.getItem("adminAccess")) || 0;
     if (sessionStorage.getItem("adminActive") === "true") {
       this.adminActive = true;
     }
   }
 
   adminActive: boolean = false;
+  adminAccess: number = 0;
 
   checkAdminAccess(): void {
     if (sessionStorage.getItem("adminAccess") === "1") {
