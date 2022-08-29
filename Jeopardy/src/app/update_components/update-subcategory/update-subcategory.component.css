@@ -1,0 +1,24 @@
+img {
+    width: 40%;
+    margin-top: 50px;
+}
+
+.forms {
+    width: 30%;
+    margin-top: 50px;
+}
+
+.box {
+    border-style: outset;
+    border-width: 7px;
+    background-color: #2bbfe0;
+    width: 45%;
+    float: left;
+    margin: 20px;
+    height: 125px;
+    padding: 20px;
+}
+
+.box:hover {
+    transform: scale(.95);
+}
