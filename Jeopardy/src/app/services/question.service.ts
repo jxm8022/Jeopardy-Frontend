@@ -45,4 +45,19 @@ export class QuestionService {
       'observe': 'response'
     });
   }
+
+  // Returns HttpResponse
+  // Input: QA
+  // QA {question: Question, subcategories: SubCategory[]}
+  updateQuestion(question: Partial<any>): Observable<HttpResponse<any>> {
+    return this.http.put(`${environment.apiAzureURL}/Question/UpdateQuestion`, question, {
+      'observe': 'response'
+    });
+  }
+
+  deleteQuestion(question_id: number, answer_id: number): Observable<HttpResponse<any>> {
+    return this.http.delete(`${environment.apiAzureURL}/Question/DeleteQuestion/${question_id}/${answer_id}`, {
+      'observe': 'response'
+    });
+  }
 }

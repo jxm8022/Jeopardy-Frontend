@@ -32,4 +32,34 @@ export class CategoryService {
       'observe': 'response'
     });
   }
+
+  // Returns HttpResponse
+  // Input: Category
+  // Category {ID: integer, Name: string}
+  updateCategory(category: Partial<any>): Observable<HttpResponse<any>> {
+    return this.http.put(`${environment.apiAzureURL}/Category/UpdateCategory`, category, {
+      'observe': 'response'
+    });
+  }
+
+  // Returns HttpResponse
+  // Input: SubCategory
+  // SubCategory {ID: integer, Name: string, CategoryID: integer}
+  updateSubcategory(subcategory: Partial<any>): Observable<HttpResponse<any>> {
+    return this.http.put(`${environment.apiAzureURL}/Category/UpdateSubcategory`, subcategory, {
+      'observe': 'response'
+    });
+  }
+
+  deleteCategory(category_id: number): Observable<HttpResponse<any>> {
+    return this.http.delete(`${environment.apiAzureURL}/Category/DeleteCategory/${category_id}`, {
+      'observe': 'response'
+    });
+  }
+
+  deleteSubcategory(subcategory_id: number): Observable<HttpResponse<any>> {
+    return this.http.delete(`${environment.apiAzureURL}/Category/DeleteSubcategory/${subcategory_id}`, {
+      'observe': 'response'
+    });
+  }
 }
