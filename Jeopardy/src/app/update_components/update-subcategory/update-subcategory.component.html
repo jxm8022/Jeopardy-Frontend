@@ -28,8 +28,8 @@
 </ng-container>
 <ng-container *ngIf="update">
     <form #form="ngForm" class="row mx-auto forms">
-        <input name="category" [(ngModel)]="newSubcategory.subcategory_name" class="form-control form-control-lg"
-            type="text" placeholder="Category" aria-label=".form-control-lg category" style="margin: 10px;">
+        <input name="subcategory" [(ngModel)]="newSubcategory.subcategory_name" class="form-control form-control-lg"
+            type="text" placeholder="Subcategory" aria-label=".form-control-lg subcategory" style="margin: 10px;">
     </form>
     <div class="text-center" style="margin-bottom: 25px;">
         <p *ngIf="errorMessage" style="color: red;">{{errorMessage}}</p>
