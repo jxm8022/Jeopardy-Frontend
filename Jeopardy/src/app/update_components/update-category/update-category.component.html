@@ -1,1 +1,24 @@
-<p>update-category works!</p>
+<app-nav-bar></app-nav-bar>
+<img class="mx-auto d-block" src="../../assets/add_category.png" />
+<ng-container *ngIf="!update">
+    <div class="d-flex justify-content-center">
+        <div class="container">
+            <div class="row">
+                <div class="box text-center" *ngFor="let category of categories;" (click)="chooseCategory(category)">
+                    <h1>{{category.category.category_name}}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<ng-container *ngIf="update">
+    <form #form="ngForm" class="row mx-auto forms">
+        <input name="category" [(ngModel)]="newCategory.category_name" class="form-control form-control-lg" type="text"
+            placeholder="Category" aria-label=".form-control-lg category" style="margin: 10px;">
+    </form>
+    <div class="text-center" style="margin-bottom: 25px;">
+        <p *ngIf="errorMessage" style="color: red;">{{errorMessage}}</p>
+        <button type="button" class="btn btn-primary btn-lg" (click)="updateCategory()">Update</button>
+    </div>
+</ng-container>
+<app-statusbar [statusMessage]="message"></app-statusbar>
