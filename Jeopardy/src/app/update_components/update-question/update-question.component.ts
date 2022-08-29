@@ -48,6 +48,10 @@ export class UpdateQuestionComponent implements OnInit {
           this.subcategoryChosen = true;
           this.message = `Questions for ${this.subcategories[subcategory_index].subcategory_name} loaded successfully!`;
         }
+        if (res.status === 204) {
+          alert(`No questions for this category!`);
+          this.router.navigate(['home/update']);
+        }
       }
     });
   }
