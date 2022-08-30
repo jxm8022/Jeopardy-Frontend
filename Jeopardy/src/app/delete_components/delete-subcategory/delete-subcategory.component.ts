@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { SubCategory } from 'src/app/models/SubCategory';
 import { Type } from 'src/app/models/Type';
 import { CategoryService } from 'src/app/services/category.service';
@@ -29,12 +30,17 @@ export class DeleteSubcategoryComponent implements OnInit {
   categoryChosen: boolean = false;
   subcategories: SubCategory[] = [];
   chooseCategory(category_index: number): void {
+    this.errorMessage = "";
     this.subcategories = this.categories[category_index].subcategories;
-    this.message = `Subcategories for ${this.categories[category_index].category.category_name} loaded successfully!`;
-    this.categoryChosen = true;
+    if (this.categories[category_index].subcategories) {
+      this.message = `Subcategories for ${this.categories[category_index].category.category_name} loaded successfully!`;
+      this.categoryChosen = true;
+    } else {
+      this.errorMessage = `No Subcategories for ${this.categories[category_index].category.category_name}!`;
+    }
   }
 
-  checkCategory(subcategory: SubCategory): any {
+  checkSubcategory(subcategory: SubCategory): void {
     this.message = "";
     this.errorMessage = "";
     this.questionService.getAllQuestions(subcategory.subcategory_id).subscribe({
@@ -42,26 +48,23 @@ export class DeleteSubcategoryComponent implements OnInit {
         if (res.status === 200) {
           this.errorMessage = "Cannot delete a subcategory that has questions!";
           this.message = "Delete questions first!";
-          return false;
         } else {
-          return true;
+          this.deleteSubcategory(subcategory);
         }
       }
     });
   }
 
   deleteSubcategory(subcategory: SubCategory): void {
-    if (this.checkCategory(subcategory)) {
-      if (confirm(`Delete subcategory ${subcategory.subcategory_name}?`)) {
-        this.categoryService.deleteSubcategory(subcategory.subcategory_id).subscribe({
-          'next': res => {
-            if (res.status === 200) {
-              alert(`Subcategory ${subcategory.subcategory_name} deleted!`);
-              this.router.navigate(['home/delete']);
-            }
+    if (confirm(`Delete subcategory ${subcategory.subcategory_name}?`)) {
+      this.categoryService.deleteSubcategory(subcategory.subcategory_id).subscribe({
+        'next': res => {
+          if (res.status === 200) {
+            alert(`Subcategory ${subcategory.subcategory_name} deleted!`);
+            this.router.navigate(['home/delete']);
           }
-        });
-      }
+        }
+      });
     }
   }
 

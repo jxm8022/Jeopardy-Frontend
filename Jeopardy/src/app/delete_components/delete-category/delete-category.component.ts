@@ -27,7 +27,7 @@ export class DeleteCategoryComponent implements OnInit {
   checkCategory(category: Type): boolean {
     this.message = "";
     this.errorMessage = "";
-    if (category.subcategories.length > 0) {
+    if (category.subcategories) {
       this.errorMessage = "Cannot delete a category that has subcategories!";
       this.message = "Delete subcategories first!";
       return false;
