@@ -1,0 +1,55 @@
+<app-nav-bar></app-nav-bar>
+<img class="mx-auto d-block" src="../../assets/update_question.png" />
+<ng-container *ngIf="!update">
+    <ng-container *ngIf="!categoryChosen && !subcategoryChosen">
+        <div class="d-flex justify-content-center">
+            <div class="container">
+                <div class="row">
+                    <div class="box text-center" *ngFor="let category of categories; let i = index;"
+                        (click)="chooseCategory(i)">
+                        <h1>{{category.category.category_name}}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="categoryChosen">
+        <div class="d-flex justify-content-center">
+            <div class="container">
+                <div class="row">
+                    <div class="box text-center" *ngFor="let subcategory of subcategories; let i = index;"
+                        (click)="chooseSubcategory(i)">
+                        <h1>{{subcategory.subcategory_name}}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="subcategoryChosen">
+        <div class="d-flex justify-content-center">
+            <div class="container">
+                <div class="row">
+                    <div class="question-box overflow-auto text-center" *ngFor="let question of questions;"
+                        (click)="chooseQuestion(question)">
+                        <h1>{{question.question.question_entry}}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</ng-container>
+<ng-container *ngIf="update">
+    <form #form="ngForm" class="row mx-auto forms">
+        <input name="question" [(ngModel)]="newQuestion.question.question_entry" class="form-control form-control-lg"
+            type="text" placeholder="Question" aria-label=".form-control-lg question" style="margin: 10px;">
+    </form>
+    <form #form="ngForm" class="row mx-auto forms">
+        <input name="answer" [(ngModel)]="newQuestion.answer.answer_entry" class="form-control form-control-lg"
+            type="text" placeholder="Answer" aria-label=".form-control-lg answer" style="margin: 10px;">
+    </form>
+    <div class="text-center" style="margin-bottom: 25px;">
+        <p *ngIf="errorMessage" style="color: red;">{{errorMessage}}</p>
+        <button type="button" class="btn btn-primary btn-lg" (click)="updateQuestion()">Update</button>
+    </div>
+</ng-container>
+<app-statusbar [statusMessage]="message"></app-statusbar>

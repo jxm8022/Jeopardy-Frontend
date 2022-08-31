@@ -42,7 +42,7 @@ export class CreateQuestionComponent implements OnInit {
   canCreate: boolean = false;
 
   subcategoryToAddTo!: SubCategory;
-  existingQuestions: Question[] = [];
+  existingQuestions: QA[] = [];
   question: string = "";
   answer: string = "";
   createQuestion(): void {

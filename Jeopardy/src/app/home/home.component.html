@@ -11,9 +11,23 @@
     <div class="center text-center">
         <input id="adminOptions" type="image" src="../../assets/play_game.png" [routerLink]="['game']" />
         <hr class="mx-auto adminHr">
-        <input id="adminOptions" type="image" src="../../assets/leaderboard.png" [routerLink]="['leaderboard']" />
-        <hr class="mx-auto adminHr">
-        <input id="adminOptions" type="image" src="../../assets/create.png" [routerLink]="['create']" />
+        <input id="adminOptions" type="image" src="../../assets/leaderboard.png" [routerLink]="['leaderboard']"
+            style="width: 60%;" />
+        <ng-container *ngIf="adminAccess > 0 && adminAccess < 4">
+            <ng-container *ngIf="adminAccess < 3">
+                <hr class="mx-auto adminHr">
+                <input id="adminOptions" type="image" src="../../assets/create.png" [routerLink]="['create']"
+                    style="width:33%;" />
+            </ng-container>
+            <hr class="mx-auto adminHr">
+            <input id="adminOptions" type="image" src="../../assets/update.png" [routerLink]="['update']"
+                style="width:33%;" />
+            <ng-container *ngIf="adminAccess === 1">
+                <hr class="mx-auto adminHr">
+                <input id="adminOptions" type="image" src="../../assets/delete.png" [routerLink]="['delete']"
+                    style="width:33%;" />
+            </ng-container>
+        </ng-container>
     </div>
     <div (click)="logout()" (mouseenter)="hover()" (mouseleave)="notHover()" class="logout">
         <svg *ngIf="!open" width="40" height="40" fill="currentColor" class="bi bi-door-closed nav-item"

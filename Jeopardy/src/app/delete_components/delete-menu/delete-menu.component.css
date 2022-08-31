@@ -1,0 +1,14 @@
+img {
+    width: 40%;
+    margin-top: 50px;
+}
+
+.adminOptions {
+    width: 30%;
+    margin: 35px 0;
+}
+
+.adminHr {
+    border-top: 5px solid;
+    width: 30%;
+}

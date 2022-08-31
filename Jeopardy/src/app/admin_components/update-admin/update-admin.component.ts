@@ -81,7 +81,7 @@ export class UpdateAdminComponent implements OnInit {
         'next': res => {
           if (res.status === 200) {
             alert(`Admin ${this.newAdmin.admin_name} updated successfully!`);
-            this.router.navigate(['home']);
+            this.router.navigate(['home/admin/settings']);
           }
         }
       });

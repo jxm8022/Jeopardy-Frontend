@@ -12,6 +12,14 @@ import { CreateMenuComponent } from './create_components/create-menu/create-menu
 import { CreateCategoryComponent } from './create_components/create-category/create-category.component';
 import { CreateSubcategoryComponent } from './create_components/create-subcategory/create-subcategory.component';
 import { CreateQuestionComponent } from './create_components/create-question/create-question.component';
+import { UpdateMenuComponent } from './update_components/update-menu/update-menu.component';
+import { DeleteCategoryComponent } from './delete_components/delete-category/delete-category.component';
+import { DeleteMenuComponent } from './delete_components/delete-menu/delete-menu.component';
+import { DeleteQuestionComponent } from './delete_components/delete-question/delete-question.component';
+import { DeleteSubcategoryComponent } from './delete_components/delete-subcategory/delete-subcategory.component';
+import { UpdateCategoryComponent } from './update_components/update-category/update-category.component';
+import { UpdateQuestionComponent } from './update_components/update-question/update-question.component';
+import { UpdateSubcategoryComponent } from './update_components/update-subcategory/update-subcategory.component';
 
 const routes: Routes = [
   {
@@ -65,6 +73,38 @@ const routes: Routes = [
   {
     path: 'home/create/question',
     component: CreateQuestionComponent
+  },
+  {
+    path: 'home/update',
+    component: UpdateMenuComponent
+  },
+  {
+    path: 'home/update/category',
+    component: UpdateCategoryComponent
+  },
+  {
+    path: 'home/update/subcategory',
+    component: UpdateSubcategoryComponent
+  },
+  {
+    path: 'home/update/question',
+    component: UpdateQuestionComponent
+  },
+  {
+    path: 'home/delete',
+    component: DeleteMenuComponent
+  },
+  {
+    path: 'home/delete/category',
+    component: DeleteCategoryComponent
+  },
+  {
+    path: 'home/delete/subcategory',
+    component: DeleteSubcategoryComponent
+  },
+  {
+    path: 'home/delete/question',
+    component: DeleteQuestionComponent
   }
 ];
 
